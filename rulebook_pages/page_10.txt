@@ -1,0 +1,172 @@
+INFLUENCE DECK CARD LIMITS
+At specific moments of the game (during game setup At specific moments of the game (during game setup 
+or or  AwakeningAwakening), you’ll have the opportunity to add or re-), you’ll have the opportunity to add or re-
+move cards from your Influence deck. Be sure to check the move cards from your Influence deck. Be sure to check the 
+number of cards in your deck during this step to ensure number of cards in your deck during this step to ensure 
+you’re within the deck limit of you’re within the deck limit of 2020--4040 cards. During this step: cards. During this step:
+  –– You must have a minimum of You must have a minimum of 2020 cards in your Influence  cards in your Influence 
+deck (if, for any reason, you have less than 20 cards available, deck (if, for any reason, you have less than 20 cards available, 
+you must add all your available cards to your deck).you must add all your available cards to your deck).
+  –– You can have a  maximum of You can have a  maximum of 4040 cards in your Influ - cards in your Influ -
+ence deck. Excess cards are placed back in the box, in the ence deck. Excess cards are placed back in the box, in the 
+slot dedicated to your Dreamer (with your Divider). These slot dedicated to your Dreamer (with your Divider). These 
+unused cards, cannot be used in the game until the next unused cards, cannot be used in the game until the next 
+deckbuilding step.deckbuilding step.
+  –– During the deckbuilding step, you must add all Flaw During the deckbuilding step, you must add all Flaw 
+cards in your possession to your Influence deck (they do not cards in your possession to your Influence deck (they do not 
+count toward the count toward the 2020--4040 limit). limit).
+Note: If the number of cards in your Influence deck exceeds Note: If the number of cards in your Influence deck exceeds 4040 or  or 
+drops under drops under 2020 during the game, nothing happens. The card limit is  during the game, nothing happens. The card limit is 
+only checked during the deckbuilding step.only checked during the deckbuilding step.
+20-40
+Additionally, each individual starting Influence deck has its Additionally, each individual starting Influence deck has its 
+own special feature – a own special feature – a character specific actioncharacter specific action – printed on  – printed on 
+the back of each card. Dreamers may perform this action when the back of each card. Dreamers may perform this action when 
+the card is on the top of their deck. As the campaign proceeds, the the card is on the top of their deck. As the campaign proceeds, the 
+more cards a Dreamer adds to their deck, the less this action will more cards a Dreamer adds to their deck, the less this action will 
+be available as they gradually lose their original identity.be available as they gradually lose their original identity.
+Gained Influence cards (from Dreams, from the Influence Mar-Gained Influence cards (from Dreams, from the Influence Mar-
+ket) are placed ket) are placed face-upface-up on top of the Dreamer’s  on top of the Dreamer’s Discard PileDiscard Pile..
+PROGRESS INFLUENCE CARDS
+“Dreams grow if you grow.”  – Zig Ziglar
+IntentIntent
+ Progress Progress 
+placement costplacement cost
+Action/effect Action/effect 
+costcost
+Additional Additional 
+requirementrequirement
+Action/effectAction/effect
+Ether cost Ether cost 
+of buying this cardof buying this card
+Progress cardsProgress cards are special types of Influence cards that pro- are special types of Influence cards that pro-
+vide persistent abilities to your Dreamers when they are played. vide persistent abilities to your Dreamers when they are played. 
+They can be used normally for Intent when discarded from your They can be used normally for Intent when discarded from your 
+hand but the actions/effects on them cannot be used until they are hand but the actions/effects on them cannot be used until they are 
+placed into your placed into your Progress ZoneProgress Zone (beneath your Dreamer board)  (beneath your Dreamer board) 
+by by paying the listed cost on the top of the cardpaying the listed cost on the top of the card . From then . From then 
+on, you may use any action or effect on this card. Once played, an on, you may use any action or effect on this card. Once played, an 
+active Progress card cannot be discarded to use as Intent. active Progress card cannot be discarded to use as Intent. 
+Each Dreamer may have a  maximum of Each Dreamer may have a  maximum of 44 Progress cards Progress cards   
+in their Progress zone but some Masks (see in their Progress zone but some Masks (see MASKSMASKS, pg 13) and , pg 13) and 
+other cards may modify this. If you want to place a new Progress other cards may modify this. If you want to place a new Progress 
+card when you have already reached your limit, you must first card when you have already reached your limit, you must first 
+discard one of your placed Progress cards (active or flipped) be-discard one of your placed Progress cards (active or flipped) be-
+fore you can place the new one. You cannot fore you can place the new one. You cannot voluntarilyvoluntarily discard  discard 
+a placed Progress card otherwise.a placed Progress card otherwise.
+Flipping Progress CardsFlipping Progress Cards – Being told to flip a progress  – Being told to flip a progress 
+card causes you to turn it face-down. The card’s action can no card causes you to turn it face-down. The card’s action can no 
+longer be used until it is unflipped but the card still counts to-longer be used until it is unflipped but the card still counts to-
+ward your placed Progress cards limit. ward your placed Progress cards limit. 
+Some rules refer to Some rules refer to 
+ //
+ //
+  icons – this refers to the num- icons – this refers to the num-
+ber of your ber of your active Progress cards of the corresponding col-active Progress cards of the corresponding col-
+oror (flipped cards  (flipped cards do notdo not count). count).
+Unless otherwise specified Progress cards are not discarded Unless otherwise specified Progress cards are not discarded 
+when used. Placed Progress cards remain in your Progress zone when used. Placed Progress cards remain in your Progress zone 
+until a game effect forces you to discard them (Dreamer’s death, until a game effect forces you to discard them (Dreamer’s death, 
+Awakening, etc.).Awakening, etc.).
+You may have two identical active Progress cards, but most You may have two identical active Progress cards, but most 
+of them will not duplicate their own effect.of them will not duplicate their own effect.
+INFLUENCE MARKET  
+ & BUYING NEW INFLUENCE CARDS
+The Influence Market is a pool of unacquired Influence cards The Influence Market is a pool of unacquired Influence cards 
+available to the Dreamers when they go Shopping on the Dream available to the Dreamers when they go Shopping on the Dream 
+World map (pg 14). These mechanics will be explained as the game World map (pg 14). These mechanics will be explained as the game 
+progresses. They can be left in the game box (you should not look progresses. They can be left in the game box (you should not look 
+at them) and taken out only when required. The Influence Market at them) and taken out only when required. The Influence Market 
+will change during the campaign with cards being added from will change during the campaign with cards being added from 
+Dreams.Dreams.
+When you are instructed to “When you are instructed to “ Buy Influence CardsBuy Influence Cards ” , each ” , each 
+Dreamer may draw the Dreamer may draw the top 3 cards of the Influence Markettop 3 cards of the Influence Market   
+and buy any number of them with their available and buy any number of them with their available 
+ , placing , placing 
+them face-up on top of your Discard Pile. Any remaining cards them face-up on top of your Discard Pile. Any remaining cards 
+are returned to the bottom of the Market. The are returned to the bottom of the Market. The 
+  cost of each  cost of each 
+Influence card in the Influence Market is indicated in its upper Influence card in the Influence Market is indicated in its upper 
+right corner.right corner.
+You mainly gain You mainly gain 
+  during Slumbers, as a  Loot for victory  during Slumbers, as a  Loot for victory 
+and also through completing Dreams. and also through completing Dreams. 
+When the game asks you to When the game asks you to RETURNRETURN a card to the Influence  a card to the Influence 
+Market, remove this card from your deck and put it at the bottom Market, remove this card from your deck and put it at the bottom 
+of the Influence Market – it doesn’t matter if this card was from of the Influence Market – it doesn’t matter if this card was from 
+your starting deck, bought from the Influence Market or gained your starting deck, bought from the Influence Market or gained 
+in a Dream.in a Dream.
+During the Buying cards step, if you draw a starting card of an-During the Buying cards step, if you draw a starting card of an-
+other Dreamer, you may buy this card – and start using the spe-other Dreamer, you may buy this card – and start using the spe-
+cial action on its back, even though you are not that Dreamer.cial action on its back, even though you are not that Dreamer.
+At the start of the game the Influence Market consists of all At the start of the game the Influence Market consists of all 
+Influence cards with no secret code number on their back.Influence cards with no secret code number on their back.
+At the start of the game the Items Market is emptyAt the start of the game the Items Market is empty
+GRADUAL ACTIONS
+Gradual actions are actions that scale with the number Gradual actions are actions that scale with the number 
+of Dreamers and they are marked by a of Dreamers and they are marked by a 
+  icon that appears after  icon that appears after 
+the basic cost to indicate how many times that cost must be paid the basic cost to indicate how many times that cost must be paid 
+to perform it. These may be paid in several steps over several to perform it. These may be paid in several steps over several 
+Turns (i.e.: gradually). Each time the basic cost is paid, an Turns (i.e.: gradually). Each time the basic cost is paid, an Intent Intent 
+MarkerMarker can be used to show that it has been paid. Place it near  can be used to show that it has been paid. Place it near 
+the Action.the Action.
+Example: There are 3 Dreamers in the game, and you want to perform Example: There are 3 Dreamers in the game, and you want to perform 
+a gradual action labelled as a gradual action labelled as 33  
+ . One Dreamer decides to spend . One Dreamer decides to spend 66  
+   
+to place to place 22 Intent markers on this action. On a later turn (or even during the  Intent markers on this action. On a later turn (or even during the 
+same turn) another Dreamer will only need to pay same turn) another Dreamer will only need to pay 33  
+   to perform that action.to perform that action.
+Note: Some gradual actions have a cost given in two Intent colors. When Note: Some gradual actions have a cost given in two Intent colors. When 
+paying for such an action, you must choose an Intent color and pay the full paying for such an action, you must choose an Intent color and pay the full 
+cost using that color. eg. if there are 4 Dreamers in play, cost using that color. eg. if there are 4 Dreamers in play, 33  
+ / / 33  
+   
+means either means either 1212  
+   or or 1212  
+ , not a combination of both., not a combination of both.
+Return all Intent markers to the pool after the action is per -Return all Intent markers to the pool after the action is per -
+formed. Intent markers are limited and if you need one of a spe-formed. Intent markers are limited and if you need one of a spe-
+cific color but there aren’t enough left, you may take an Intent cific color but there aren’t enough left, you may take an Intent 
+marker from another action.marker from another action.
+Any Intent marker placed on an action is considered to be Any Intent marker placed on an action is considered to be 
+yours, even if it was placed by another Dreamer.yours, even if it was placed by another Dreamer.
+When there are several miniatures of a  given type of Entity When there are several miniatures of a  given type of Entity 
+in play, Intent markers placed on the Entity tile are not assigned in play, Intent markers placed on the Entity tile are not assigned 
+to any of the miniatures. They are only assigned (and then dis-to any of the miniatures. They are only assigned (and then dis-
+carded) to a specific miniature when the gradual action is actually carded) to a specific miniature when the gradual action is actually 
+performed.performed.
+Note: the notation “Note: the notation “
+ xX” just means a higher action cost, not a gradual xX” just means a higher action cost, not a gradual 
+action that you may pay in steps. For example, with 3 Dreamers in play,  action that you may pay in steps. For example, with 3 Dreamers in play,  
+x2x2
+ , means you must pay , means you must pay 66
+  at once. at once.
+ASSAULT / CONTACT ACTIONS
+Examples of Examples of AssaultAssault//ContactContact actions.  actions. 
+AssaultAssault//ContactContact  actions  – marked specifically with "actions  – marked specifically with " AssaultAssault" " 
+or "or "ContactContact" keywords – are used the same way as normal actions " keywords – are used the same way as normal actions 
+with a few exceptions:with a few exceptions:
+Not every Not every 
+   action is a Contact action. Not every action is a Contact action. Not every 
+   action is an As-action is an As-
+sault action.sault action.
+  –– Unlike map actions which require you to be in the action’s Unlike map actions which require you to be in the action’s 
+space to use, space to use, AssaultAssault//ContactContact actions can be performed from the  actions can be performed from the 
+base base AssaultAssault//ContactContact range of  range of 11 space away. This can be modified  space away. This can be modified 
+by some Influence or Item cards.by some Influence or Item cards.
+  –– You can bold the effect of an You can bold the effect of an AssaultAssault//ContactContact action by pay- action by pay-
+ing its cost multiple times.ing its cost multiple times.
+Example: You perform an Assault action with a  cost of Example: You perform an Assault action with a  cost of 33  
+ . You can . You can 
+spend spend 99  
+   at once to apply the effect of this action three times.at once to apply the effect of this action three times.
+  –– If you pay the cost of an action multiple times, you can If you pay the cost of an action multiple times, you can 
+choose a different target for each effect.choose a different target for each effect.
+Example: You perform a Contact action with a cost of Example: You perform a Contact action with a cost of 33  
+ , and decide , and decide 
+to pay to pay 99  
+ . There are 2 Entities in range that can be targeted by the action. . There are 2 Entities in range that can be targeted by the action. 
+You can decide to target the first entity twice, and the second Entity once.You can decide to target the first entity twice, and the second Entity once.
+1010

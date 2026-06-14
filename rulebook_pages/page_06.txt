@@ -1,0 +1,108 @@
+Examples of Map Actions. Examples of Map Actions. 
+BASIC RULES
+FLOW OF THE GAME
+Throughout the course of the campaign, players explore a variety of Dreams and their Dreamscapes in order to unravel their purpose and identity. These are Throughout the course of the campaign, players explore a variety of Dreams and their Dreamscapes in order to unravel their purpose and identity. These are 
+longer, unique expanded adventures that feature a variety of environments and storylines. In between these Dreams, they travel across the Dreamworld map longer, unique expanded adventures that feature a variety of environments and storylines. In between these Dreams, they travel across the Dreamworld map 
+and encounter Slumbers – shorter mini-encounters – that expose them to the denizens and creatures that inhabit this world.and encounter Slumbers – shorter mini-encounters – that expose them to the denizens and creatures that inhabit this world.
+DREAM GATE TILES
+“Ever have that feeling where you’re not sure 
+if you’re awake or dreaming?” 
+ – Neo, The Matrix
+Dream Gates are used to enter Dreams. Usually they will have Dream Gates are used to enter Dreams. Usually they will have 
+a specific District on the Dreamworld map where you can enter a specific District on the Dreamworld map where you can enter 
+them (see them (see DREAMWORLD MAPDREAMWORLD MAP, pg 14) and also a listed key , pg 14) and also a listed key 
+requirement to do so. requirement to do so. For the First Dream you can ignore those For the First Dream you can ignore those 
+requirements. requirements. Dreams can be stored in between each game ses-Dreams can be stored in between each game ses-
+sion in the envelope provided. sion in the envelope provided. 
+To enter a Dream resolve the following:To enter a Dream resolve the following:
+  –– If the Slumber Dreamscape is present, discard it first (i.e.: If the Slumber Dreamscape is present, discard it first (i.e.: 
+all Slumber Map tiles, Quirk cards, etc.). all Slumber Map tiles, Quirk cards, etc.). 
+There is no Slumber Map currently so you can ignore this for now.There is no Slumber Map currently so you can ignore this for now.
+  –– SetupSetup: Resolve all the listed steps here prior to beginning : Resolve all the listed steps here prior to beginning 
+the Dream. Generally this will require you to prepare by taking the Dream. Generally this will require you to prepare by taking 
+all the appropriate cards out of the box and placing them within all the appropriate cards out of the box and placing them within 
+reach and also by setting up its starting Dreamscape Map Tiles. reach and also by setting up its starting Dreamscape Map Tiles. 
+Remember! Never look at the front side of any Secret Remember! Never look at the front side of any Secret 
+Card or Tile unless instructed to  reveal, peek or gain it.Card or Tile unless instructed to  reveal, peek or gain it.
+  –– Turn DeckTurn Deck: Randomly draw the listed number of Turn : Randomly draw the listed number of Turn 
+cards and place them face-up in the Turn deck slot. This de-cards and place them face-up in the Turn deck slot. This de-
+termines how much time you have to complete the Dream (see termines how much time you have to complete the Dream (see 
+TURN CARDSTURN CARDS, pg 12). The rest are discarded face-down to the , pg 12). The rest are discarded face-down to the 
+Turn Discard Pile. Turn Discard Pile. 
+  –– IntroductionIntroduction: Read this reference within the Secret : Read this reference within the Secret 
+Scripts booklet for this specific Dream after you have set up the Scripts booklet for this specific Dream after you have set up the 
+Dream. Dream. 
+  –– Then Then flipflip the Dream Gate tile to its other side and place it  the Dream Gate tile to its other side and place it 
+on the Dream Gate slot. Any special rules are listed here along on the Dream Gate slot. Any special rules are listed here along 
+with the GOAL of the Dream and also the script number to re-with the GOAL of the Dream and also the script number to re-
+solve if you run Out of Turns. solve if you run Out of Turns. 
+  –– Finally the Dreamers enter the Dreamscape and the first Finally the Dreamers enter the Dreamscape and the first 
+Turn begins…Turn begins…
+THE DREAMSCAPE MAP
+Ignorance, that blind old fool who steers a wayward path, has set the course on which we sail 
+into a night of uncertainty
+ – Dead Can Dance, In the Wake of Adversity
+While in Dreams or Slumbers, the game takes place on the Dreamscape, which consists of Map tiles that represent what the Dreamers While in Dreams or Slumbers, the game takes place on the Dreamscape, which consists of Map tiles that represent what the Dreamers 
+experience within the Dream or Slumber. Miniatures are used to represent the Dreamers and the Entities they encounter. Each map tile is experience within the Dream or Slumber. Miniatures are used to represent the Dreamers and the Entities they encounter. Each map tile is 
+divided into 4 spaces. When a map tile is revealed, turn it face-up and align the tile’s code with the corresponding code on the game board divided into 4 spaces. When a map tile is revealed, turn it face-up and align the tile’s code with the corresponding code on the game board 
+on the on the DREAMSCAPE MAPDREAMSCAPE MAP area (upper portion of the game board).  area (upper portion of the game board). 
+Note that Map tiles or cards do not always occupy a whole Map tile slot. Sometimes a tile may overlap two slots, lying partly on both Note that Map tiles or cards do not always occupy a whole Map tile slot. Sometimes a tile may overlap two slots, lying partly on both 
+or a card may be placed at an angle. In such a case, it is important to check the code of the tile is (A1, B2, etc) is aligned with the code on the or a card may be placed at an angle. In such a case, it is important to check the code of the tile is (A1, B2, etc) is aligned with the code on the 
+game board and the grid lines match up.game board and the grid lines match up.
+If this is your first game, the Dream Gate tile has instructed you to reveal only the Setup tile (Tile 1-01 SETUP). Turn it over and place If this is your first game, the Dream Gate tile has instructed you to reveal only the Setup tile (Tile 1-01 SETUP). Turn it over and place 
+it over the top of the A2 Dreamscape (upper) location on the main boardit over the top of the A2 Dreamscape (upper) location on the main board
+DREAMER'S ENTRANCE
+Dreamers will always enter the Dreamscape on the Dreamer’s Dreamers will always enter the Dreamscape on the Dreamer’s 
+Entrance Entrance 
+ . This icon is placed between 2 spaces. It means that . This icon is placed between 2 spaces. It means that 
+it refers to both of them. Place your miniatures on either of these it refers to both of them. Place your miniatures on either of these 
+spaces. spaces. Place your dreamers in either of the 2 available spaces on Place your dreamers in either of the 2 available spaces on 
+the A2 Tile.the A2 Tile.
+MAP ACTIONS
+Map actions are those that can be found on Map tiles. Those Map actions are those that can be found on Map tiles. Those 
+with the with the 
+  symbol are single use only.  After using the action,  symbol are single use only.  After using the action, 
+block it with a block it with a 
+  token (see  token (see DREAMER ACTIONSDREAMER ACTIONS, pg 9 for , pg 9 for 
+more details about performing actions).more details about performing actions).
+WALLS 
+There is also a wall close-by – this is an impassable barrier that you There is also a wall close-by – this is an impassable barrier that you 
+can’t move through or measure Range through (see can’t move through or measure Range through (see MOVEMENT MOVEMENT 
+ACTIONSACTIONS, pg 11 for more detail)., pg 11 for more detail).
+ENTITY SPAWN
+There is no Entity present at the moment so you don’t need There is no Entity present at the moment so you don’t need 
+to worry about this just yet but keep these rules in the back of to worry about this just yet but keep these rules in the back of 
+your mind.your mind.
+Spawned Entities (see Spawned Entities (see ENTITYENTITY, pg 12) always appear in spac -, pg 12) always appear in spac -
+es bearing the es bearing the 
+  icon. If several  icon. If several 
+  spaces are available, you  spaces are available, you 
+can choose between them. When spawning several Entities, if can choose between them. When spawning several Entities, if 
+there is more than one there is more than one 
+  space available allocate them as even- space available allocate them as even-
+ly as possible. ly as possible. 
+//
+ //
+ //
+In the Dreamscape, if there is any In the Dreamscape, if there is any 
+  space with a  space with a TURN TURN 
+SUITSUIT icon, check to see if it corresponds to the current Turn Suit  icon, check to see if it corresponds to the current Turn Suit 
+on the current Turn card. If it does, the first Spawned Entity must on the current Turn card. If it does, the first Spawned Entity must 
+be placed in that corresponding be placed in that corresponding 
+  space. space.
+HELLO? 
+IS THERE ANYBODY
+OUT THERE?
+THIS TUNNEL 
+MUST END SOMEWHERE!
+SetupSetup
+IntroductionIntroduction
+Number of Number of 
+Turn cardsTurn cards
+DreamworldDreamworld
+Map LocationMap Location
+Secret tile codeSecret tile code
+Dreamer's EntranceDreamer's Entrance
+Entity SpawnEntity Spawn
+Keys CostKeys Cost
+66

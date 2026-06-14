@@ -1,0 +1,87 @@
+OTHER DREAMSCAPE RULES
+If this is your first game, you may skip this page for now. Most of this information won't be neccessary to play for now.If this is your first game, you may skip this page for now. Most of this information won't be neccessary to play for now.
+OTHER DREAMSCAPE ICONS
+Shining Gem SlotsShining Gem Slots – When you’re in a space  – When you’re in a space 
+with a with a 
+ , you may spend , you may spend 11  
+  and place it in that  and place it in that 
+. From this moment, the effect described next . From this moment, the effect described next 
+to that to that 
+  is active. You may use this action without  is active. You may use this action without 
+paying additional costs. If you’re in a space with an active paying additional costs. If you’re in a space with an active 
+  you  you 
+may recover that may recover that 
+  but will also deactivate the effect of the  but will also deactivate the effect of the 
+ ..
+TrapTrap – whenever you Move through a  – whenever you Move through a 
+  space  space 
+(or end Movement/Relocation on it), you trigger the (or end Movement/Relocation on it), you trigger the 
+Trap effect. The Trap effect is described in Trap effect. The Trap effect is described in 
+the Slumber/Dream.the Slumber/Dream.
+Flying ruleFlying rule – effects or actions given in this blue frame are  – effects or actions given in this blue frame are 
+not related to the space in which the frame is located, but concern not related to the space in which the frame is located, but concern 
+the whole Dreamscape. If such a frame contains an action, you the whole Dreamscape. If such a frame contains an action, you 
+may perform it regardless of range.may perform it regardless of range.
+If there is no action inside the Flying Rule but instructions If there is no action inside the Flying Rule but instructions 
+(e.g.: resolving a script) it should be resolved as soon as this Fly -(e.g.: resolving a script) it should be resolved as soon as this Fly -
+ing Rule is revealed.ing Rule is revealed.
+2
+Drawing BonusDrawing Bonus – at the start of the Dreamers  – at the start of the Dreamers 
+Phase, if you’re in a space with a Drawing Bonus, Phase, if you’re in a space with a Drawing Bonus, 
+draw a number of additional Influence cards equal draw a number of additional Influence cards equal 
+to the number shown on this bonus icon during the to the number shown on this bonus icon during the 
+Draw stepDraw step..
+Remember that a Drawing Bonus does not modify your Hand Size limit. Remember that a Drawing Bonus does not modify your Hand Size limit. 
+StairsStairs – this icon doesn’t have any effect unless  – this icon doesn’t have any effect unless 
+another card or rule directly addresses it.another card or rule directly addresses it.
+BLOCKED SPACEBLOCKED SPACE  – Neither Enti - – Neither Enti -
+ties nor Dreamers may Move or mea -ties nor Dreamers may Move or mea -
+sure range through a  Blocked space. sure range through a  Blocked space. 
+If you want to Move to a space behind If you want to Move to a space behind 
+a  Blocked space (or use an action tar -a  Blocked space (or use an action tar -
+geting that space), you must measure geting that space), you must measure 
+the range around it  – this may some-the range around it  – this may some-
+times be impossible.times be impossible.
+TERRAIN SYMBOLS AND TERRAIN TOKENS
+    
+     
+     
+Terrain SymbolsTerrain Symbols don’t have any effect unless another card  don’t have any effect unless another card 
+or rule directly addresses them.or rule directly addresses them.
+When a Terrain symbol is at the center of a Map tile, all 4 spac-When a Terrain symbol is at the center of a Map tile, all 4 spac-
+es on this tile are considered as having that symbol.es on this tile are considered as having that symbol.
+If a Terrain symbol is on the line between 2 spaces of a Map tile, If a Terrain symbol is on the line between 2 spaces of a Map tile, 
+both spaces are considered as having that symbol.both spaces are considered as having that symbol.
+Terrain tokensTerrain tokens (placed in a space / 2 spaces / tile) follow the  (placed in a space / 2 spaces / tile) follow the 
+same rules as Terrain symbols.same rules as Terrain symbols.
+Whenever there are both Whenever there are both 
+  and  and 
+  Terrain symbols in the  Terrain symbols in the 
+same space at the same time, the same space at the same time, the 
+  symbol is ignored. symbol is ignored.
+LIMIT OF MINIATURES  
+ & ENTITY TOKENS PER SPACE
+Each space can hold a maximum of Each space can hold a maximum of 44 miniatures and/or Entity tokens, after which it is considered full. Dreamers can move through full  miniatures and/or Entity tokens, after which it is considered full. Dreamers can move through full 
+spaces, but cannot stop on them. Entities entering full spaces (either by Moving or by Spawning) causes Dreamers to be pushed out to any spaces, but cannot stop on them. Entities entering full spaces (either by Moving or by Spawning) causes Dreamers to be pushed out to any 
+adjacent space chosen by the players. However if the full space contains only 1 Dreamer, that Dreamer cannot be pushed and the Entity adjacent space chosen by the players. However if the full space contains only 1 Dreamer, that Dreamer cannot be pushed and the Entity 
+ends its Movement within range 1 of the space.ends its Movement within range 1 of the space.
+Big EntitiesBig Entities: Big Entities are those whose miniatures or tokens are bigger than normal. They occupy the whole space in which they : Big Entities are those whose miniatures or tokens are bigger than normal. They occupy the whole space in which they 
+stand and cannot be pushed out in any way. When a Big Entity enters a space, it pushes all other miniatures and/or Entity tokens in that stand and cannot be pushed out in any way. When a Big Entity enters a space, it pushes all other miniatures and/or Entity tokens in that 
+space to any adjacent spaces chosen by the players and also causes it to end its Movement. space to any adjacent spaces chosen by the players and also causes it to end its Movement. 
+Note: In some Dreams, you will find spaces completely cut off by Walls. The Dreamers may be able to Relocate to these spaces in various ways. If 4 Dreamers Note: In some Dreams, you will find spaces completely cut off by Walls. The Dreamers may be able to Relocate to these spaces in various ways. If 4 Dreamers 
+occupy such a space, no Entity can spawn or Relocate there.occupy such a space, no Entity can spawn or Relocate there.
+COMPONENT LIMITATIONS
+Whenever you should gain or place a component and there are not enough left in the pool (lack of Whenever you should gain or place a component and there are not enough left in the pool (lack of 
+  or  or 
+  markers, Keys,  markers, Keys, 
+  tokens,  tokens, 
+Shapeshifter miniatures, etc.), that component is not gained/placed.Shapeshifter miniatures, etc.), that component is not gained/placed.
+ is the only exception to this rule. If a Dreamer should suffer  is the only exception to this rule. If a Dreamer should suffer 
+  and there are none left in the pool, all Dreamers fail (see  and there are none left in the pool, all Dreamers fail (see Distress Distress 
+and Dyingand Dying, pg 8)., pg 8).
+The number of components of a given type is NOT dependent on the numbers of Dreamers. This rule applies to any component gained The number of components of a given type is NOT dependent on the numbers of Dreamers. This rule applies to any component gained 
+from the Secret cards of a Dream (Influence/Item/Note cards, etc.). For instance, if you already found a special Item in a Dream, that Item from the Secret cards of a Dream (Influence/Item/Note cards, etc.). For instance, if you already found a special Item in a Dream, that Item 
+won’t be there anymore if you visit that Dream again (e.g., because you were previously defeated). You do not gain a second copy of that Item.won’t be there anymore if you visit that Dream again (e.g., because you were previously defeated). You do not gain a second copy of that Item.
+PLEASE, DON’T LEAVE ME 
+IN THIS ABYSS...
+77

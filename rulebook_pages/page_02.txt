@@ -1,0 +1,136 @@
+COMPONENTS
+COMPONENTS
+COMPONENTS
+So what is all this stuff that you spilled out of the box.So what is all this stuff that you spilled out of the box.
+DO NOT SHUFFLE ANY DECK  
+UNTIL INSTRUCTED
+BoardBoard
+Team Team 
+markermarker
+First Player First Player 
+markermarker
+Belshazar Belshazar 
+miniatureminiature
+4 Dreamer miniatures4 Dreamer miniatures
+(Gambler, Specialist, Tough Guy, Free Spirit)(Gambler, Specialist, Tough Guy, Free Spirit)
+4 Lucid mode Dreamer miniatures4 Lucid mode Dreamer miniatures
+They won’t be used in the game until you discover how They won’t be used in the game until you discover how 
+to open the Secret Mode decks during the campaign.to open the Secret Mode decks during the campaign.
+4 Human Shapeshifter miniatures4 Human Shapeshifter miniatures
+4 Creature Shapeshifter miniatures4 Creature Shapeshifter miniatures
+TABLE OF CONTENTS
+2 COMPONENTS2 CO MPONENTS
+3 BEFORE YOU BEGIN3 BEFORE YOU BEGIN
+4 4 OVERVIEW / GAME SETUPOVERVIEW / GAME SETUP
+ STARTING THE CAMPAIGN STARTING THE CAMPAIGN
+6 6 BASIC RULESBASIC RULES
+ DREAM GATE TILES DREAM GATE TILES
+  DREAMSCAPE MAPDREAMSCAPE MAP
+ OTHER DREAMSCAPE RULES OTHER DREAMSCAPE RULES
+8 8 TURN ORDERTURN ORDER
+ DREAMERS & DREAMSCAPE PHASE DREAMERS & DREAMSCAPE PHASE
+ RESHUFFLE RESHUFFLE
+ SEALING/ UNSEALING SEALING/ UNSEALING
+ DISTRESS & DYING DISTRESS & DYING
+9 9 DREAMERS ACTIONSDREAMERS ACTIONS
+ MOVEMENT ACTION MOVEMENT ACTION
+ GRADUAL ACTIONS GRADUAL ACTIONS
+10 ASSAULT/CONTACT ACTIONS10 ASSAULT/CONTACT ACTIONS
+ BASIC ACTIONS CARD BASIC ACTIONS CARD
+ BOOSTING INTENT BOOSTING INTENT
+ REROLLS REROLLS
+ INFLUENCE CARDS INFLUENCE CARDS
+11 PROGRESS INFLUENCE CARDS11 PROGRESS INFLUENCE CARDS
+ INFLUENCE MARKET INFLUENCE MARKET
+ ITEMS ITEMS
+12 12 DREAMSCAPE PHASEDREAMSCAPE PHASE
+ TURN CARDS TURN CARDS
+ ENTITY TILE, MOVEMENT, EFFECTS ENTITY TILE, MOVEMENT, EFFECTS
+13 STATE TOKENS13 STATE TOKENS
+ MASKS MASKS
+ CLOCK CLOCK
+ WISDOM CARDS WISDOM CARDS
+ AWAKENING AWAKENING
+14 14 DREAMWORLD MAPDREAMWORLD MAP
+ SLUMBERS AND SLUMBER ENTITY SLUMBERS AND SLUMBER ENTITY
+ MORPHINGS MORPHINGS
+15 FATE CARDS15 FATE CARDS
+ DELTA PHASE DELTA PHASE
+ FLAW CARDS FLAW CARDS
+ SHOPPING SHOPPING
+ SEASON CARDS SEASON CARDS
+16 SAVING YOUR GAME16 SAVING YOUR GAME
+ ADDING A DREAMER ADDING A DREAMER
+ VARIANTS VARIANTS
+17 FAQ/ CLARIFICATIONS17 FAQ/ CLARIFICATIONS
+18 STRATEGY GUIDE18 STRATEGY GUIDE
+19 19 INDEXINDEX
+20 20 RULES SUMMARYRULES SUMMARY
+All life is only a set of pictures  
+in the brain, among which there  
+is no difference betwixt those born 
+of real things and those born  
+of inward dreamings, and no cause 
+to value the one above the other.
+ – H. P . Lovecraft
+CREDITS
+GAME DESIGN:GAME DESIGN: Michał Oracz Michał Oracz
+TESTING AND DEVELOPINGTESTING AND DEVELOPING (UNTIL DISTURBING SYMPTOMS  (UNTIL DISTURBING SYMPTOMS 
+APPEAR):APPEAR): Krzysztof Belczyk, Bartłomiej Kalisz, Adrian Krawczyk,  Krzysztof Belczyk, Bartłomiej Kalisz, Adrian Krawczyk, 
+Łukasz Krawiec, Ernest Kiedrowicz, Michał Lach, Jan TruchanowiczŁukasz Krawiec, Ernest Kiedrowicz, Michał Lach, Jan Truchanowicz
+TESTING AND DEVELOPING LEAD:TESTING AND DEVELOPING LEAD: Paweł Samborski Paweł Samborski
+GRAPHIC DESIGN: GRAPHIC DESIGN: Adrian Radziun, Andrzej PółtoranosAdrian Radziun, Andrzej Półtoranos
+PAINTED EVERYTHING:PAINTED EVERYTHING: Anna Myrcha, Ewa Labak, Michał  Anna Myrcha, Ewa Labak, Michał 
+Peitsch, Patryk Jędraszek, Jakub Dzikowski, Piotr Orleański, Piotr Peitsch, Patryk Jędraszek, Jakub Dzikowski, Piotr Orleański, Piotr 
+Foksowicz, Piotr Kryński, Łukasz Jaskulski, Maciej Łaszkiewicz Foksowicz, Piotr Kryński, Łukasz Jaskulski, Maciej Łaszkiewicz 
+“Makilask”, Michał Sałata “Fajna Wizja”, Mateusz Bielski, Michał “Makilask”, Michał Sałata “Fajna Wizja”, Mateusz Bielski, Michał 
+OraczOracz
+CHARACTER DESIGN AND BOX ART:CHARACTER DESIGN AND BOX ART: Anna Myrcha Anna Myrcha
+BEAUTIFUL 3D FIGURINES:BEAUTIFUL 3D FIGURINES: Jędrzej Chomicki, Jakub Ziółkowski,  Jędrzej Chomicki, Jakub Ziółkowski, 
+Piotr Gacek, Mateusz Modzelewski, Agnieszka Pogan, Marta Piotr Gacek, Mateusz Modzelewski, Agnieszka Pogan, Marta 
+BiernackaBiernacka
+BEAUTIFUL 3D FIGURINES LEAD:BEAUTIFUL 3D FIGURINES LEAD: Adrian Komarski Adrian Komarski
+WORLD CONCEPT:WORLD CONCEPT: Adrian Komarski, Anna Myrcha Adrian Komarski, Anna Myrcha
+STORY:STORY: Michał Oracz, Andrzej Betkiewicz Michał Oracz, Andrzej Betkiewicz
+GAME VISION AND PROMOTION: GAME VISION AND PROMOTION: Marcin ŚwierkotMarcin Świerkot
+PRODUCTION LEAD:PRODUCTION LEAD: Dawid Przybyła, Michał Matłosz Dawid Przybyła, Michał Matłosz
+RULEBOOK 2.0: RULEBOOK 2.0: William Dovan, Michał LachWilliam Dovan, Michał Lach
+LAYOUT AND COMPOSITION:LAYOUT AND COMPOSITION: Jędrzej Cieślak, Michał Oracz,  Jędrzej Cieślak, Michał Oracz, 
+Patrycja Marzec, Rafał Janiszewski, Maria Pinkowska-PorzyckaPatrycja Marzec, Rafał Janiszewski, Maria Pinkowska-Porzycka
+PROOFREADING AND EDITING: PROOFREADING AND EDITING: Tyler BrownTyler Brown
+THANK YOU VERY MUCH:THANK YOU VERY MUCH: Ken Cunningham, Christi Kropf, Jordan  Ken Cunningham, Christi Kropf, Jordan 
+Luminais, Tony Nguyen, Ian Sutton, Michael French, Joanna Luminais, Tony Nguyen, Ian Sutton, Michael French, Joanna 
+Brzezińska, Anna Gajdziszewska, Marta Syc, Kamil Maleszka, Brzezińska, Anna Gajdziszewska, Marta Syc, Kamil Maleszka, 
+Maciej Wanicki, Kostek Weber. Thank you to all people who tested Maciej Wanicki, Kostek Weber. Thank you to all people who tested 
+this game during its making. Special thanks to all Kickstarter this game during its making. Special thanks to all Kickstarter 
+backers who helped us to make this game a reality.backers who helped us to make this game a reality.
+4 Dreamer boards4 Dreamer boards
+4 Lucid mode Dreamer boards4 Lucid mode Dreamer boards
+They won’t be used in the game until you discover how They won’t be used in the game until you discover how 
+to open the Secret Mode decks during the campaign.to open the Secret Mode decks during the campaign.
+14 Masks (and 4 Mask stands)14 Masks (and 4 Mask stands)
+4 Dreamer 4 Dreamer INFLUENCEINFLUENCE  decks  decks 
+(22 cards in each)(22 cards in each)
+4 4 BASIC ACTIONSBASIC ACTIONS  cards cards
+5 Starting 5 Starting ITEMITEM cards cards
+4 packed Secret (Lucid) Mode decks4 packed Secret (Lucid) Mode decks
+(20 cards in each)(20 cards in each)
+Do not open them until instructed!Do not open them until instructed!
+Starting Starting INFLUENCEINFLUENCE Market deck  Market deck (81 cards)(81 cards)
+Influence cards without numbers  Influence cards without numbers  
+or rules on their backs.During the campaign,  or rules on their backs.During the campaign,  
+many new cards from other Influence decks  many new cards from other Influence decks  
+(i.e. Dreamers Influence decks or Secret Influence cards) (i.e. Dreamers Influence decks or Secret Influence cards) 
+will be added to the Influence Market.will be added to the Influence Market.
+12 12 TURNTURN cards cards
+Starting FATE deck Starting FATE deck (10 cards)(10 cards)
+Starting FLAW deckStarting FLAW deck (6 cards) (6 cards)
+395 395 SECRETSECRET cards cards
+Don’t look at them until instructed!Don’t look at them until instructed!
+280 280 SECRETSECRET tiles tiles
+Don’t look at them until instructed!Don’t look at them until instructed!
+In this game, we use the term “tiles” for oversized In this game, we use the term “tiles” for oversized 
+100x100mm cards. 100x100mm cards. 
+17 Dividers17 Dividers
+They are used to separate decks in the box.They are used to separate decks in the box.
+22

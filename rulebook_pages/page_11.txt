@@ -1,0 +1,131 @@
+LUCK DIE
+Many cards and effects require the use of the Luck Many cards and effects require the use of the Luck 
+die to determine a  random outcome. The effect die to determine a  random outcome. The effect 
+of the roll is indicated on these components.of the roll is indicated on these components.
+If a result of a roll isn’t stated, it means that nothing If a result of a roll isn’t stated, it means that nothing 
+happens.happens.
+A result A result 
+  is usually severely negative,  is usually severely negative, 
+  is just negative or neutral,  is just negative or neutral, 
+and and 
+ , , 
+ , and , and 
+  are usually positive. are usually positive.
+BOOSTING YOUR INTENT
+Once per turn, when you spend at least Once per turn, when you spend at least 11 Intent (even if it’s less  Intent (even if it’s less 
+than the required cost) to pay for any action, you may decide af -than the required cost) to pay for any action, you may decide af -
+terwards to roll the Luck die to add additional Intent to this ac -terwards to roll the Luck die to add additional Intent to this ac -
+tion. The various outcomes depend on the following results:tion. The various outcomes depend on the following results:
+ – The action is failed and you don’t reclaim discarded Influ- – The action is failed and you don’t reclaim discarded Influ-
+ence cards used to pay for this action. ence cards used to pay for this action. AdditionallyAdditionally, discard , discard 11  
+   
+or suffer or suffer 11  
+  or Seal  or Seal 33 cards. cards.
+ – No Intent is added. If this means that the action fails, you  – No Intent is added. If this means that the action fails, you 
+don’t reclaim discarded Influence cards used to pay for this action.don’t reclaim discarded Influence cards used to pay for this action.
+  
+   
+  – add  – add 11//22//33 Intent of the same color. Intent of the same color.
+The Luck die is always used as the last source of add -The Luck die is always used as the last source of add -
+ing Intent to the actioning Intent to the action  – after rolling the die, you can’t add  – after rolling the die, you can’t add 
+any more Intent to this action. If you fail to gather the required any more Intent to this action. If you fail to gather the required 
+number of Intent, the used Intent is lost, even though you didn’t number of Intent, the used Intent is lost, even though you didn’t 
+perform the action.perform the action.
+You may also use the Luck die when performing a Movement You may also use the Luck die when performing a Movement 
+action to Move farther. It counts only as 1 Movement. If roll was action to Move farther. It counts only as 1 Movement. If roll was 
+failed, the Dreamer does not Move at all.failed, the Dreamer does not Move at all.
+MOVEMENT ACTIONS
+Her feet half rested half floated,  
+upon the floor; Earth scarcely held her down, 
+so fast was she becoming a thing of dreams. 
+ – Lord Dunsany
+, The King of Elfland’s Daughter
+A Move action is performed by discarding either Influence A Move action is performed by discarding either Influence 
+cards or Active Item cards with cards or Active Item cards with 
+  Intent and then moving the  Intent and then moving the 
+Dreamer miniature as many spaces as there were Dreamer miniature as many spaces as there were 
+  Intent  Intent 
+on these. Movement is only ever orthogonal (vertical or horizon-on these. Movement is only ever orthogonal (vertical or horizon-
+tal) but never diagonal*.tal) but never diagonal*.
+*Some Influence/Item cards may alter this rule and even provide other *Some Influence/Item cards may alter this rule and even provide other 
+bonuses to movement...bonuses to movement...
+RelocationRelocation – Relocating means moving to another space,  – Relocating means moving to another space, 
+ignoring range, Walls, and any other obstacles – much like ignoring range, Walls, and any other obstacles – much like 
+a “teleportation” .a “teleportation” .
+WALLS 
+A
+C
+IIII
+II
+B
+D
+Neither Entities nor Dreamers may Move or measure range Neither Entities nor Dreamers may Move or measure range 
+through Walls. If you want to Move to a space behind a Wall (or through Walls. If you want to Move to a space behind a Wall (or 
+use an action targeting that space), you have to measure the range use an action targeting that space), you have to measure the range 
+around it.around it.
+Some Walls do not cover the entire edge of their space (they Some Walls do not cover the entire edge of their space (they 
+have an opening in their center, or cover just half their space). have an opening in their center, or cover just half their space). 
+This means that the Wall on that edge is disabled.This means that the Wall on that edge is disabled.
+Two adjacent tiles may sometimes display a tiny gap between Two adjacent tiles may sometimes display a tiny gap between 
+their Walls, just on their edges. These gaps don’t disable the Wall.their Walls, just on their edges. These gaps don’t disable the Wall.
+A) The Dreamer moves 1 space.A) The Dreamer moves 1 space.
+B) The Dreamer cannot perform this Move because diagonal movement B) The Dreamer cannot perform this Move because diagonal movement 
+is not allowed.is not allowed.
+C) To perform a legal move to space I, the Dreamer must move 2 spaces.C) To perform a legal move to space I, the Dreamer must move 2 spaces.
+D) To perform a legal move to space II, the Dreamer must move 4 spaces D) To perform a legal move to space II, the Dreamer must move 4 spaces 
+(the Wall prevents them from taking the shorter path).(the Wall prevents them from taking the shorter path).
+ITEMS
+The mystifying oddities that can be found scattered through -The mystifying oddities that can be found scattered through -
+out the Dreamworld act as useful aids to help the Dreamers over-out the Dreamworld act as useful aids to help the Dreamers over-
+come their many challenges.come their many challenges.
+At any one time there can only be a maximum of At any one time there can only be a maximum of 33 ACTIVE  ACTIVE 
+ITEMSITEMS* which are placed in their designated spaces on the board. * which are placed in their designated spaces on the board. 
+Any Dreamer can use these – either by discarding them for their Any Dreamer can use these – either by discarding them for their 
+Intent or using them for their effects. Note that not all items are Intent or using them for their effects. Note that not all items are 
+discarded after using their effect unless specifically stated.discarded after using their effect unless specifically stated.
+*There is a 4th Item Slot on the board that may also be unlocked.*There is a 4th Item Slot on the board that may also be unlocked.
+You may have found some You may have found some STARTING ITEMSSTARTING ITEMS during the Ini- during the Ini-
+tial Dream (tial Dream ( 33 that you got to keep as  that you got to keep as ACTIVE ITEMSACTIVE ITEMS and the  and the 
+remaining remaining 22 that were sent to your  that were sent to your STORAGESTORAGE). If you didn’t find ). If you didn’t find 
+them, these would have made their way to the them, these would have made their way to the ITEM MARKETITEM MARKET  
+for you to buy later through Shopping Locations on the Dream -for you to buy later through Shopping Locations on the Dream -
+world Map.world Map.
+All other Item cards owned by the Dreamers are not considered All other Item cards owned by the Dreamers are not considered 
+to be active but placed face-down in the Storage slot. to be active but placed face-down in the Storage slot. 
+When the game allows you to When the game allows you to RESTORE AN ITEMRESTORE AN ITEM  (e.g.:  (e.g.: 
+through the effect of an Influence card or Script event), draw one through the effect of an Influence card or Script event), draw one 
+randomly from the randomly from the STORAGESTORAGE and place it in an Active Item slot.  and place it in an Active Item slot. 
+If there are no slots available, you must discard one of your other If there are no slots available, you must discard one of your other 
+active Items or the Item you just drew back into the Storage. Gen-active Items or the Item you just drew back into the Storage. Gen-
+erally erally DISCARDED ITEMSDISCARDED ITEMS will go into the  will go into the STORAGESTORAGE (however  (however 
+some may go back to the some may go back to the ITEM MARKETITEM MARKET which you can obtain  which you can obtain 
+again by again by SHOPPINGSHOPPING –  – see pg 15see pg 15).).
+REROLLS
+Many effects allow you to reroll a  die result (some-Many effects allow you to reroll a  die result (some-
+times this only applies to your roll, sometimes to any times this only applies to your roll, sometimes to any 
+roll, including other Players' and Entity rolls).roll, including other Players' and Entity rolls).
+There is no limit to the number of rerolls you can per-There is no limit to the number of rerolls you can per-
+form, as long as you can meet the conditions and pay all form, as long as you can meet the conditions and pay all 
+costs given on the card/rule allowing that reroll.costs given on the card/rule allowing that reroll.
+When you reroll the die, only the result of the last roll When you reroll the die, only the result of the last roll 
+is applied. Previous results are ignored.is applied. Previous results are ignored.
+WHY ARE WE DIGGING 
+EMPTY GRAVES? 
+WHO WANTS TO LIVE IN THEM?
+RANGE
+Most actions and effects requiring a target have a specif-Most actions and effects requiring a target have a specif-
+ic range. This is the maximum range of this action / effect. ic range. This is the maximum range of this action / effect. 
+Actions and effects can always target spaces that are closer Actions and effects can always target spaces that are closer 
+than maximum range.than maximum range.
+Range Range 00 means the same space. means the same space.
+Range Range 11 means an adjacent space and/or closer spaces. means an adjacent space and/or closer spaces.
+“In any range” or “unlimited range” doesn’t mean you may af -“In any range” or “unlimited range” doesn’t mean you may af -
+fect spaces behind Walls or Blocked spaces – you still must be able fect spaces behind Walls or Blocked spaces – you still must be able 
+to find a legitimate connection between you and the targeted space. to find a legitimate connection between you and the targeted space. 
+If a  rule states “in any space, ” you may ignore range, Walls and If a  rule states “in any space, ” you may ignore range, Walls and 
+Blocked spaces.Blocked spaces.
+Range 0Range 0
+ Range 1Range 1
+Range 3Range 3
+Range 2Range 2
+1111
