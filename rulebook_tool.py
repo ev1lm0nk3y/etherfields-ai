@@ -5,12 +5,13 @@
 # ]
 # ///
 
+import argparse
+import hashlib
+import json
 import os
 import sys
-import json
-import hashlib
-import argparse
 from datetime import datetime, timezone
+
 from pypdf import PdfReader
 
 # Paths
@@ -42,7 +43,7 @@ def get_pdf_metadata():
         return None
     mtime = os.path.getmtime(PDF_PATH)
     mtime_str = datetime.fromtimestamp(mtime, tz=timezone.utc).isoformat()
-    
+
     sha256_hash = hashlib.sha256()
     with open(PDF_PATH, "rb") as f:
         for byte_block in iter(lambda: f.read(4096), b""):
@@ -51,19 +52,19 @@ def get_pdf_metadata():
 
 def regenerate_cache_and_index():
     print("[Rulebook Tool] Regenerating page cache and building index...", file=sys.stderr)
-    
+
     # 1. Extract Pages
     os.makedirs(PAGES_DIR, exist_ok=True)
     reader = PdfReader(PDF_PATH)
     total_pages = len(reader.pages)
-    
+
     for i, page in enumerate(reader.pages):
         page_num = i + 1
         text = page.extract_text() or ""
         output_file = os.path.join(PAGES_DIR, f"page_{page_num:02d}.txt")
         with open(output_file, "w", encoding="utf-8") as f:
             f.write(text.strip())
-            
+
     # 2. Get Metadata
     mtime_str, sha256_hex = get_pdf_metadata()
     metadata = {
@@ -72,7 +73,7 @@ def regenerate_cache_and_index():
         "sha256": sha256_hex,
         "total_pages": total_pages
     }
-    
+
     # 3. Parse Table of Contents
     chapters = {}
     toc_file = os.path.join(PAGES_DIR, "page_02.txt")
@@ -132,7 +133,7 @@ def regenerate_cache_and_index():
                             index_terms[term] = pages
                     except ValueError:
                         continue
-                        
+
     # 5. Save index.json
     final_index = {
         "_metadata": metadata,
@@ -147,11 +148,11 @@ def check_and_validate_index(force=False):
     if not os.path.exists(PDF_PATH):
         print(f"Error: PDF not found at {PDF_PATH}", file=sys.stderr)
         return False
-        
+
     if force or not os.path.exists(INDEX_PATH) or not os.path.exists(PAGES_DIR) or len(os.listdir(PAGES_DIR)) == 0:
         regenerate_cache_and_index()
         return True
-        
+
     # Read index metadata
     try:
         with open(INDEX_PATH, "r", encoding="utf-8") as f:
@@ -160,54 +161,54 @@ def check_and_validate_index(force=False):
     except Exception:
         regenerate_cache_and_index()
         return True
-        
+
     # Get current PDF metadata
     current_mtime, current_sha = get_pdf_metadata()
-    
+
     if cached_meta.get("sha256") != current_sha:
         print("[Rulebook Tool] PDF hash mismatch! Rebuilding cache.", file=sys.stderr)
         regenerate_cache_and_index()
         return True
-    
+
     return True
 
 def search_rulebook(query):
     # Ensure valid index
     check_and_validate_index()
-    
+
     with open(INDEX_PATH, "r", encoding="utf-8") as f:
         index_data = json.load(f)
-        
+
     query_lower = query.lower().strip()
-    
+
     matched_chapters = []
     for chapter, pages in index_data.get("chapters", {}).items():
         if query_lower in chapter.lower():
             matched_chapters.append((chapter, pages))
-            
+
     matched_terms = []
     for term, pages in index_data.get("index_terms", {}).items():
         if query_lower in term.lower():
             matched_terms.append((term, pages))
-            
+
     print("\n" + "="*60)
     print(f"SEARCH RESULTS FOR: '{query}'")
     print("="*60)
-    
+
     pages_to_display = set()
-    
+
     if matched_chapters:
         print("\n--- MATCHING CHAPTERS/SECTIONS ---")
         for chap, pages in matched_chapters:
             print(f"  * {chap} -> Page(s) {', '.join(map(str, pages))}")
             pages_to_display.update(pages)
-            
+
     if matched_terms:
         print("\n--- MATCHING INDEX TERMS ---")
         for term, pages in matched_terms:
             print(f"  * {term} -> Page(s) {', '.join(map(str, pages))}")
             pages_to_display.update(pages)
-            
+
     if not matched_chapters and not matched_terms:
         print(f"\nNo exact index terms found containing '{query}'.")
         print("Falling back to full-text search across all page text files...")
@@ -244,9 +245,9 @@ if __name__ == "__main__":
     parser.add_argument("--validate", action="store_true", help="Validate index and rebuild if necessary")
     parser.add_argument("--search", type=str, help="Search for a topic or term in the index and display contents")
     parser.add_argument("--force", action="store_true", help="Force rebuild cache")
-    
+
     args = parser.parse_args()
-    
+
     if args.force:
         check_and_validate_index(force=True)
     elif args.validate:

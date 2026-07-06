@@ -8,8 +8,8 @@
 # ///
 
 import os
-import sys
 import shutil
+import sys
 import time
 from pathlib import Path
 
@@ -38,7 +38,7 @@ def save_env_vars(env_vars):
 
     updated_keys = set()
     new_lines = []
-    
+
     for line in lines:
         stripped = line.strip()
         if stripped and not stripped.startswith("#") and "=" in stripped:
@@ -121,9 +121,9 @@ def main():
     if source_choice == "1":
         # Recording with sounddevice
         try:
+            import numpy as np
             import sounddevice as sd
             import soundfile as sf
-            import numpy as np
         except ImportError:
             print_error("Failed to load audio recording dependencies (sounddevice, soundfile, numpy).")
             sys.exit(1)
@@ -139,7 +139,7 @@ def main():
         print("-" * 50 + "\n")
 
         ready = input("Press [Enter] when ready to record for 6 seconds...")
-        
+
         # Audio parameters
         sample_rate = 16000
         channels = 1
@@ -155,18 +155,18 @@ def main():
             # Trigger OS beep if on macOS
             if sys.platform == "darwin":
                 os.system('printf "\a"')
-            
+
             audio_data = sd.rec(int(duration * sample_rate), samplerate=sample_rate, channels=channels, dtype='float32')
-            
+
             # Show a simple progress bar
             for s in range(int(duration)):
                 time.sleep(1.0)
                 progress = "#" * (s + 1) + " " * (int(duration) - s - 1)
                 print(f"\r   [{progress}] {s+1}/6s", end="", flush=True)
             sd.wait()
-            
+
             print("\n⏹️ Recording completed!\n")
-            
+
             # Save the WAV file
             sf.write(str(target_path), audio_data, sample_rate)
             print_success(f"Successfully recorded and saved voice profile to: {target_path}")
@@ -185,7 +185,7 @@ def main():
             print_error("Specified file does not exist or is not a .wav file. Please try again.")
 
         try:
-            print_info(f"Copying reference file to custom directory...")
+            print_info("Copying reference file to custom directory...")
             shutil.copy2(file_path, target_path)
             print_success(f"Successfully registered custom voice profile: {target_path}")
         except Exception as e:

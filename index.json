@@ -6,872 +6,268 @@
     "total_pages": 20
   },
   "chapters": {
-    "COMPONENTSCO MPONENTS": [
-      2
-    ],
-    "BEFORE YOU BEGINBEFORE YOU BEGIN": [
-      3
-    ],
-    "OVERVIEW / GAME SETUPOVERVIEW / GAME SETUP": [
-      4
-    ],
-    "STARTING THE CAMPAIGN": [
-      4
-    ],
-    "BASIC RULESBASIC RULES": [
-      6
-    ],
-    "DREAM GATE TILES": [
-      6
-    ],
-    "DREAMSCAPE MAPDREAMSCAPE MAP": [
-      6
-    ],
-    "OTHER DREAMSCAPE RULES": [
-      6
-    ],
-    "TURN ORDERTURN ORDER": [
-      8
-    ],
-    "DREAMERS & DREAMSCAPE PHASE": [
-      8
-    ],
-    "RESHUFFLE": [
-      8
-    ],
-    "SEALING/ UNSEALING": [
-      8
-    ],
-    "DISTRESS & DYING": [
-      8
-    ],
-    "DREAMERS ACTIONSDREAMERS ACTIONS": [
-      9
-    ],
-    "MOVEMENT ACTION": [
-      9
-    ],
-    "GRADUAL ACTIONS": [
-      9
-    ],
-    "ASSAULT/CONTACT ACTIONSASSAULT/CONTACT ACTIONS": [
-      10
-    ],
-    "BASIC ACTIONS CARD": [
-      10
-    ],
-    "BOOSTING INTENT": [
-      10
-    ],
-    "REROLLS": [
-      10
-    ],
-    "INFLUENCE CARDS": [
-      10
-    ],
-    "PROGRESS INFLUENCE CARDSPROGRESS INFLUENCE CARDS": [
-      11
-    ],
-    "INFLUENCE MARKET": [
-      11
-    ],
-    "ITEMS": [
-      11
-    ],
-    "DREAMSCAPE PHASEDREAMSCAPE PHASE": [
-      12
-    ],
-    "TURN CARDS": [
-      12
-    ],
-    "ENTITY TILE, MOVEMENT, EFFECTS": [
-      12
-    ],
-    "STATE TOKENSSTATE TOKENS": [
-      13
-    ],
-    "MASKS": [
-      13
-    ],
-    "CLOCK": [
-      13
-    ],
-    "WISDOM CARDS": [
-      13
-    ],
-    "AWAKENING": [
-      13
-    ],
-    "DREAMWORLD MAPDREAMWORLD MAP": [
-      14
-    ],
-    "SLUMBERS AND SLUMBER ENTITY": [
-      14
-    ],
-    "MORPHINGS": [
-      14
-    ],
-    "FATE CARDSFATE CARDS": [
-      15
-    ],
-    "DELTA PHASE": [
-      15
-    ],
-    "FLAW CARDS": [
-      15
-    ],
-    "SHOPPING": [
-      15
-    ],
-    "SEASON CARDS": [
-      15
-    ],
-    "SAVING YOUR GAMESAVING YOUR GAME": [
-      16
-    ],
-    "ADDING A DREAMER": [
-      16
-    ],
-    "VARIANTS": [
-      16
-    ],
-    "FAQ/ CLARIFICATIONSFAQ/ CLARIFICATIONS": [
-      17
-    ],
-    "STRATEGY GUIDESTRATEGY GUIDE": [
-      18
-    ],
-    "INDEXINDEX": [
-      19
-    ],
-    "RULES SUMMARYRULES SUMMARY": [
-      20
-    ]
+    "COMPONENTS": [2],
+    "BEFORE YOU BEGIN": [3],
+    "OVERVIEW / GAME SETUP": [4],
+    "STARTING THE CAMPAIGN": [4],
+    "BASIC RULES": [6],
+    "DREAM GATE TILES": [6],
+    "DREAMSCAPE MAP": [6],
+    "OTHER DREAMSCAPE RULES": [6],
+    "TURN ORDER": [8],
+    "DREAMERS & DREAMSCAPE PHASE": [8],
+    "RESHUFFLE": [8],
+    "SEALING / UNSEALING": [8],
+    "DISTRESS & DYING": [8],
+    "DREAMERS ACTIONS": [9],
+    "MOVEMENT ACTION": [9],
+    "GRADUAL ACTIONS": [9],
+    "ASSAULT/CONTACT ACTIONS": [10],
+    "BASIC ACTIONS CARD": [10],
+    "BOOSTING INTENT": [10],
+    "REROLLS": [10],
+    "INFLUENCE CARDS": [10],
+    "PROGRESS INFLUENCE CARDS": [11],
+    "INFLUENCE MARKET": [11],
+    "ITEMS": [11],
+    "DREAMSCAPE PHASE": [12],
+    "TURN CARDS": [12],
+    "ENTITY TILE, MOVEMENT, EFFECTS": [12],
+    "STATE TOKENS": [13],
+    "MASKS": [13],
+    "CLOCK": [13],
+    "WISDOM CARDS": [13],
+    "AWAKENING": [13],
+    "DREAMWORLD MAP": [14],
+    "SLUMBERS AND SLUMBER ENTITY": [14],
+    "MORPHINGS": [14],
+    "FATE CARDS": [15],
+    "DELTA PHASE": [15],
+    "FLAW CARDS": [15],
+    "SHOPPING": [15],
+    "SEASON CARDS": [15],
+    "SAVING YOUR GAME": [16],
+    "ADDING A DREAMER": [16],
+    "VARIANTS": [16],
+    "FAQ / CLARIFICATIONS": [17],
+    "STRATEGY GUIDE": [18],
+    "INDEX": [19],
+    "RULES SUMMARY": [20]
   },
   "index_terms": {
-    "Active Items slots": [
-      11
-    ],
-    "Adding New Players": [
-      16
-    ],
-    "Assault": [
-      9,
-      10,
-      12
-    ],
-    "Awakening": [
-      5,
-      13,
-      14
-    ],
-    "Basic Actions": [
-      9
-    ],
-    "Basic Actions Assault": [
-      10
-    ],
-    "Basic Actions Contact": [
-      10
-    ],
-    "Basic Actions Effort": [
-      9
-    ],
-    "Big Entities": [
-      7
-    ],
-    "Block 1 Step": [
-      12
-    ],
-    "Block tokens": [
-      3,
-      6,
-      19
-    ],
-    "Blocked space": [
-      7,
-      11
-    ],
-    "Board": [
-      2,
-      4,
-      5,
-      6,
-      14
-    ],
-    "Boosting your Intent": [
-      9,
-      11,
-      18
-    ],
-    "Buying new Influence cards": [
-      10,
-      15,
-      16
-    ],
-    "Buying new Item cards": [
-      11,
-      15
-    ],
-    "Classic cards": [
-      16
-    ],
-    "Clock": [
-      5,
-      13
-    ],
-    "Clock Hours": [
-      5,
-      13
-    ],
-    "Contact": [
-      10,
-      12
-    ],
-    "Dazed": [
-      14
-    ],
-    "Death of a Dreamer": [
-      8,
-      9,
-      16
-    ],
-    "Deliverance": [
-      14
-    ],
-    "Discard Item": [
-      11
-    ],
-    "Distress": [
-      3,
-      7,
-      8,
-      9
-    ],
-    "Distress actions cost": [
-      9
-    ],
-    "Distress limit": [
-      7
-    ],
-    "Distress reshuffle": [
-      8
-    ],
-    "Distress suffering": [
-      8
-    ],
-    "Draw step": [
-      7,
-      8
-    ],
-    "Drawing Bonus": [
-      7
-    ],
-    "Dream": [
-      5,
-      6
-    ],
-    "Dream After you have finished": [
-      14
-    ],
-    "Dream Entity tiles": [
-      5,
-      12
-    ],
-    "Dream Gate tiles": [
-      6
-    ],
-    "Dream Gate tiles Introduction": [
-      6
-    ],
-    "Dream Gate tiles Keys Cost": [
-      6
-    ],
-    "Dream Gate tiles Secret tile code": [
-      6
-    ],
-    "Dream Gate tiles Setup": [
-      6
-    ],
-    "Dream Gate tiles slot": [
-      5
-    ],
-    "Dreamer": [
-      4
-    ],
-    "Dreamer board": [
-      4
-    ],
-    "Dreamer Movement": [
-      11
-    ],
-    "Dreamer Personal tokens": [
-      3
-    ],
-    "Dreamers Actions": [
-      9,
-      10,
-      11
-    ],
-    "Dreamers Entrance": [
-      6,
-      19
-    ],
-    "Dreamers Phase": [
-      8,
-      20
-    ],
-    "Dreamscape": [
-      6,
-      7,
-      14
-    ],
-    "Dreamscape icons": [
-      7
-    ],
-    "Dreamscape Phase": [
-      8,
-      12
-    ],
-    "Dreamscape space": [
-      6
-    ],
-    "Dreamworld Map": [
-      5,
-      14,
-      15
-    ],
-    "Dreamworld Map Locations": [
-      14
-    ],
-    "Dreamworld Map Paths": [
-      14
-    ],
-    "Dreamworld Map Shortcuts": [
-      14
-    ],
-    "Dreamworld Map Shortcuts effect": [
-      14
-    ],
-    "Effort": [
-      9
-    ],
-    "Entity": [
-      12,
-      14
-    ],
-    "Entity Big Entities": [
-      7
-    ],
-    "Entity Deliverance": [
-      14
-    ],
-    "Entity Dream Entity tiles": [
-      12
-    ],
-    "Entity Entities Effects": [
-      12
-    ],
-    "Entity Interactions": [
-      12
-    ],
-    "Entity Limit of Entity tokens per space": [
-      7
-    ],
-    "Entity Morphings": [
-      3,
-      13
-    ],
-    "Entity Movement and Movement die": [
-      12
-    ],
-    "Entity Movement value": [
-      12
-    ],
-    "Entity Setup": [
-      12,
-      14
-    ],
-    "Entity Skip": [
-      14
-    ],
-    "Entity Slot": [
-      5
-    ],
-    "Entity Slumber tiles": [
-      14
-    ],
-    "Entity Spawn": [
-      12,
-      14
-    ],
-    "Entity This Slumber ends": [
-      14
-    ],
-    "Ether": [
-      3,
-      18,
-      19
-    ],
-    "Ether Buying new cards": [
-      10,
-      15
-    ],
-    "Ether Cost": [
-      9,
-      10
-    ],
-    "Ether Saving and restoring the game": [
-      16
-    ],
-    "Fate cards": [
-      2,
-      15
-    ],
-    "Fate Deck slot": [
-      5
-    ],
-    "Fate Quirk card": [
-      14,
-      15
-    ],
-    "First Player marker": [
-      2,
-      16
-    ],
-    "Flaw cards": [
-      2,
-      15
-    ],
-    "Flaw Deck slot": [
-      5
-    ],
-    "Flaw Discard": [
-      15
-    ],
-    "Flaw Remove": [
-      15
-    ],
-    "Flaw Sealing": [
-      8,
-      15
-    ],
-    "Flipping a card": [
-      10
-    ],
-    "Flying Rule": [
-      7,
-      19
-    ],
-    "Gain Loot": [
-      12,
-      14
-    ],
-    "Gradual actions": [
-      10
-    ],
-    "Hand size limit": [
-      8
-    ],
-    "Hours": [
-      5,
-      13
-    ],
-    "Influence card": [
-      9
-    ],
-    "Influence card Progress zone": [
-      10
-    ],
-    "Influence card back": [
-      10
-    ],
-    "Influence card Buying": [
-      10
-    ],
-    "Influence card Deck": [
-      4
-    ],
-    "Influence card Deck limits": [
-      10
-    ],
-    "Influence card Draw": [
-      8
-    ],
-    "Influence card Flip a card": [
-      10
-    ],
-    "Influence card Hand size limit": [
-      8
-    ],
-    "Influence card Intent": [
-      9,
-      10
-    ],
-    "Influence card Progress": [
-      10
-    ],
-    "Influence card Remove": [
-      10,
-      17
-    ],
-    "Influence card Reshuffle": [
-      8
-    ],
-    "Influence card Return": [
-      10
-    ],
-    "Influence card Sealing": [
-      8
-    ],
-    "Influence card Unsealing": [
-      8
-    ],
-    "eamworld Map": [
-      15
-    ],
-    "Influence Discard pile": [
-      4,
-      8,
-      9,
-      10
-    ],
-    "Influence Market": [
-      5,
-      10
-    ],
-    "Intent": [
-      9,
-      10
-    ],
-    "Intent Boosting your Intent": [
-      9,
-      11,
-      18
-    ],
-    "Intent markers": [
-      10
-    ],
-    "Interactions": [
-      12
-    ],
-    "Item Market": [
-      5,
-      11,
-      15
-    ],
-    "Items": [
-      11
-    ],
-    "Items Active slots": [
-      11
-    ],
-    "Items Restore": [
-      11
-    ],
-    "Items Using on the Dreamworld Map": [
-      15
-    ],
-    "Keys Cost": [
-      6
-    ],
-    "Lack of Components": [
-      7
-    ],
-    "Limit of Entity tokens per space": [
-      7
-    ],
-    "Limit of Influence cards": [
-      10
-    ],
-    "Limit of miniatures per space": [
-      7
-    ],
-    "Locations": [
-      14
-    ],
-    "Loot": [
-      12,
-      14
-    ],
-    "Luck die": [
-      3,
-      11
-    ],
-    "Map Actions": [
-      6,
-      9
-    ],
-    "Masks": [
-      2,
-      13
-    ],
-    "Masks Discard": [
-      13
-    ],
-    "Masks Restore": [
-      13
-    ],
-    "Morphings": [
-      3,
-      13
-    ],
-    "Movement and Relocation": [
-      11
-    ],
-    "Movement die": [
-      3,
-      12
-    ],
-    "Movement value": [
-      12
-    ],
-    "Multiple choices": [
-      5
-    ],
-    "Note cards": [
-      15
-    ],
-    "Number Of Turn cards": [
-      12
-    ],
-    "Out Of Turns": [
-      8,
-      12,
-      14
-    ],
-    "Overlay cards": [
-      15
-    ],
-    "Paralyzed": [
-      14
-    ],
-    "Paths": [
-      14
-    ],
-    "Personal tokens": [
-      3
-    ],
-    "Player Count icon": [
-      5,
-      19
-    ],
-    "Poisoned": [
-      14
-    ],
-    "Progress cards": [
-      10
-    ],
-    "Progress zone": [
-      10
-    ],
-    "Quirk card": [
-      14,
-      15
-    ],
-    "Quirk space": [
-      15
-    ],
-    "Range": [
-      11
-    ],
-    "Rapid action / effect": [
-      9
-    ],
-    "Relocation": [
-      11
-    ],
-    "Rerolls": [
-      11
-    ],
-    "Reshuffle Influence deck": [
-      8
-    ],
-    "Restore Item": [
-      11
-    ],
-    "Restore Mask": [
-      13
-    ],
-    "Return Item to the Item Market": [
-      10
-    ],
-    "Revealing Secret cards / tiles": [
-      5
-    ],
-    "Rolling for Entity Movement": [
-      12
-    ],
-    "Round": [
-      16
-    ],
-    "Saving": [
-      16
-    ],
-    "Sealing Influence card": [
-      8
-    ],
-    "Season cards": [
-      15
-    ],
-    "Season cards slot": [
-      5
-    ],
-    "Secret cards": [
-      2,
-      3
-    ],
-    "Secret cards code and setup": [
-      3
-    ],
-    "Secret cards Note cards": [
-      15
-    ],
-    "Secret cards Overlay cards": [
-      15
-    ],
-    "Secret cards Revealing": [
-      5
-    ],
-    "Secret tiles": [
-      2,
-      3
-    ],
-    "Secret tiles Revealing": [
-      5
-    ],
-    "Shining Gems": [
-      3
-    ],
-    "Shining Gems Actions cost": [
-      9
-    ],
-    "Shining Gems Slot": [
-      7
-    ],
-    "Shortcuts": [
-      14
-    ],
-    "Skip": [
-      14
-    ],
-    "Slumbers": [
-      5
-    ],
-    "Slumbers After you have finished": [
-      13
-    ],
-    "Slumbers Deck slot": [
-      5
-    ],
-    "Slumbers Dreamscape": [
-      5
-    ],
-    "Slumbers Dreamscape Phase": [
-      12
-    ],
-    "Slumbers Entity tiles": [
-      5,
-      14
-    ],
-    "Slumbers Map tiles": [
-      14
-    ],
-    "Slumbers Map tiles slot": [
-      5
-    ],
-    "Slumber tiles": [
-      14
-    ],
-    "Space": [
-      6
-    ],
-    "Spawn": [
-      12,
-      14
-    ],
-    "Stairs": [
-      7
-    ],
-    "State tokens": [
-      3,
-      14
-    ],
-    "Storage": [
-      4
-    ],
-    "Story tokens": [
-      3
-    ],
-    "Stunned": [
-      14
-    ],
-    "Suffering Distress": [
-      8
-    ],
-    "Team marker": [
-      2,
-      13,
-      14
-    ],
-    "Terrain symbols / tokens": [
-      3,
-      7
-    ],
-    "This Slumber ends": [
-      14
-    ],
-    "Thorn Knight": [
-      16
-    ],
-    "ens": [
-      3
-    ],
-    "Trap": [
-      7
-    ],
-    "Turn Add Turns": [
-      12
-    ],
-    "Turn cards": [
-      12
-    ],
-    "Turn cards In Dream": [
-      12
-    ],
-    "Turn cards In Slumber": [
-      12
-    ],
-    "Turn Deck slot": [
-      5
-    ],
-    "Turn Discard pile slot": [
-      5
-    ],
-    "Turn Discard Step": [
-      8
-    ],
-    "Turn Order": [
-      8
-    ],
-    "Turn Suits": [
-      6,
-      12
-    ],
-    "Unsealing Influence card": [
-      8
-    ],
-    "Universal markers": [
-      3
-    ],
-    "Unlimited range": [
-      11
-    ],
-    "Walls": [
-      11
-    ],
-    "Wisdom cards": [
-      13
-    ]
+    "Active Items slots": [11],
+    "Adding New Players": [16],
+    "Assault": [9, 10, 12],
+    "Awakening": [5, 13, 14],
+    "Basic Actions": [9],
+    "Basic Actions Assault": [10],
+    "Basic Actions Contact": [10],
+    "Basic Actions Effort": [9],
+    "Big Entities": [7],
+    "Block 1 Step": [12],
+    "Block tokens": [3, 6, 19],
+    "Blocked space": [7, 11],
+    "Board": [2, 4, 5, 6, 14],
+    "Boosting your Intent": [9, 11, 18],
+    "Buying new Influence cards": [10, 15, 16],
+    "Buying new Item cards": [11, 15],
+    "Classic cards": [16],
+    "Clock": [5, 13],
+    "Clock Hours": [5, 13],
+    "Contact": [10, 12],
+    "Dazed": [14],
+    "Death of a Dreamer": [8, 9, 16],
+    "Deliverance": [14],
+    "Discard Item": [11],
+    "Distress": [3, 7, 8, 9],
+    "Distress actions cost": [9],
+    "Distress limit": [7],
+    "Distress reshuffle": [8],
+    "Distress suffering": [8],
+    "Draw step": [7, 8],
+    "Drawing Bonus": [7],
+    "Dream": [5, 6],
+    "Dream After you have finished": [14],
+    "Dream Entity tiles": [5, 12],
+    "Dream Gate tiles": [6],
+    "Dream Gate tiles Introduction": [6],
+    "Dream Gate tiles Keys Cost": [6],
+    "Dream Gate tiles Secret tile code": [6],
+    "Dream Gate tiles Setup": [6],
+    "Dream Gate tiles slot": [5],
+    "Dreamer": [4],
+    "Dreamer board": [4],
+    "Dreamer Movement": [11],
+    "Dreamer Personal tokens": [3],
+    "Dreamers Actions": [9, 10, 11],
+    "Dreamers Entrance": [6, 19],
+    "Dreamers Phase": [8, 20],
+    "Dreamscape": [6, 7, 14],
+    "Dreamscape icons": [7],
+    "Dreamscape Phase": [8, 12],
+    "Dreamscape space": [6],
+    "Dreamworld Map": [5, 14, 15],
+    "Dreamworld Map Locations": [14],
+    "Dreamworld Map Paths": [14],
+    "Dreamworld Map Shortcuts": [14],
+    "Dreamworld Map Shortcuts effect": [14],
+    "Effort": [9],
+    "Entity": [12, 14],
+    "Entity Big Entities": [7],
+    "Entity Deliverance": [14],
+    "Entity Dream Entity tiles": [12],
+    "Entity Entities Effects": [12],
+    "Entity Interactions": [12],
+    "Entity Limit of Entity tokens per space": [7],
+    "Entity Morphings": [3, 13],
+    "Entity Movement and Movement die": [12],
+    "Entity Movement value": [12],
+    "Entity Setup": [12, 14],
+    "Entity Skip": [14],
+    "Entity Slot": [5],
+    "Entity Slumber tiles": [14],
+    "Entity Spawn": [12, 14],
+    "Entity This Slumber ends": [14],
+    "Ether": [3, 18, 19],
+    "Ether Buying new cards": [10, 15],
+    "Ether Cost": [9, 10],
+    "Ether Saving and restoring the game": [16],
+    "Fate cards": [2, 15],
+    "Fate Deck slot": [5],
+    "Fate Quirk card": [14, 15],
+    "First Player marker": [2, 16],
+    "Flaw cards": [2, 15],
+    "Flaw Deck slot": [5],
+    "Flaw Discard": [15],
+    "Flaw Remove": [15],
+    "Flaw Sealing": [8, 15],
+    "Flipping a card": [10],
+    "Flying Rule": [7, 19],
+    "Gain Loot": [12, 14],
+    "Gradual actions": [10],
+    "Hand size limit": [8],
+    "Hours": [5, 13],
+    "Influence card": [9],
+    "Influence card Progress zone": [10],
+    "Influence card back": [10],
+    "Influence card Buying": [10],
+    "Influence card Deck": [4],
+    "Influence card Deck limits": [10],
+    "Influence card Draw": [8],
+    "Influence card Flip a card": [10],
+    "Influence card Hand size limit": [8],
+    "Influence card Intent": [9, 10],
+    "Influence card Progress": [10],
+    "Influence card Remove": [10, 17],
+    "Influence card Reshuffle": [8],
+    "Influence card Return": [10],
+    "Influence card Sealing": [8],
+    "Influence card Unsealing": [8],
+    "eamworld Map": [15],
+    "Influence Discard pile": [4, 8, 9, 10],
+    "Influence Market": [5, 10],
+    "Intent": [9, 10],
+    "Intent Boosting your Intent": [9, 11, 18],
+    "Intent markers": [10],
+    "Interactions": [12],
+    "Item Market": [5, 11, 15],
+    "Items": [11],
+    "Items Active slots": [11],
+    "Items Restore": [11],
+    "Items Using on the Dreamworld Map": [15],
+    "Keys Cost": [6],
+    "Lack of Components": [7],
+    "Limit of Entity tokens per space": [7],
+    "Limit of Influence cards": [10],
+    "Limit of miniatures per space": [7],
+    "Locations": [14],
+    "Loot": [12, 14],
+    "Luck die": [3, 11],
+    "Map Actions": [6, 9],
+    "Masks": [2, 13],
+    "Masks Discard": [13],
+    "Masks Restore": [13],
+    "Morphings": [3, 13],
+    "Movement and Relocation": [11],
+    "Movement die": [3, 12],
+    "Movement value": [12],
+    "Multiple choices": [5],
+    "Note cards": [15],
+    "Number Of Turn cards": [12],
+    "Out Of Turns": [8, 12, 14],
+    "Overlay cards": [15],
+    "Paralyzed": [14],
+    "Paths": [14],
+    "Personal tokens": [3],
+    "Player Count icon": [5, 19],
+    "Poisoned": [14],
+    "Progress cards": [10],
+    "Progress zone": [10],
+    "Quirk card": [14, 15],
+    "Quirk space": [15],
+    "Range": [11],
+    "Rapid action / effect": [9],
+    "Relocation": [11],
+    "Rerolls": [11],
+    "Reshuffle Influence deck": [8],
+    "Restore Item": [11],
+    "Restore Mask": [13],
+    "Return Item to the Item Market": [10],
+    "Revealing Secret cards / tiles": [5],
+    "Rolling for Entity Movement": [12],
+    "Round": [16],
+    "Saving": [16],
+    "Sealing Influence card": [8],
+    "Season cards": [15],
+    "Season cards slot": [5],
+    "Secret cards": [2, 3],
+    "Secret cards code and setup": [3],
+    "Secret cards Note cards": [15],
+    "Secret cards Overlay cards": [15],
+    "Secret cards Revealing": [5],
+    "Secret tiles": [2, 3],
+    "Secret tiles Revealing": [5],
+    "Shining Gems": [3],
+    "Shining Gems Actions cost": [9],
+    "Shining Gems Slot": [7],
+    "Shortcuts": [14],
+    "Skip": [14],
+    "Slumbers": [5],
+    "Slumbers After you have finished": [13],
+    "Slumbers Deck slot": [5],
+    "Slumbers Dreamscape": [5],
+    "Slumbers Dreamscape Phase": [12],
+    "Slumbers Entity tiles": [5, 14],
+    "Slumbers Map tiles": [14],
+    "Slumbers Map tiles slot": [5],
+    "Slumber tiles": [14],
+    "Space": [6],
+    "Spawn": [12, 14],
+    "Stairs": [7],
+    "State tokens": [3, 14],
+    "Storage": [4],
+    "Story tokens": [3],
+    "Stunned": [14],
+    "Suffering Distress": [8],
+    "Team marker": [2, 13, 14],
+    "Terrain symbols / tokens": [3, 7],
+    "This Slumber ends": [14],
+    "Thorn Knight": [16],
+    "ens": [3],
+    "Trap": [7],
+    "Turn Add Turns": [12],
+    "Turn cards": [12],
+    "Turn cards In Dream": [12],
+    "Turn cards In Slumber": [12],
+    "Turn Deck slot": [5],
+    "Turn Discard pile slot": [5],
+    "Turn Discard Step": [8],
+    "Turn Order": [8],
+    "Turn Suits": [6, 12],
+    "Unsealing Influence card": [8],
+    "Universal markers": [3],
+    "Unlimited range": [11],
+    "Walls": [11],
+    "Wisdom cards": [13]
   }
 }

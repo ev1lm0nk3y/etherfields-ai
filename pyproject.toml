@@ -3,7 +3,7 @@ name = "etherfields-ai"
 version = "0.1.0"
 description = "🌌 Etherfields AI Board Game Assistant & Retrieval Engine"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = "==3.11.10"
 dependencies = [
     "pypdf>=5.0.0",
     "openwakeword>=0.6.0",

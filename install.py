@@ -6,11 +6,12 @@ downloads assets, and handles tool installations.
 """
 
 import os
-import sys
 import shutil
 import subprocess
+import sys
 import urllib.request
 from pathlib import Path
+
 
 # Color helpers for rich CLI experience
 def print_success(msg):
@@ -40,7 +41,7 @@ def ask_input(question, default_val=None):
 
 def check_prerequisites():
     print_info("Checking system prerequisites...")
-    
+
     # 1. Python version >= 3.12
     major, minor = sys.version_info.major, sys.version_info.minor
     if major < 3 or (major == 3 and minor < 12):
@@ -70,7 +71,7 @@ def setup_directories_and_env():
     custom_dir = Path(os.path.expandvars(os.path.expanduser(custom_dir_str))).resolve()
 
     print_info(f"Initializing directories in: {custom_dir}")
-    
+
     # Create directories
     subdirs = ["logs", "audio_cache", "rulebook_pages", "topics", "models"]
     for subdir in subdirs:
@@ -80,7 +81,7 @@ def setup_directories_and_env():
 
     # 2. Ask for Voice Assist enablement
     enable_voice = ask_yes_no("Would you like to enable the voice/TTS and wake-word listener capabilities?", default=False)
-    
+
     if enable_voice:
         # Check ffmpeg
         ffmpeg_path = shutil.which("ffmpeg")
@@ -152,7 +153,7 @@ def handle_rulebook_pdf(custom_dir):
     # Rulebook PDF check
     local_pdf = Path("Rulebook_20.pdf")
     custom_pdf_path = custom_dir / "Rulebook_20.pdf"
-    
+
     # If PDF is already in CWD, move/copy it to the custom directory
     if local_pdf.exists() and not custom_pdf_path.exists():
         print_info(f"Moving local Rulebook_20.pdf to custom directory: {custom_pdf_path}")
@@ -164,7 +165,7 @@ def handle_rulebook_pdf(custom_dir):
         pdf_input = ask_input("Enter local path to the Rulebook v2.0 PDF, or a URL to download it", default_url)
 
         if pdf_input.startswith("http://") or pdf_input.startswith("https://"):
-            print_info(f"Downloading Rulebook_20.pdf from Awaken Realms...")
+            print_info("Downloading Rulebook_20.pdf from Awaken Realms...")
             try:
                 urllib.request.urlretrieve(pdf_input, custom_pdf_path)
                 print_success(f"Downloaded rulebook successfully to {custom_pdf_path}")
@@ -217,11 +218,11 @@ def detect_hardware():
                 return "mps"
         except Exception:
             pass
-            
+
     # 2. Check for NVIDIA CUDA
     if shutil.which("nvidia-smi"):
         return "cuda"
-        
+
     return "cpu"
 
 
@@ -232,7 +233,7 @@ def select_hardware_acceleration():
     print("  1) GPU (MPS - Apple Silicon Mac)")
     print("  2) GPU (CUDA - NVIDIA Graphics Cards)")
     print("  3) CPU Only (Lightweight, default on most systems)")
-    
+
     # Set default choice based on detection
     if detected == "mps":
         default_choice = "1"
@@ -240,7 +241,7 @@ def select_hardware_acceleration():
         default_choice = "2"
     else:
         default_choice = "3"
-        
+
     choice = ask_input("Select target (1-3)", default_choice)
     if choice == "1":
         return "mps"
@@ -263,7 +264,7 @@ def sync_environment(target):
             subprocess.run(cmd, check=True)
         else: # mps / default
             subprocess.run(["uv", "sync"], check=True)
-            
+
         print_success("Project environment synced successfully (dependencies and dev tools installed).")
     except subprocess.CalledProcessError as e:
         print_warning(f"Failed to synchronize environment: {e}")
@@ -273,27 +274,27 @@ def main():
     print("=" * 60)
     print("🌌  Etherfields AI Rule Master & Retriever Setup Wizard  🌌")
     print("=" * 60)
-    
+
     check_prerequisites()
     print("-" * 60)
-    
+
     target = select_hardware_acceleration()
     print("-" * 60)
-    
+
     sync_environment(target)
     print("-" * 60)
-    
+
     enable_voice, custom_dir = setup_directories_and_env()
     print("-" * 60)
-    
+
     handle_voice_tools(enable_voice)
     print("-" * 60)
-    
+
     handle_rulebook_pdf(custom_dir)
     print("-" * 60)
-    
+
     warmup_dependencies(enable_voice)
-    
+
     print("=" * 60)
     print("\033[92m🎉  Installation and configuration completed successfully!  🎉\033[0m")
     print("-" * 60)

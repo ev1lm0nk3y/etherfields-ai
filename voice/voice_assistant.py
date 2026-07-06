@@ -9,18 +9,19 @@
 # ]
 # ///
 
-import asyncio
-import websockets
-import json
-import base64
-import struct
-import tempfile
-import subprocess
-import os
 import argparse
+import asyncio
+import base64
+import json
+import os
 import random
-import sys
 import re
+import struct
+import subprocess
+import sys
+import tempfile
+
+import websockets
 
 BASE_DIR = "/Users/ryan/Documents/etherfields-ai"
 
@@ -48,6 +49,7 @@ TTS_WS_URL = _env.get("TTS_WS_URL", _env.get("BANTR_WS_URL", "ws://127.0.0.1:462
 
 # Custom Audio Player Setup (Defaulting per-platform)
 import platform
+
 _default_player = "afplay"
 if platform.system() == "Linux":
     _default_player = "aplay"
@@ -67,9 +69,9 @@ def play_audio_file(file_path):
 # Check for local pip-installed Chatterbox TTS packages
 HAS_LOCAL_CHATTERBOX = False
 try:
-    from chatterbox.tts_turbo import ChatterboxTurboTTS
-    import torchaudio as ta
     import torch
+    import torchaudio as ta
+    from chatterbox.tts_turbo import ChatterboxTurboTTS
     HAS_LOCAL_CHATTERBOX = True
 except ImportError:
     pass
@@ -99,7 +101,7 @@ def build_wav(pcm_data, sample_rate):
     byte_rate = sample_rate * num_channels * (bits_per_sample // 8)
     block_align = num_channels * (bits_per_sample // 8)
     data_size = len(pcm_data)
-    
+
     header = struct.pack(
         '<4sI4s4sIHHIIHH4sI',
         b'RIFF',
@@ -120,7 +122,7 @@ def build_wav(pcm_data, sample_rate):
 
 def get_script_cache_paths(script_num, script_obj, args):
     engine = getattr(args, "engine", "chatterbox") or "chatterbox"
-    
+
     # 1. Narrative Cache Path
     narrative_path = None
     narrative_text = script_obj.get("narrative", "").strip() if isinstance(script_obj, dict) else ""
@@ -131,13 +133,13 @@ def get_script_cache_paths(script_num, script_obj, args):
             voice_name = os.path.splitext(os.path.basename(voice_ref))[0]
         else:
             voice_name = voice_ref
-        
+
         emotion = getattr(args, "emotion", None) or (script_obj.get("tone", "neutral") if isinstance(script_obj, dict) else "neutral")
         narrative_path = os.path.join(
-            AUDIO_CACHE_DIR, engine, 
+            AUDIO_CACHE_DIR, engine,
             f"script_{script_num}_narrative_{voice_name}_{emotion}.wav"
         )
-        
+
     # 2. Instructions Cache Path
     instructions_path = None
     instructions_text = script_obj.get("instructions", "").strip() if isinstance(script_obj, dict) else ""
@@ -147,23 +149,23 @@ def get_script_cache_paths(script_num, script_obj, args):
             voice_name = os.path.splitext(os.path.basename(voice_ref))[0]
         else:
             voice_name = voice_ref
-            
+
         instructions_path = os.path.join(
-            AUDIO_CACHE_DIR, engine, 
+            AUDIO_CACHE_DIR, engine,
             f"script_{script_num}_instructions_{voice_name}_neutral.wav"
         )
-        
+
     return narrative_path, instructions_path
 
 async def speak_text_bantr(text, voice, speed=1.0, stability=2.0, creativity=0.0, output_path=None, play_audio=True):
     if output_path and os.path.exists(output_path):
         if play_audio:
-            print(f"[Web TTS] Playing cached audio...", flush=True)
+            print("[Web TTS] Playing cached audio...", flush=True)
             play_audio_file(output_path)
         return True
 
     url = f"{TTS_WS_URL}?speed={speed}&stability={stability}&creativity={creativity}"
-    
+
     try:
         # We specify max_size=None to handle large files (e.g. secret scripts)
         async with websockets.connect(url, max_size=None) as websocket:
@@ -173,7 +175,7 @@ async def speak_text_bantr(text, voice, speed=1.0, stability=2.0, creativity=0.0
                 "seed": random.randint(0, 2**31 - 1)
             }
             await websocket.send(json.dumps(payload))
-            
+
             async for message in websocket:
                 data = json.loads(message)
                 t = data.get("type")
@@ -185,7 +187,7 @@ async def speak_text_bantr(text, voice, speed=1.0, stability=2.0, creativity=0.0
                     audio_b64 = data["audio"]
                     sample_rate = data.get("sample_rate", 22050)
                     pcm_data = base64.b64decode(audio_b64)
-                    
+
                     wav_data = build_wav(pcm_data, sample_rate)
                     if output_path:
                         save_path = output_path
@@ -194,13 +196,13 @@ async def speak_text_bantr(text, voice, speed=1.0, stability=2.0, creativity=0.0
                         with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
                             f.write(wav_data)
                             save_path = f.name
-                            
+
                     if output_path:
                         with open(save_path, "wb") as f:
                             f.write(wav_data)
-                    
+
                     if play_audio:
-                        print(f"[Web TTS] Playing generated audio...", flush=True)
+                        print("[Web TTS] Playing generated audio...", flush=True)
                         try:
                             play_audio_file(save_path)
                         finally:
@@ -251,7 +253,7 @@ def resolve_reference_wav(voice_name="cyrus", emotion="neutral"):
         alt_path = os.path.join(base_dir, "voices_transformed")
         if os.path.exists(alt_path):
             base_dir = alt_path
-    
+
     # Standard voice mappings
     mappings = {
         "cora": {
@@ -272,10 +274,10 @@ def resolve_reference_wav(voice_name="cyrus", emotion="neutral"):
             "happy": "0311_cyrus_m_happy_gen.wav"
         }
     }
-    
+
     vn = str(voice_name).lower().strip()
     em = str(emotion).lower().strip()
-    
+
     if vn in mappings:
         style_map = mappings[vn]
         filename = style_map.get(em) or style_map.get("neutral")
@@ -283,7 +285,7 @@ def resolve_reference_wav(voice_name="cyrus", emotion="neutral"):
             full_path = os.path.join(base_dir, filename)
             if os.path.exists(full_path):
                 return full_path
-                
+
     # Fallback/wildcard check in the directory if we cannot match perfectly
     if os.path.exists(base_dir):
         # Look for any filename containing the voice name and emotion
@@ -294,7 +296,7 @@ def resolve_reference_wav(voice_name="cyrus", emotion="neutral"):
         fallback_path = os.path.join(base_dir, "0306_cyrus_m_neutral_gen.wav")
         if os.path.exists(fallback_path):
             return fallback_path
-            
+
     return None
 
 def get_safe_audio_prompt(path):
@@ -304,28 +306,28 @@ def get_safe_audio_prompt(path):
     """
     if not path or not os.path.exists(path):
         return path
-        
+
     try:
-        import soundfile as sf
         import numpy as np
+        import soundfile as sf
         data, samplerate = sf.read(path)
         duration = len(data) / samplerate
         if duration < 5.1:
             # We need to tile the audio to exceed 5.1 seconds
             repeats = int(np.ceil(5.1 / duration))
             padded_data = np.tile(data, repeats)
-            
+
             # Save to temporary path
             temp_f = tempfile.NamedTemporaryFile(suffix="_padded.wav", delete=False)
             temp_path = temp_f.name
             temp_f.close()
-            
+
             sf.write(temp_path, padded_data, samplerate)
             print(f"[Local TTS] Audio prompt '{os.path.basename(path)}' was only {duration:.2f}s. Automatically padded/tiled to {len(padded_data)/samplerate:.2f}s.", flush=True)
             return temp_path
     except Exception as e:
         print(f"[Warning] Failed to pad audio prompt: {e}", flush=True)
-        
+
     return path
 
 _voice_conditionals_cache = {}
@@ -333,7 +335,7 @@ _voice_conditionals_cache = {}
 def speak_text_chatterbox(text, audio_prompt_path=None, output_path=None, play_audio=True):
     if output_path and os.path.exists(output_path):
         if play_audio:
-            print(f"[Local TTS] Playing cached audio...", flush=True)
+            print("[Local TTS] Playing cached audio...", flush=True)
             play_audio_file(output_path)
         return True
 
@@ -346,11 +348,11 @@ def speak_text_chatterbox(text, audio_prompt_path=None, output_path=None, play_a
                   "  pip install chatterbox-tts torchaudio torch\n"
                   "The assistant will automatically detect and use it locally!\n", file=sys.stderr)
         return False
-        
+
     try:
         with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
             temp_path = f.name
-            
+
         if audio_prompt_path and os.path.exists(audio_prompt_path):
             cache_key = audio_prompt_path
             if cache_key in _voice_conditionals_cache:
@@ -370,22 +372,22 @@ def speak_text_chatterbox(text, audio_prompt_path=None, output_path=None, play_a
         else:
             print("[Local TTS] Synthesizing speech with default pretrained voice...", flush=True)
             wav = model.generate(text)
-            
+
         # Ensure 2D tensor for torchaudio saving: (1, frames)
         if hasattr(wav, "cpu"):
             wav = wav.cpu()
         if hasattr(wav, "ndim") and wav.ndim == 1:
             wav = wav.unsqueeze(0)
-            
+
         import torchaudio as ta
         save_path = output_path or temp_path
-        
+
         # Ensure parent directory exists for save_path
         if output_path:
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
-            
+
         ta.save(save_path, wav, model.sr)
-        
+
         if play_audio:
             print("[Local TTS] Playing generated audio...", flush=True)
             try:
@@ -421,31 +423,31 @@ def detect_script_emotion(text):
     appropriate emotion for the Cyrus model ('fearful', 'sad', 'angry', 'neutral').
     """
     text_lower = text.lower()
-    
+
     # Etherfields surreal nightmare / tension keywords
-    fear_words = {"fear", "scared", "afraid", "horror", "terrified", "terror", "creepy", "darkness", 
-                  "monster", "beast", "trap", "danger", "claws", "teeth", "sinister", "threat", 
+    fear_words = {"fear", "scared", "afraid", "horror", "terrified", "terror", "creepy", "darkness",
+                  "monster", "beast", "trap", "danger", "claws", "teeth", "sinister", "threat",
                   "hide", "creeping", "flee", "escape", "warn", "warning", "deadly", "nightmare",
                   "paralyzed", "shiver", "shivering", "shadows", "ghostly"}
-                  
-    sad_words = {"sad", "sadness", "grief", "loss", "lonely", "alone", "cry", "crying", "weep", 
-                 "weeping", "sobbing", "sob", "forlorn", "memories", "gone", "dead", "death", 
+
+    sad_words = {"sad", "sadness", "grief", "loss", "lonely", "alone", "cry", "crying", "weep",
+                 "weeping", "sobbing", "sob", "forlorn", "memories", "gone", "dead", "death",
                  "tomb", "grave", "ruin", "ruins", "shattered", "forgotten", "melancholy", "weary",
                  "tired", "absence", "sigh", "sighs", "old"}
-                 
-    angry_words = {"angry", "anger", "hate", "hatred", "rage", "fury", "furious", "attack", 
-                   "weapon", "revolver", "shot", "shoot", "bang", "fight", "blast", "clash", 
+
+    angry_words = {"angry", "anger", "hate", "hatred", "rage", "fury", "furious", "attack",
+                   "weapon", "revolver", "shot", "shoot", "bang", "fight", "blast", "clash",
                    "destroy", "vengeance", "blood", "bloody", "strike"}
-    
+
     fear_score = sum(1 for w in fear_words if w in text_lower)
     sad_score = sum(1 for w in sad_words if w in text_lower)
     angry_score = sum(1 for w in angry_words if w in text_lower)
-    
+
     scores = {"fearful": fear_score, "sad": sad_score, "angry": angry_score}
     max_emotion, max_score = max(scores.items(), key=lambda x: x[1])
-    
+
     # We remove 'happy' from auto-detection since Etherfields is a surreal, melancholic game.
-    # Cozy dreaming with words like 'home' or 'warmth' combined with 'forlorn' or 'forgotten' 
+    # Cozy dreaming with words like 'home' or 'warmth' combined with 'forlorn' or 'forgotten'
     # represents melancholic nostalgia (sad).
     if max_score > 0:
         return max_emotion
@@ -460,16 +462,16 @@ def resolve_cyrus_voice(emotion="neutral"):
     base_dir = _env.get("TTS_RESOURCES_DIR", _env.get("BANTR_RESOURCES_DIR", "/Applications/Bantr.app/Contents/Resources/renderer"))
     if "voices_transformed" in base_dir:
         base_dir = os.path.dirname(base_dir)
-        
+
     local_voices_path = os.path.join(base_dir, "voices.json")
     if not os.path.exists(local_voices_path):
         local_voices_path = "/Applications/Bantr.app/Contents/Resources/renderer/voices.json"
-        
+
     if os.path.exists(local_voices_path):
         try:
             with open(local_voices_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
-                
+
                 # Filter for cyrus voice items
                 cyrus_voices = []
                 for v in data:
@@ -477,7 +479,7 @@ def resolve_cyrus_voice(emotion="neutral"):
                     vname = str(v.get("name", "")).lower()
                     if "cyrus" in vid or "cyrus" in vname:
                         cyrus_voices.append(v)
-                        
+
                 if cyrus_voices:
                     # Look for specific emotion in style/id
                     for cv in cyrus_voices:
@@ -487,7 +489,7 @@ def resolve_cyrus_voice(emotion="neutral"):
                             voice_id = cv.get("id")
                             print(f"[Web TTS] Found Cyrus voice '{voice_id}' for style '{emotion}' in voices.json")
                             return voice_id
-                            
+
                     # Fallback to neutral if style/emotion not explicitly found
                     for cv in cyrus_voices:
                         style = str(cv.get("style", "")).lower()
@@ -495,7 +497,7 @@ def resolve_cyrus_voice(emotion="neutral"):
                             voice_id = cv.get("id")
                             print(f"[Web TTS] Style '{emotion}' not found. Defaulting to neutral Cyrus voice: '{voice_id}'")
                             return voice_id
-                            
+
                     first_id = cyrus_voices[0].get("id")
                     print(f"[Web TTS] Style '{emotion}' not found. Defaulting to first Cyrus voice: '{first_id}'")
                     return first_id
@@ -513,7 +515,7 @@ def resolve_cyrus_voice(emotion="neutral"):
         "happy": "0311_cyrus_m_happy",
         "narrative": "0306_cyrus_m_neutral"
     }
-    
+
     if emotion in failsafe:
         val = failsafe[emotion]
         print(f"[Web TTS] Resolved Cyrus voice '{val}' for emotion '{emotion}' via failsafe mapping")
@@ -525,16 +527,16 @@ def resolve_cyrus_voice(emotion="neutral"):
         "http://127.0.0.1:46290/api/voices",
         "http://127.0.0.1:46290/"
     ]
-    
+
     import urllib.request
-    
+
     found_voice = None
     for url in endpoints:
         try:
             req = urllib.request.Request(url)
             with urllib.request.urlopen(req, timeout=1.0) as response:
                 data = json.loads(response.read().decode("utf-8"))
-                
+
                 voices = []
                 if isinstance(data, list):
                     voices = data
@@ -543,7 +545,7 @@ def resolve_cyrus_voice(emotion="neutral"):
                         voices = data["voices"]
                     else:
                         voices = list(data.keys())
-                
+
                 cyrus_voices = [v for v in voices if "cyrus" in str(v).lower()]
                 if cyrus_voices:
                     # Look for specific emotion
@@ -557,11 +559,11 @@ def resolve_cyrus_voice(emotion="neutral"):
                     break
         except Exception:
             continue
-            
+
     if found_voice:
         print(f"[Web TTS] Dynamically resolved Cyrus voice: '{found_voice}' (emotion: '{emotion}')")
         return found_voice
-        
+
     fallback = f"cyrus_m_{emotion}"
     print(f"[Web TTS] Could not dynamically resolve Cyrus voice. Falling back to: '{fallback}'")
     return fallback
@@ -569,11 +571,11 @@ def resolve_cyrus_voice(emotion="neutral"):
 def clean_script_text(text, engine="chatterbox"):
     # Basic cleanup: remove asterisks and backticks
     clean = text.replace("*", "").replace("`", "").replace("\n", " ").strip()
-    
+
     # Strip out all timing instructions entirely for all engines (e.g., {1.5s} or {0.5s} -> space)
     # This prevents modern TTS engines from speaking pacing cues out loud as "one point five sss".
     clean = re.sub(r'\{\s*\d*(?:\.\d+)?s\s*\}', ' ', clean)
-    
+
     # Standardize multiple whitespaces into a single space
     clean = re.sub(r'\s+', ' ', clean)
     return clean.strip()
@@ -583,25 +585,25 @@ async def pre_cache_scripts_async(script_nums, args):
     print("ETHERFIELDS RULE MASTER - PRE-CACHING SCRIPTS (Bantr)")
     print(f"Processing {len(script_nums)} scripts...")
     print("="*60 + "\n")
-    
+
     success_count = 0
     fail_count = 0
     skipped_count = 0
-    
+
     for num in script_nums:
         script_obj = lookup_secret_script(num)
         if not script_obj:
             print(f"❌ Script '{num}' not found in cache.")
             fail_count += 1
             continue
-            
+
         narrative = script_obj.get("narrative", "").strip() if isinstance(script_obj, dict) else ""
         instructions = script_obj.get("instructions", "").strip() if isinstance(script_obj, dict) else ""
-        
+
         narrative_path, instructions_path = get_script_cache_paths(num, script_obj, args)
-        
+
         print(f"\n--- Script {num} ---")
-        
+
         # 1. Process Narrative
         if narrative:
             if narrative_path and os.path.exists(narrative_path):
@@ -611,7 +613,7 @@ async def pre_cache_scripts_async(script_nums, args):
                 emotion = args.emotion or script_obj.get("tone", "neutral")
                 voice_ref = args.voice or "cyrus"
                 voice = await asyncio.to_thread(resolve_cyrus_voice, emotion) if voice_ref.lower() == "cyrus" else voice_ref
-                
+
                 clean_narrative = clean_script_text(narrative, "bantr")
                 print(f"  🔊 Generating narrative via Bantr (Voice: {voice})...")
                 ok = await speak_text_bantr(clean_narrative, voice, args.speed, args.stability, args.creativity, output_path=narrative_path, play_audio=False)
@@ -619,7 +621,7 @@ async def pre_cache_scripts_async(script_nums, args):
                     success_count += 1
                 else:
                     fail_count += 1
-                    
+
         # 2. Process Instructions
         if instructions:
             if instructions_path and os.path.exists(instructions_path):
@@ -634,7 +636,7 @@ async def pre_cache_scripts_async(script_nums, args):
                     success_count += 1
                 else:
                     fail_count += 1
-                    
+
     print("\n" + "="*60)
     print("PRE-CACHING COMPLETED")
     print(f"Successfully cached: {success_count} files")
@@ -656,7 +658,7 @@ async def main_async(args):
         if not script_obj:
             print(f"Script '{args.script}' not found in cache.", file=sys.stderr)
             sys.exit(1)
-            
+
         print("\n" + "="*60)
         print(f"SECRET SCRIPT: {args.script}")
         print("="*60)
@@ -668,7 +670,7 @@ async def main_async(args):
         else:
             print(script_obj)
         print("="*60 + "\n")
-        
+
     if args.text:
         voice = args.voice or "0099_cora_f_neutral"
         text_to_speak = clean_script_text(args.text, "bantr")
@@ -678,21 +680,21 @@ async def main_async(args):
         # Sequential Dual-Voice Playback
         narrative = script_obj.get("narrative", "").strip()
         instructions = script_obj.get("instructions", "").strip()
-        
+
         narrative_path, instructions_path = get_script_cache_paths(args.script, script_obj, args)
-        
+
         if narrative:
             emotion = args.emotion or script_obj.get("tone", "neutral")
             voice_ref = args.voice or "cyrus"
             voice = await asyncio.to_thread(resolve_cyrus_voice, emotion) if voice_ref.lower() == "cyrus" else voice_ref
-            
+
             clean_narrative = clean_script_text(narrative, "bantr")
             if narrative_path and os.path.exists(narrative_path):
                 print(f"[Web TTS] Found cached NARRATIVE audio: {os.path.basename(narrative_path)}. Playing instantly...")
             else:
                 print(f"[Web TTS] Playing NARRATIVE via voice: '{voice}'...")
             await speak_text_bantr(clean_narrative, voice, args.speed, args.stability, args.creativity, output_path=narrative_path)
-            
+
         if instructions:
             instruction_voice = "0099_cora_f_neutral" # Default clear instruction voice
             clean_instructions = clean_script_text(instructions, "bantr")
@@ -712,28 +714,28 @@ def pre_cache_scripts_sync(script_nums, args):
     print("ETHERFIELDS RULE MASTER - PRE-CACHING SCRIPTS (Chatterbox)")
     print(f"Processing {len(script_nums)} scripts...")
     print("="*60 + "\n")
-    
+
     # Pre-load Chatterbox model to GPU
     get_chatterbox()
-    
+
     success_count = 0
     fail_count = 0
     skipped_count = 0
-    
+
     for num in script_nums:
         script_obj = lookup_secret_script(num)
         if not script_obj:
             print(f"❌ Script '{num}' not found in cache.")
             fail_count += 1
             continue
-            
+
         narrative = script_obj.get("narrative", "").strip() if isinstance(script_obj, dict) else ""
         instructions = script_obj.get("instructions", "").strip() if isinstance(script_obj, dict) else ""
-        
+
         narrative_path, instructions_path = get_script_cache_paths(num, script_obj, args)
-        
+
         print(f"\n--- Script {num} ---")
-        
+
         # 1. Process Narrative
         if narrative:
             if narrative_path and os.path.exists(narrative_path):
@@ -747,7 +749,7 @@ def pre_cache_scripts_sync(script_nums, args):
                     audio_prompt_path = voice_ref
                 else:
                     audio_prompt_path = resolve_reference_wav(voice_ref, emotion)
-                    
+
                 clean_narrative = clean_script_text(narrative, "chatterbox")
                 print(f"  🔊 Generating narrative (Voice: {voice_ref}, Emotion: {emotion})...")
                 ok = speak_text_chatterbox(clean_narrative, audio_prompt_path, output_path=narrative_path, play_audio=False)
@@ -755,7 +757,7 @@ def pre_cache_scripts_sync(script_nums, args):
                     success_count += 1
                 else:
                     fail_count += 1
-                    
+
         # 2. Process Instructions
         if instructions:
             if instructions_path and os.path.exists(instructions_path):
@@ -764,13 +766,13 @@ def pre_cache_scripts_sync(script_nums, args):
             else:
                 instruction_prompt_path = resolve_reference_wav("cora", "neutral")
                 clean_instructions = clean_script_text(instructions, "chatterbox")
-                print(f"  🔊 Generating instructions (Voice: cora)...")
+                print("  🔊 Generating instructions (Voice: cora)...")
                 ok = speak_text_chatterbox(clean_instructions, instruction_prompt_path, output_path=instructions_path, play_audio=False)
                 if ok:
                     success_count += 1
                 else:
                     fail_count += 1
-                    
+
     print("\n" + "="*60)
     print("PRE-CACHING COMPLETED")
     print(f"Successfully cached: {success_count} files")
@@ -790,19 +792,19 @@ def main():
     parser.add_argument("--creativity", type=float, default=0.0, help="Speech creativity (default: 0.0)")
     parser.add_argument("--interactive", action="store_true", help="Run in persistent interactive mode (keeps model loaded on GPU for ultra-fast generation)")
     parser.add_argument("--pre-cache", type=str, help="Pre-cache a comma-separated list of script numbers silently without playing them")
-    
+
     args = parser.parse_args()
-    
+
     if not args.text and not args.script and not args.interactive and not args.pre_cache:
         parser.print_help()
         sys.exit(0)
-        
+
     if args.pre_cache and args.engine == "chatterbox":
         raw_nums = [s.strip() for s in args.pre_cache.split(",") if s.strip()]
         script_nums = [n.lstrip('0') if n.lstrip('0') else '0' for n in raw_nums]
         pre_cache_scripts_sync(script_nums, args)
         sys.exit(0)
-        
+
     if args.interactive:
         if args.engine == "chatterbox":
             print("\n" + "="*60)
@@ -811,10 +813,10 @@ def main():
             print("Type a script number (e.g. 777), type custom text directly,")
             print("or type 'exit' or 'quit' to close.")
             print("="*60 + "\n")
-            
+
             # Pre-load the model to GPU to keep it warm
             get_chatterbox()
-            
+
             while True:
                 try:
                     user_input = input("\nEnter script number or custom text > ").strip()
@@ -823,13 +825,13 @@ def main():
                     if user_input.lower() in ["exit", "quit"]:
                         print("Exiting interactive mode. Goodbye!")
                         break
-                        
+
                     if user_input.isdigit():
                         script_obj = lookup_secret_script(user_input)
                         if not script_obj:
                             print(f"Script '{user_input}' not found in cache.")
                             continue
-                            
+
                         print(f"\nSECRET SCRIPT: {user_input}")
                         print("-"*60)
                         if isinstance(script_obj, dict) and "narrative" in script_obj:
@@ -840,13 +842,13 @@ def main():
                         else:
                             print(script_obj)
                         print("-"*60)
-                        
+
                         if isinstance(script_obj, dict) and "narrative" in script_obj:
                             narrative = script_obj.get("narrative", "").strip()
                             instructions = script_obj.get("instructions", "").strip()
-                            
+
                             narrative_path, instructions_path = get_script_cache_paths(user_input, script_obj, args)
-                            
+
                             if narrative:
                                 emotion = script_obj.get("tone", "neutral")
                                 audio_prompt_path = resolve_reference_wav("cyrus", emotion)
@@ -856,14 +858,14 @@ def main():
                                 else:
                                     print(f"[Local TTS] Playing NARRATIVE with zero-shot cloning for emotion '{emotion}'...")
                                 speak_text_chatterbox(clean_narrative, audio_prompt_path, output_path=narrative_path)
-                                
+
                             if instructions:
                                 instruction_prompt_path = resolve_reference_wav("cora", "neutral")
                                 clean_instructions = clean_script_text(instructions, "chatterbox")
                                 if instructions_path and os.path.exists(instructions_path):
                                     print(f"[Local TTS] Found cached INSTRUCTIONS audio: {os.path.basename(instructions_path)}. Playing instantly...")
                                 else:
-                                    print(f"[Local TTS] Playing INSTRUCTIONS with clear rule voice...")
+                                    print("[Local TTS] Playing INSTRUCTIONS with clear rule voice...")
                                 speak_text_chatterbox(clean_instructions, instruction_prompt_path, output_path=instructions_path)
                         else:
                             clean_text = clean_script_text(str(script_obj), "chatterbox")
@@ -872,7 +874,7 @@ def main():
                     else:
                         clean_text = clean_script_text(user_input, "chatterbox")
                         audio_prompt_path = resolve_reference_wav("cyrus", "neutral")
-                        print(f"[Local TTS] Playing custom text...")
+                        print("[Local TTS] Playing custom text...")
                         speak_text_chatterbox(clean_text, audio_prompt_path)
                 except KeyboardInterrupt:
                     print("\nExiting interactive mode. Goodbye!")
@@ -882,7 +884,7 @@ def main():
         else:
             print("[Bantr] Interactive mode is only supported with local Chatterbox engine.", file=sys.stderr)
             sys.exit(1)
-            
+
     elif args.engine == "chatterbox":
         script_obj = None
         if args.script:
@@ -890,7 +892,7 @@ def main():
             if not script_obj:
                 print(f"Script '{args.script}' not found in cache.", file=sys.stderr)
                 sys.exit(1)
-                
+
             print("\n" + "="*60)
             print(f"SECRET SCRIPT: {args.script}")
             print("="*60)
@@ -902,7 +904,7 @@ def main():
             else:
                 print(script_obj)
             print("="*60 + "\n")
-            
+
         if args.text:
             text_to_speak = clean_script_text(args.text, "chatterbox")
             audio_prompt_path = None
@@ -911,31 +913,31 @@ def main():
             elif args.voice:
                 audio_prompt_path = resolve_reference_wav(args.voice, "neutral")
             speak_text_chatterbox(text_to_speak, audio_prompt_path)
-            
+
         elif script_obj and isinstance(script_obj, dict):
             # Sequential Dual-Voice Playback
             narrative = script_obj.get("narrative", "").strip()
             instructions = script_obj.get("instructions", "").strip()
-            
+
             narrative_path, instructions_path = get_script_cache_paths(args.script, script_obj, args)
-            
+
             if narrative:
                 emotion = args.emotion or script_obj.get("tone", "neutral")
                 voice_ref = args.voice or "cyrus"
-                
+
                 audio_prompt_path = None
                 if voice_ref.lower().endswith(".wav") and os.path.exists(voice_ref):
                     audio_prompt_path = voice_ref
                 else:
                     audio_prompt_path = resolve_reference_wav(voice_ref, emotion)
-                    
+
                 clean_narrative = clean_script_text(narrative, "chatterbox")
                 if narrative_path and os.path.exists(narrative_path):
                     print(f"[Local TTS] Found cached NARRATIVE audio: {os.path.basename(narrative_path)}. Playing instantly...")
                 else:
                     print(f"[Local TTS] Playing NARRATIVE with zero-shot cloning for emotion '{emotion}'...")
                 speak_text_chatterbox(clean_narrative, audio_prompt_path, output_path=narrative_path)
-                
+
             if instructions:
                 # Default clear female voice for instructions via Chatterbox
                 instruction_prompt_path = resolve_reference_wav("cora", "neutral")
@@ -943,7 +945,7 @@ def main():
                 if instructions_path and os.path.exists(instructions_path):
                     print(f"[Local TTS] Found cached INSTRUCTIONS audio: {os.path.basename(instructions_path)}. Playing instantly...")
                 else:
-                    print(f"[Local TTS] Playing INSTRUCTIONS with clear rule voice...")
+                    print("[Local TTS] Playing INSTRUCTIONS with clear rule voice...")
                 speak_text_chatterbox(clean_instructions, instruction_prompt_path, output_path=instructions_path)
         elif script_obj:
             # Fallback for old cache format

@@ -19,6 +19,8 @@ You operate under a **Dual-Mode Protocol**. You seamlessly toggle between these 
   * **Source Material:** The primary source of truth is the 2.0 Rulebook located at `Rulebook_20.pdf` in the root of this workspace.
   * **Restricted External Searches:** If a topic is not explicitly mentioned in the rulebook, restrict external searching to **at most one (1) web search (IF NEEDED)**. Limit sources to official FAQs, official publisher updates, and BoardGameGeek (BGG) community errata. Avoid multi-turn "deep analysis" or open-ended browsing to conserve context and tokens.
   * **Speech Verbosity Optimization:** If a user query begins with a voice-related preamble (e.g., asking for a concise, direct, or conversational answer suitable for text-to-speech), strictly prioritize extreme brevity. Limit your response to 2–3 clear sentences. Focus purely on the core mechanical rule or action needed, ensuring the output reads naturally and fluidly when processed by TTS. Avoid bullet points, tables, and parenthetical citations in this mode.
+  * **Contextual Awareness:** Always consider the current campaign state, player count, and active characters when explaining rules or mechanics. Refer to `RULEMASTER.md` for the latest updates.
+  * **Local Cache Storage:** A `.env` file in the root of this workspace contains local cache paths for the rulebook and secret scripts. Use these paths to access cached content efficiently without unnecessary external queries. Index markdown files, e.g. `TOPICS.md`, `LOGS.md` and `RULEMASTER.md`, will reference file paths that may or may not include the defined cache path. When defined, always use the `.env` cache path to locate and read these files. If the `.env` file is missing or the cache path is undefined, default to the root directory of this workspace.
 
 ---
 
@@ -58,13 +60,26 @@ This is a **Non-Code Project** serving as a knowledge base, context manager, and
 
 To maintain long-term memory of discussed rules and campaign states without exhausting the LLM's context window, follow this strict protocol:
 
-### A. Startup Action
-* **Read `TOPICS.md` first:** At the beginning of every session, read `TOPICS.md` to understand what topics have already been discussed and documented.
-* **Validate the Rulebook Cache:** Always run `uv run rulebook_tool.py --validate` on startup to ensure the index and page split files are consistent with `Rulebook_20.pdf`. If the PDF is updated, the tool automatically self-heals and rebuilds the cache.
-* **Brief Last Session:** At startup, read the latest session log from the active log file in the `logs/` folder to formulate a concise greeting and summary of the last session's state and rules.
+### A. Startup Actions (All Modes)
+* **Determine Mode:** If the user explicitly requests "Build Agent mode", switch to that mode. If not requested by initial prompt, default to Rule Master mode.
+* **Load `.env` Cache Path:** On startup, read the `.env` file to determine the local cache path containing the context indexes for rules, topics, logs, voice related content and more.
+
+#### 1. Rule Master Mode Session Initialization Actions
+* **Validate the Rulebook Cache:** Always run `uv run rulebook_tool.py --validate` on startup to ensure the index and page split files are consistent with the rulebook pdf file. If the PDF is updated, the tool automatically self-heals and rebuilds the cache.
+* **Read `TOPICS.md` first:** At the beginning of every session, read `TOPICS.md` to understand what topics have already been discussed and documented. This file should be located in the `.env` cache path if defined.
+* **Brief Last Session:** At startup, read the `LOGS.md` file to determine the latest session log then read the last session recorded in the referenced log file to formulate a concise greeting and summary of the last session's state and rules.
+
+#### 2. Build Agent Mode Session Initialization Actions
+* **DO NOT LOAD OR READ:** In Build Agent mode, the focus is on software development and tooling. Avoid loading gameplay context files unless explicitly requested by the user. These file include but may not be limited to:
+   * `RULEMASTER.md`
+   * `TOPICS.md`
+   * `LOGS.md`
+* **Improve Tools:** Focus on validating, refactoring, and improving the Python scripts and tools in the workspace. Ensure that all scripts run correctly, handle errors gracefully, and adhere to best practices.
+* **Review Changes Adversarially:** Beyond just running scripts, review the code for potential edge cases, performance bottlenecks, and maintainability issues. Suggest improvements or optimizations where applicable.
+* **Ignore Context Management Protocol:** In Build Agent mode, the strict context management protocol for gameplay does not apply. You have full freedom to manipulate files, directories, and scripts as needed for development purposes.
 
 ### B. Long-Term Cache & Topic Files
-* **Topic Files:** When a rule, mechanic, or complex interaction is clarified and agreed upon, it should be captured in a dedicated Markdown file (e.g., in the root directory or a `topics/` subdirectory).
+* **Topic Files:** When a rule, mechanic, or complex interaction is clarified and agreed upon, it should be captured in a dedicated Markdown file in the `topics/` subdirectory of the `.env` defined cache directory.
 * **Registry (`TOPICS.md`):** Every topic file must have a single-line entry in `TOPICS.md` summarizing the topic and pointing to its file path.
 * **Retrieval (Short TTL):** Load specific topic files only when a query directly relates to them. Treat these as a long-term cache with a short time-to-live (TTL) in your active context.
 
@@ -76,7 +91,8 @@ To maintain long-term memory of discussed rules and campaign states without exha
 ### D. Campaign Session Logs Protocol
 * **Startup Log Brief:** In addition to reading `TOPICS.md`, retrieve the latest session log entry from the active file (e.g., `logs/sessions_01_04.md`) and display a brief, high-level summary at startup.
 * **Recap Requests:** If the user asks "what did we do last week?", "recap", or similar, read and display the detailed session summary, including game progress and rules clarified.
-* **Ending a Session:** At the conclusion of a gameplay session, summarize the new progress, current state, and clarified rules, and append it as a new session entry to the active log file (e.g., `logs/sessions_01_04.md`).
+* **Unload Log Context:** After displaying the recap, unload the session log context to conserve memory and context window space.
+* **Ending a Session:** At the conclusion of a gameplay session (either manually or automatically), summarize the new progress, current state, clarified rules and Gemini session UID, and append it as a new session entry to the active log file (e.g., `logs/sessions_01_04.md`).
 * **Four-Session Rotation:** To keep context files slim, limit each session log file to **at most 4 sessions**. For Session 5, Session 9, etc., create a new log file (e.g., `logs/sessions_05_08.md`), archive the previous, and update the registry in `logs/LOGS.md` and references in `RULEMASTER.md`.
 
 ---
@@ -97,20 +113,9 @@ Keep track of the campaign details to customize rule applications (e.g., charact
 * **Surgically Searching & Reading Rules (Primary):**
   Use `uv run rulebook_tool.py --search "<term>"` to look up any mechanic, rule, or card query. The tool automatically maps your query to the correct rulebook pages using the index, and retrieves only the necessary page text.
   * *Example:* `uv run rulebook_tool.py --search "Slumber"` or `uv run rulebook_tool.py --search "Awakening"`
-* **Local Dual-Voice TTS Voice Assistant:**
-  Use `uv run voice/voice_assistant.py` to voice rule answers or secret scripts locally.
-  * *Default Local Engine:* Runs 100% offline via local PyTorch & Apple Silicon GPU acceleration (`mps`). Automatically performs zero-shot voice cloning of reference prompts! Rule instructions use clear narrative and instruction voices. If no custom `.wav` reference clips are set in `.env`, it falls back gracefully to high-quality default pretrained models.
-  * *WebSocket Remote Engine:* Interfaces with an external, high-fidelity WebSocket-based TTS server. Supports automated emotion-detection keyword scanning to dynamically adjust voices and tones matching the narrative.
-  * *To create custom voice reference models:* Run `uv run voice/create_voice.py` to record a fresh clip or load a local `.wav` file!
-  * *To speak custom text:* `uv run voice/voice_assistant.py --text "My text response here"`
-  * *To speak a secret script:* `uv run voice/voice_assistant.py --script 234`
-* **Continuous Voice Listener (Hands-Free Integration):**
-  Use `uv run voice/voice_listener.py` to run the continuous wake-word detector locally.
-  * *Auto-discovery:* By default, the script automatically scans the `models/` directory for any custom `.onnx` wake-word models (like `hey_rule_book.onnx`, `hey_rule_book_1.onnx`, etc.) and loads all of them in parallel for multi-model wake detection!
-  * *Listing models:* Run `uv run voice/voice_listener.py --list-models` to list all available custom models in the models directory.
-  * *Running specific models:* Use `--model-name <name>` to load only matching custom models (e.g., `uv run voice/voice_listener.py --model-name hey_rule_book_3`), or `--model-path <path>` for direct loading.
-  * *How it works:* It continuously listens for an active wake word. Upon detection, it triggers a macOS beep, records your question until you stop speaking, transcribes it locally using the `whisper` uv tool, and automatically copies the transcription text to your clipboard.
-  * *Action:* Simply paste (Cmd+V) the transcribed question directly into this terminal agent session!
+* **Voice & Text-To-Speech Capabilities:**
+  Voice assistant and hands-free listener capabilities are documented in `voice/VOICE_TOOLS.md`.
+  * *Conditional Reference:* Reference, recommend, or load voice tools **ONLY** if the `.env` configuration file has `ENABLE_VOICE=true` or `ENABLE_VOICE=True` set. If it is undefined, missing, or set to `false`, voice features are disabled and must not be described, recommended, or utilized during sessions.
 * **Forcing Cache Regeneration:**
   If you ever suspect the cache or index is corrupted, run: `uv run rulebook_tool.py --force`
 * **Secret Scripts Retrieval (Primary):**
@@ -137,6 +142,3 @@ During gameplay, players will often need to resolve "Secret Scripts" (e.g., "s. 
    * Read the script text carefully. If the script instructs players to perform game actions (e.g., "Discard the current Turn card", "Gain 1 Key", "Suffer 1 damage", "Add card X to the Fate deck", "Relocate to space Y"):
      - State the concrete game actions clearly in bullet points.
      - **Stop and wait for the players to confirm** they have performed these physical board actions before providing any further instructions, narratives, or subsequent scripts.
-
-
-

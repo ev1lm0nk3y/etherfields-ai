@@ -1,10 +1,12 @@
 # /// script
 # requires-python = ">=3.11"
 # dependencies = [
+#     "nanowakeword",
 #     "openwakeword",
 #     "sounddevice",
 #     "soundfile",
-#     "numpy",
+#     "numpy==1.26.4",
+#     "pyyaml",
 # ]
 # ///
 
@@ -15,10 +17,23 @@ import sys
 import time
 
 import numpy as np
-import openwakeword
 import sounddevice as sd
 import soundfile as sf
-from openwakeword.model import Model
+
+# Try importing nanowakeword
+try:
+    from nanowakeword import NanoInterpreter
+    HAS_NANOWAKEWORD = True
+except ImportError:
+    HAS_NANOWAKEWORD = False
+
+# Try importing openwakeword
+try:
+    import openwakeword
+    from openwakeword.model import Model as OWWModel
+    HAS_OPENWAKEWORD = True
+except ImportError:
+    HAS_OPENWAKEWORD = False
 
 # Repo root is parent of the directory of this file
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -203,6 +218,13 @@ def main():
         action="store_true",
         help="Print real-time audio volume and model scores for debugging",
     )
+    parser.add_argument(
+        "--engine",
+        type=str,
+        default="auto",
+        choices=["auto", "nanowakeword", "openwakeword"],
+        help="The wake-word detection engine to use (default: auto)",
+    )
 
     args = parser.parse_args()
 
@@ -237,7 +259,7 @@ def main():
         print()
         sys.exit(0)
 
-    print("[Voice Listener] Loading openWakeWord engine...", flush=True)
+    print(f"[Voice Listener] Loading wake-word engine (Engine: {args.engine})...", flush=True)
 
     # Build the list of models to load
     model_paths = []
@@ -285,77 +307,92 @@ def main():
             model_paths.extend(custom_onnx_files)
         else:
             print(
-                "[Voice Listener] No custom models found. Falling back to built-in openWakeWord models.",
+                "[Voice Listener] No custom models found. Falling back to built-in models.",
                 flush=True,
             )
 
-    # Initialize openWakeWord Model
-    try:
-        if model_paths:
-            print(
-                f"[Voice Listener] Loading custom model(s): {model_paths}", flush=True
-            )
+    # Initialize nanowakeword and openWakeWord models
+    nano_models = {}
+    oww_paths = []
+
+    for path in model_paths:
+        model_name = os.path.basename(path)
+        loaded_nano = False
+
+        if HAS_NANOWAKEWORD and args.engine in ["auto", "nanowakeword"]:
             try:
-                oww_model = Model(
-                    wakeword_models=model_paths,
-                    inference_framework=args.inference_framework,
-                )
-            except TypeError:
-                print(
-                    "[Voice Listener] Warning: 'inference_framework' parameter not supported by this openWakeWord version. Retrying without it...",
-                    flush=True,
-                )
-                oww_model = Model(wakeword_models=model_paths)
-        else:
-            print(
-                "[Voice Listener] Loading built-in models (e.g. 'alexa', 'hey_mycroft')...",
-                flush=True,
-            )
-            try:
-                oww_model = Model(inference_framework=args.inference_framework)
-            except TypeError:
-                print(
-                    "[Voice Listener] Warning: 'inference_framework' parameter not supported by this openWakeWord version. Retrying without it...",
-                    flush=True,
-                )
-                oww_model = Model()  # Loads all built-ins
-    except Exception as e:
-        print(f"[Voice Listener] Error initializing openWakeWord: {e}", file=sys.stderr)
-        print(
-            "[Voice Listener] Attempting to automatically download missing base/required models...",
-            flush=True,
-        )
+                print(f"[Voice Listener] Attempting to load '{model_name}' using nanowakeword...", flush=True)
+                nano_models[model_name] = NanoInterpreter(path)
+                loaded_nano = True
+                print(f"  ✨ Successfully loaded '{model_name}' with nanowakeword!", flush=True)
+            except Exception as e:
+                if args.engine == "nanowakeword":
+                    print(f"  ❌ Error loading '{model_name}' with nanowakeword: {e}", file=sys.stderr)
+                    sys.exit(1)
+                else:
+                    print(f"  ⚠️ Could not load '{model_name}' with nanowakeword: {e}. Falling back to openWakeWord...", flush=True)
+
+        if not loaded_nano:
+            if HAS_OPENWAKEWORD and args.engine in ["auto", "openwakeword"]:
+                oww_paths.append(path)
+            else:
+                print(f"  ❌ Error: Model '{model_name}' requires openwakeword, but it is disabled or unavailable.", file=sys.stderr)
+                sys.exit(1)
+
+    oww_model = None
+    if oww_paths:
         try:
-            import openwakeword.utils
-
-            openwakeword.utils.download_models()
+            print(f"[Voice Listener] Loading {len(oww_paths)} custom model(s) using openWakeWord: {oww_paths}", flush=True)
+            oww_model = OWWModel(
+                wakeword_models=oww_paths,
+                inference_framework=args.inference_framework,
+            )
+        except TypeError:
             print(
-                "[Voice Listener] Base models downloaded successfully. Retrying initialization...",
+                "[Voice Listener] Warning: 'inference_framework' parameter not supported by this openWakeWord version. Retrying without it...",
                 flush=True,
             )
-
-            # Retry initialization
-            if model_paths:
+            oww_model = OWWModel(wakeword_models=oww_paths)
+        except Exception as e:
+            print(f"[Voice Listener] Error initializing openWakeWord: {e}", file=sys.stderr)
+            print(
+                "[Voice Listener] Attempting to automatically download missing base/required models...",
+                flush=True,
+            )
+            try:
+                import openwakeword.utils
+                openwakeword.utils.download_models()
+                print(
+                    "[Voice Listener] Base models downloaded successfully. Retrying initialization...",
+                    flush=True,
+                )
                 try:
-                    oww_model = Model(
-                        wakeword_models=model_paths,
+                    oww_model = OWWModel(
+                        wakeword_models=oww_paths,
                         inference_framework=args.inference_framework,
                     )
                 except TypeError:
-                    oww_model = Model(wakeword_models=model_paths)
-            else:
-                try:
-                    oww_model = Model(inference_framework=args.inference_framework)
-                except TypeError:
-                    oww_model = Model()
-        except Exception as retry_err:
-            print(
-                f"Error after downloading and retrying initialization: {retry_err}",
-                file=sys.stderr,
-            )
+                    oww_model = OWWModel(wakeword_models=oww_paths)
+            except Exception as retry_err:
+                print(f"Error after downloading and retrying initialization: {retry_err}", file=sys.stderr)
+                sys.exit(1)
+
+    # Handle built-in model fallback if no models were loaded
+    if not nano_models and oww_model is None:
+        if HAS_OPENWAKEWORD and args.engine in ["auto", "openwakeword"]:
+            print("[Voice Listener] Loading built-in openWakeWord models (e.g. 'alexa', 'hey_mycroft')...", flush=True)
+            try:
+                oww_model = OWWModel(inference_framework=args.inference_framework)
+            except TypeError:
+                oww_model = OWWModel()
+        else:
+            print("❌ Error: No models specified and no wake-word engine was available to load built-ins.", file=sys.stderr)
             sys.exit(1)
 
-    active_models = list(oww_model.models.keys())
+    active_models = list(nano_models.keys())
+    if oww_model is not None:
+        active_models.extend(list(oww_model.models.keys()))
+
     print(f"[Voice Listener] Active wake word models: {active_models}", flush=True)
     print(
         f"[Voice Listener] Continuous listening started. Say an active wake word to trigger..."
@@ -380,7 +417,17 @@ def main():
                 chunk = audio_buffer.pop(0).squeeze()
 
                 # Check for prediction
-                prediction = oww_model.predict(chunk)
+                prediction = {}
+
+                # 1. Process with nanowakeword
+                for model_name, interpreter in nano_models.items():
+                    prediction[model_name] = interpreter.process(chunk)
+
+                # 2. Process with openwakeword
+                if oww_model is not None:
+                    oww_preds = oww_model.predict(chunk)
+                    for model_name, score in oww_preds.items():
+                        prediction[model_name] = score
 
                 # If debugging is active, print volume and model scores
                 if args.debug:

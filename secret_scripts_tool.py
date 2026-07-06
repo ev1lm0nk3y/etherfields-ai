@@ -3,12 +3,12 @@
 # dependencies = []
 # ///
 
+import argparse
+import json
 import os
 import sys
-import json
 import time
 import urllib.request
-import argparse
 
 BASE_DIR = "/Users/ryan/Documents/etherfields-ai"
 
@@ -39,7 +39,7 @@ def build_cache(force=False):
 
     print("[Secret Scripts] Starting cache build for core campaign...", file=sys.stderr)
     stats_url = f"{URL_PREFIX}stats.json"
-    
+
     try:
         print(f"[Secret Scripts] Fetching stats from {stats_url}...", file=sys.stderr)
         req = urllib.request.Request(stats_url, headers={"User-Agent": "Etherfields Rule Master Cache Builder (Polite User)"})
@@ -55,13 +55,13 @@ def build_cache(force=False):
         return False
 
     print(f"[Secret Scripts] Core campaign consists of {core_count} shards.", file=sys.stderr)
-    
+
     combined_scripts = {}
-    
+
     for i in range(core_count):
         shard_url = f"{URL_PREFIX}core/{i}.json"
         print(f"[Secret Scripts] Downloading core shard {i+1}/{core_count}... ({shard_url})", file=sys.stderr)
-        
+
         try:
             req = urllib.request.Request(shard_url, headers={"User-Agent": "Etherfields Rule Master Cache Builder (Polite User)"})
             with urllib.request.urlopen(req) as response:
@@ -70,7 +70,7 @@ def build_cache(force=False):
         except Exception as e:
             print(f"Error downloading shard {i}: {e}", file=sys.stderr)
             return False
-            
+
         # Polite throttling as requested (1.5 seconds)
         if i < core_count - 1:
             print("[Secret Scripts] Sleeping 1.5s to be polite...", file=sys.stderr)
@@ -81,7 +81,7 @@ def build_cache(force=False):
         with open(RAW_CACHE_PATH, "w", encoding="utf-8") as f:
             json.dump(combined_scripts, f, indent=2, ensure_ascii=False)
         print(f"[Secret Scripts] Cached {len(combined_scripts)} raw scripts to {RAW_CACHE_PATH}!", file=sys.stderr)
-        
+
         # Automatically run preprocessor to sync the structured database
         print("[Secret Scripts] Triggering preprocessor to build structured cache...", file=sys.stderr)
         import preprocess_scripts
@@ -107,29 +107,29 @@ def lookup_script(script_num):
 
     script_num_str = str(script_num).strip()
     script_data = scripts.get(script_num_str)
-    
+
     if script_data:
         tone = script_data.get("tone", "neutral")
         narrative = script_data.get("narrative", "")
         instructions = script_data.get("instructions", "")
         branches = script_data.get("branches", [])
-        
+
         print("\n" + "="*60)
         print(f"SECRET SCRIPT: {script_num_str} (Tone: {tone.upper()})")
         print("="*60)
-        
+
         if narrative:
             # Yellow text / italic simulation for narrative
             print("\033[93m" + "--- STORY NARRATIVE ---" + "\033[0m")
             print(f"\033[3m{narrative}\033[0m")
             print()
-            
+
         if instructions:
             # Green text for gameplay instructions
             print("\033[92m" + "--- ACTIONS & INSTRUCTIONS ---" + "\033[0m")
             print(instructions)
             print()
-            
+
         if branches:
             # Cyan text for branching choices
             print("\033[96m" + "--- BRANCHING CHOICES ---" + "\033[0m")
@@ -137,7 +137,7 @@ def lookup_script(script_num):
                 dest = b['link'].split('/')[-1]
                 print(f"  • {b['label']} -> go to script {dest}")
             print()
-            
+
         print("="*60 + "\n")
     else:
         print(f"\n[Secret Scripts] Script '{script_num_str}' not found in structured cache.\n", file=sys.stderr)
@@ -146,9 +146,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Etherfields Secret Scripts Cache & Retrieval Tool")
     parser.add_argument("--update-cache", action="store_true", help="Politely rebuild the local secret scripts cache")
     parser.add_argument("--script", type=str, help="Look up a secret script by number/id")
-    
+
     args = parser.parse_args()
-    
+
     if args.update_cache:
         build_cache(force=True)
     elif args.script:

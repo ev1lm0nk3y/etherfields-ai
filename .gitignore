@@ -14,11 +14,15 @@ venv/
 ENV/
 
 # Large copyrighted source material (Keep this local)
+rulebook_pages/
 Rulebook_20.pdf
+secret_scripts_cache.json
+structured_scripts_cache.json
 
 # Local configurations & settings
 .env
 .gemini/
+.ruff_cache/
 
 # Compiled voice and temporary media
 audio_cache/
@@ -27,9 +31,8 @@ audio_cache/
 # Deep neural network wake-word models
 models/
 
-# Core copyrighted caches
-secret_scripts_cache.json
-structured_scripts_cache.json
-
 # Session/user custom data
 logs/
+topics/
+LOGS.md
+TOPICS.md
