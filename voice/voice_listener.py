@@ -20,6 +20,27 @@ import sounddevice as sd
 import soundfile as sf
 from openwakeword.model import Model
 
+# Repo root is parent of the directory of this file
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+def load_env_vars():
+    env_vars = {}
+    env_path = os.path.join(REPO_ROOT, ".env")
+    if os.path.exists(env_path):
+        with open(env_path, "r") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    key, val = line.split("=", 1)
+                    env_vars[key.strip()] = val.strip()
+    return env_vars
+
+_env = load_env_vars()
+CUSTOM_DIR_STR = _env.get("ETHERFIELDS_CUSTOM_DIR", REPO_ROOT)
+CUSTOM_DIR = os.path.abspath(os.path.expanduser(os.path.expandvars(CUSTOM_DIR_STR)))
+DEFAULT_MODELS_DIR = os.path.join(CUSTOM_DIR, "models")
+DEFAULT_AUDIO_CACHE_DIR = os.path.join(CUSTOM_DIR, "audio_cache")
+
 # Global Audio Parameters
 SAMPLE_RATE = 16000  # openWakeWord and Whisper expect 16kHz
 CHANNELS = 1
@@ -71,7 +92,8 @@ def record_question(silence_threshold=0.03, silence_duration=1.5, max_duration=1
 
     print("[Record] Processing audio...", flush=True)
     audio_data = np.concatenate(recording)
-    temp_wav = os.path.join(os.getcwd(), "question_temp.wav")
+    temp_wav_dir = DEFAULT_AUDIO_CACHE_DIR if os.path.exists(DEFAULT_AUDIO_CACHE_DIR) else os.getcwd()
+    temp_wav = os.path.join(temp_wav_dir, "question_temp.wav")
     sf.write(temp_wav, audio_data, SAMPLE_RATE)
     return temp_wav
 
@@ -138,8 +160,8 @@ def main():
     parser.add_argument(
         "--models-dir",
         type=str,
-        default="models",
-        help="Directory containing custom .onnx models (default: models)",
+        default=DEFAULT_MODELS_DIR,
+        help=f"Directory containing custom .onnx models (default: {DEFAULT_MODELS_DIR})",
     )
     parser.add_argument(
         "--model-name",

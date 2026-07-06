@@ -23,8 +23,25 @@ import sys
 import re
 
 BASE_DIR = "/Users/ryan/Documents/etherfields-ai"
+
+def load_env_vars():
+    env_vars = {}
+    env_path = os.path.join(BASE_DIR, ".env")
+    if os.path.exists(env_path):
+        with open(env_path, "r") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    key, val = line.split("=", 1)
+                    env_vars[key.strip()] = val.strip()
+    return env_vars
+
+_env = load_env_vars()
+CUSTOM_DIR_STR = _env.get("ETHERFIELDS_CUSTOM_DIR", BASE_DIR)
+CUSTOM_DIR = os.path.abspath(os.path.expanduser(os.path.expandvars(CUSTOM_DIR_STR)))
+
 SCRIPTS_CACHE_PATH = os.path.join(BASE_DIR, "structured_scripts_cache.json")
-AUDIO_CACHE_DIR = os.path.join(BASE_DIR, "audio_cache")
+AUDIO_CACHE_DIR = os.path.join(CUSTOM_DIR, "audio_cache")
 BANTR_WS_URL = "ws://127.0.0.1:46290/generate"
 
 # Check for local pip-installed Chatterbox TTS packages

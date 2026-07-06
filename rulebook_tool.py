@@ -15,9 +15,27 @@ from pypdf import PdfReader
 
 # Paths
 BASE_DIR = "/Users/ryan/Documents/etherfields-ai"
-PDF_PATH = os.path.join(BASE_DIR, "Rulebook_20.pdf")
-PAGES_DIR = os.path.join(BASE_DIR, "rulebook_pages")
-INDEX_PATH = os.path.join(BASE_DIR, "index.json")
+
+def load_env_vars():
+    env_vars = {}
+    env_path = os.path.join(BASE_DIR, ".env")
+    if os.path.exists(env_path):
+        with open(env_path, "r") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    key, val = line.split("=", 1)
+                    env_vars[key.strip()] = val.strip()
+    return env_vars
+
+# Resolve custom directory from env if available (falls back to workspace root)
+_env = load_env_vars()
+CUSTOM_DIR_STR = _env.get("ETHERFIELDS_CUSTOM_DIR", BASE_DIR)
+CUSTOM_DIR = os.path.abspath(os.path.expanduser(os.path.expandvars(CUSTOM_DIR_STR)))
+
+PDF_PATH = os.path.join(CUSTOM_DIR, "Rulebook_20.pdf")
+PAGES_DIR = os.path.join(CUSTOM_DIR, "rulebook_pages")
+INDEX_PATH = os.path.join(CUSTOM_DIR, "index.json")
 
 def get_pdf_metadata():
     if not os.path.exists(PDF_PATH):

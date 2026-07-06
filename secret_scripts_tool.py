@@ -11,6 +11,23 @@ import urllib.request
 import argparse
 
 BASE_DIR = "/Users/ryan/Documents/etherfields-ai"
+
+def load_env_vars():
+    env_vars = {}
+    env_path = os.path.join(BASE_DIR, ".env")
+    if os.path.exists(env_path):
+        with open(env_path, "r") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    key, val = line.split("=", 1)
+                    env_vars[key.strip()] = val.strip()
+    return env_vars
+
+_env = load_env_vars()
+CUSTOM_DIR_STR = _env.get("ETHERFIELDS_CUSTOM_DIR", BASE_DIR)
+CUSTOM_DIR = os.path.abspath(os.path.expanduser(os.path.expandvars(CUSTOM_DIR_STR)))
+
 RAW_CACHE_PATH = os.path.join(BASE_DIR, "secret_scripts_cache.json")
 STRUCTURED_CACHE_PATH = os.path.join(BASE_DIR, "structured_scripts_cache.json")
 URL_PREFIX = "https://dev.etherfieldsapp.awakenrealms.com/assets/secrets/en/"

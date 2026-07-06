@@ -17,6 +17,7 @@ ENV/
 Rulebook_20.pdf
 
 # Local configurations & settings
+.env
 .gemini/
 
 # Compiled voice and temporary media

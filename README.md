@@ -39,9 +39,27 @@ This project turns an AI agent into an expert **Rule Master**, allowing players 
 ## 🛠️ Setup & Usage
 
 ### Prerequisites
-* **Python 3.13** or higher
+* **Python 3.12** or higher
 * **`uv`** (fast Python package installer and runner)
-* Place `Rulebook_20.pdf` in the project root.
+
+### 🚀 Interactive Setup Wizard
+
+The project includes an interactive installation script that validates your environment, creates directory structures, configures environment settings, and downloads necessary assets. 
+
+To start the installer, simply run:
+```bash
+python install.py
+```
+
+The setup wizard will walk you through:
+1. **Prerequisite Verification:** Ensuring Python 3.12+ and `uv` are available.
+2. **Custom Files Directory:** Defining a local directory for logs, caches, and models (defaults to `~/.local/etherfields-ai`), keeping the repository directory clean.
+3. **Environment Generation:** Creating a local `.env` file (copied from `.env.example` template) to specify your custom paths and configurations. This file is automatically ignored by git.
+4. **Voice Assistance (Optional):** Setting up wake-word models (e.g. downloading `jarvis.onnx`), verifying `ffmpeg` installation, and installing `openai-whisper` globally.
+5. **Rulebook PDF Auto-Retrieval:** Checking for `Rulebook_20.pdf` and offering to automatically download it directly from Awaken Realms if missing, followed by rebuilding the page search index.
+6. **Dependency Warming:** Pre-downloading any large libraries (like PyTorch/torch) so they're ready for instant, offline, hands-free gameplay sessions.
+
+---
 
 ### Usage Commands
 

@@ -42,8 +42,9 @@ This is a **Non-Code Project** serving as a knowledge base, context manager, and
 ├── rulebook_pages/       # Extracted page-level text cache (page_01.txt to page_20.txt)
 ├── index.json            # Generated TOC & Alphabetical Index mapping keywords to page numbers
 ├── rulebook_tool.py      # Python script to validate, regenerate, and query the page cache
-├── voice_assistant.py    # Local TTS script interfacing with Bantr for scene/rule narration
-├── voice_listener.py     # Continuous openWakeWord listener & Whisper transcriber
+├── voice/                # Voice activation module directory
+│   ├── voice_assistant.py # Local TTS script interfacing with Bantr for scene/rule narration
+│   └── voice_listener.py  # Continuous openWakeWord listener & Whisper transcriber
 ├── secret_scripts_tool.py # Polite offline caching and lookups of Core Secret Scripts
 ├── secret_scripts_cache.json # Compiled offline database of 1093 Core Campaign Secret Scripts
 ├── RULEMASTER.md         # Primary prompt, campaign details, and player roster
@@ -97,16 +98,16 @@ Keep track of the campaign details to customize rule applications (e.g., charact
   Use `uv run rulebook_tool.py --search "<term>"` to look up any mechanic, rule, or card query. The tool automatically maps your query to the correct rulebook pages using the index, and retrieves only the necessary page text.
   * *Example:* `uv run rulebook_tool.py --search "Slumber"` or `uv run rulebook_tool.py --search "Awakening"`
 * **Local Dual-Mode TTS Voice Assistant (Chatterbox & Bantr Integration):**
-  Use `uv run voice_assistant.py` to voice rule answers or secret scripts locally.
+  Use `uv run voice/voice_assistant.py` to voice rule answers or secret scripts locally.
   * *Default Engine (Chatterbox):* Chatterbox TTS (`--engine chatterbox`). Runs 100% offline via local PyTorch & Apple Silicon GPU acceleration (`mps`). Automatically performs zero-shot voice cloning using local Bantr `.wav` samples as reference prompts! Rule instructions default to neutral Cyrus voice; secret scripts automatically detect and clone Cyrus's emotional profiles (e.g. `happy`, `sad`, `fearful`, `angry`).
   * *High-Fidelity Engine (Bantr):* Bantr TTS (`--engine bantr`). Rule instructions default to speaker `0306_cyrus_m_neutral` (Cyrus). Secret scripts utilize automated emotion-detection keyword scanning to dynamically load matching emotional Cyrus voices (e.g. `0311_cyrus_m_happy`, `0305_cyrus_m_fearful`).
-  * *To speak custom text:* `uv run voice_assistant.py --text "My text response here"`
-  * *To speak a secret script:* `uv run voice_assistant.py --script 234`
+  * *To speak custom text:* `uv run voice/voice_assistant.py --text "My text response here"`
+  * *To speak a secret script:* `uv run voice/voice_assistant.py --script 234`
 * **Continuous Voice Listener (Hands-Free Integration):**
-  Use `uv run voice_listener.py` to run the continuous wake-word detector locally.
+  Use `uv run voice/voice_listener.py` to run the continuous wake-word detector locally.
   * *Auto-discovery:* By default, the script automatically scans the `models/` directory for any custom `.onnx` wake-word models (like `hey_rule_book.onnx`, `hey_rule_book_1.onnx`, etc.) and loads all of them in parallel for multi-model wake detection!
-  * *Listing models:* Run `uv run voice_listener.py --list-models` to list all available custom models in the models directory.
-  * *Running specific models:* Use `--model-name <name>` to load only matching custom models (e.g., `uv run voice_listener.py --model-name hey_rule_book_3`), or `--model-path <path>` for direct loading.
+  * *Listing models:* Run `uv run voice/voice_listener.py --list-models` to list all available custom models in the models directory.
+  * *Running specific models:* Use `--model-name <name>` to load only matching custom models (e.g., `uv run voice/voice_listener.py --model-name hey_rule_book_3`), or `--model-path <path>` for direct loading.
   * *How it works:* It continuously listens for an active wake word. Upon detection, it triggers a macOS beep, records your question until you stop speaking, transcribes it locally using the `whisper` uv tool, and automatically copies the transcription text to your clipboard.
   * *Action:* Simply paste (Cmd+V) the transcribed question directly into this terminal agent session!
 * **Forcing Cache Regeneration:**
