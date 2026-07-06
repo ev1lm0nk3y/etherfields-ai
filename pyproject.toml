@@ -5,7 +5,9 @@ description = "🌌 Etherfields AI Board Game Assistant & Retrieval Engine"
 readme = "README.md"
 requires-python = "==3.11.10"
 dependencies = [
+    "jinja2>=3.1.6",
     "mcp>=1.28.1",
+    "nanowakeword>=1.2.0",
     "pypdf>=5.0.0",
 ]
 

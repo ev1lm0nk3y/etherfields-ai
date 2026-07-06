@@ -352,14 +352,14 @@ def main():
         model_path = os.path.join(models_dir, "kokoro-v1.0.onnx")
         voices_path = os.path.join(models_dir, "voices-v1.0.bin")
 
-        if not model_path.exists():
+        if not os.path.exists(model_path):
             print_warning("Kokoro ONNX model file missing. Downloading (~310MB)...")
             kokoro_model_url = "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx"
             download_file_with_progress(kokoro_model_url, model_path)
         else:
             print_success(f"Kokoro ONNX model already cached at {model_path}")
 
-        if not voices_path.exists():
+        if not os.path.exists(voices_path):
             print_warning("Kokoro voices mapping file missing. Downloading (~15MB)...")
             kokoro_voices_url = "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/voices-v1.0.bin"
             download_file_with_progress(kokoro_voices_url, voices_path)
