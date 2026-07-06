@@ -98,7 +98,7 @@ def setup_directories_and_env():
     if enable_voice:
         print_info(
             "Enabling voice capabilities will install additional dependencies and tools "
-            " (e.g., openai-whisper, ffmpeg)."
+            " (e.g., mlx-whisper or faster-whisper, and ffmpeg)."
         )
         subprocess.run(["uv", "sync", "--extra", "voice"], check=True)
         # Check ffmpeg
@@ -164,22 +164,6 @@ WAKE_WORD_MODEL={wake_word_model}
     return enable_voice, custom_dir
 
 
-def handle_voice_tools(enable_voice):
-    if not enable_voice:
-        return
-
-    print_info("Installing global transcription tool `openai-whisper` via uv...")
-    try:
-        # Run uv tool install openai-whisper
-        subprocess.run(["uv", "tool", "install", "openai-whisper"], check=True)
-        print_success("Successfully installed openai-whisper tool.")
-    except subprocess.CalledProcessError as e:
-        print_error(f"Failed to install openai-whisper: {e}")
-        print_warning(
-            "Ensure you have network access and try running manually: `uv tool install openai-whisper`"
-        )
-
-
 def handle_rulebook_pdf(custom_dir):
     # Rulebook PDF check
     local_pdf = Path("Rulebook_20.pdf")
@@ -242,6 +226,15 @@ def warmup_dependencies():
         print_warning(
             f"Dry-run dependency warm-up exited with an error (this might be normal if audio devices aren't ready): {e}"
         )
+
+
+def handle_voice_tools():
+    # Launch our custom voice setup wizard!
+    print_info("Launching the interactive Voice & TTS Setup Wizard...")
+    try:
+        subprocess.run(["uv", "run", "voice/voice_install.py"], check=True)
+    except subprocess.CalledProcessError as e:
+        print_error(f"Voice Installation Wizard exited with an error: {e}")
 
 
 def detect_hardware():
@@ -346,13 +339,13 @@ def main():
     enable_voice, custom_dir = setup_directories_and_env()
     print("-" * 60)
 
-    handle_voice_tools(enable_voice)
-    print("-" * 60)
-
     handle_rulebook_pdf(custom_dir)
     print("-" * 60)
 
     if enable_voice:
+        handle_voice_tools()
+        print("-" * 60)
+
         warmup_dependencies()
 
     print("=" * 60)

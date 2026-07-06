@@ -29,8 +29,8 @@ This project turns an AI agent into an expert **Rule Master**, allowing players 
 ├── index.json            # Generated TOC and alphabetical index mapping keywords to pages
 ├── rulebook_tool.py      # Unified Python 3.13 tool to validate, regenerate, and query the cache
 ├── voice/                # Voice assistant & wake-word listening sub-system
-│   ├── voice_assistant.py # Local TTS narration script (Bantr/Chatterbox)
-│   ├── voice_listener.py  # Continuous wake-word listener (openWakeWord/Whisper)
+│   ├── voice_assistant.py # Local TTS narration (Kokoro-ONNX / OpenAI / ElevenLabs)
+│   ├── voice_listener.py  # Continuous wake-word listener (openWakeWord / mlx-whisper / faster-whisper)
 │   └── wakeword_model_training.ipynb # Google Colab notebook for training custom models
 ├── GEMINI.md             # Automatic LLM instructions and workflow protocols
 ├── RULEMASTER.md         # Baseline rules role prompt and active player roster
@@ -59,7 +59,7 @@ The setup wizard will walk you through:
 1. **Prerequisite Verification:** Ensuring Python 3.12+ and `uv` are available.
 2. **Custom Files Directory:** Defining a local directory for logs, caches, and models (defaults to `~/.local/etherfields-ai`), keeping the repository directory clean.
 3. **Environment Generation:** Creating a local `.env` file (copied from `.env.example` template) to specify your custom paths and configurations. This file is automatically ignored by git.
-4. **Voice Assistance (Optional):** Setting up wake-word models (e.g. downloading `jarvis.onnx`), verifying `ffmpeg` installation, and installing `openai-whisper` globally.
+4. **Voice Assistance (Optional):** Setting up wake-word models (e.g. downloading `jarvis.onnx`) and verifying `ffmpeg` installation.
 5. **Rulebook PDF Auto-Retrieval:** Checking for `Rulebook_20.pdf` and offering to automatically download it directly from Awaken Realms if missing, followed by rebuilding the page search index.
 6. **Dependency Warming:** Pre-downloading any large libraries (like PyTorch/torch) so they're ready for instant, offline, hands-free gameplay sessions.
 

@@ -7,6 +7,7 @@
 #     "soundfile",
 #     "numpy==1.26.4",
 #     "pyyaml",
+#     "mlx-whisper>=0.4.0",
 # ]
 # ///
 
@@ -113,51 +114,62 @@ def record_question(silence_threshold=0.03, silence_duration=1.5, max_duration=1
     return temp_wav
 
 
+# Global variable for lazy model loading
+_stt_model = None
+
 def transcribe_audio(wav_path):
     """
-    Invokes the globally-installed Whisper tool to transcribe the WAV file.
+    Transcribes audio using the configured local STT engine (mlx-whisper or faster-whisper).
+    Loads the model into memory upon first use.
     """
-    print("[Whisper STT] Transcribing audio file...", flush=True)
+    global _stt_model
+    stt_program = _env.get("STT_PROGRAM", "faster-whisper").lower()
+    
+    print(f"[{stt_program.upper()}] Transcribing audio file...", flush=True)
+    start_t = time.time()
+    transcription = None
+
     try:
-        # Run Whisper CLI (installed globally via uv tool install)
-        result = subprocess.run(
-            [
-                "whisper",
+        if stt_program == "mlx-whisper":
+            import mlx_whisper
+            
+            # mlx_whisper takes a path_or_hf_repo and returns a dict with 'text'
+            result = mlx_whisper.transcribe(
                 wav_path,
-                "--model",
-                "base",
-                "--language",
-                "en",
-                "--output_format",
-                "txt",
-            ],
-            capture_output=True,
-            text=True,
-        )
-
-        txt_path = wav_path.replace(".wav", ".txt")
-        if os.path.exists(txt_path):
-            with open(txt_path, "r", encoding="utf-8") as f:
-                transcription = f.read().strip()
-
-            # Clean up generated whisper artifact files
-            os.remove(wav_path)
-            os.remove(txt_path)
-            for ext in [".vtt", ".srt", ".tsv", ".json"]:
-                p = wav_path.replace(".wav", ext)
-                if os.path.exists(p):
-                    os.remove(p)
-
-            return transcription
-        else:
-            print(
-                "[Whisper STT] Error: Transcription output file not found.",
-                file=sys.stderr,
+                path_or_hf_repo="mlx-community/whisper-large-v3-turbo"
             )
-            if os.path.exists(wav_path):
-                os.remove(wav_path)
+            transcription = result["text"].strip()
+            
+        elif stt_program == "faster-whisper":
+            from faster_whisper import WhisperModel
+            
+            if _stt_model is None:
+                print(f"[FASTER-WHISPER] Loading model (first time only)...", flush=True)
+                _stt_model = WhisperModel(
+                    "Systran/faster-whisper-medium.en",
+                    device="cpu",
+                    compute_type="int8",
+                    download_root=DEFAULT_MODELS_DIR
+                )
+            
+            segments, _ = _stt_model.transcribe(wav_path, beam_size=5)
+            transcription = " ".join([segment.text for segment in segments]).strip()
+        
+        else:
+            print(f"[STT] Error: Unknown STT program configured '{stt_program}'", file=sys.stderr)
+            return None
+
+        elapsed = time.time() - start_t
+        print(f"[{stt_program.upper()}] Transcription completed in {elapsed:.2f}s", flush=True)
+
+        # Cleanup wav
+        if os.path.exists(wav_path):
+            os.remove(wav_path)
+
+        return transcription
+
     except Exception as e:
-        print(f"[Whisper STT] Error during transcription process: {e}", file=sys.stderr)
+        print(f"[{stt_program.upper()}] Error during transcription process: {e}", file=sys.stderr)
         if os.path.exists(wav_path):
             os.remove(wav_path)
     return None
