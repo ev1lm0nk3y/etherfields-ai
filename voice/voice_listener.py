@@ -24,6 +24,7 @@ import soundfile as sf
 # Try importing nanowakeword
 try:
     from nanowakeword import NanoInterpreter
+
     HAS_NANOWAKEWORD = True
 except ImportError:
     HAS_NANOWAKEWORD = False
@@ -32,12 +33,14 @@ except ImportError:
 try:
     import openwakeword
     from openwakeword.model import Model as OWWModel
+
     HAS_OPENWAKEWORD = True
 except ImportError:
     HAS_OPENWAKEWORD = False
 
 # Repo root is parent of the directory of this file
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 def load_env_vars():
     env_vars = {}
@@ -50,6 +53,7 @@ def load_env_vars():
                     key, val = line.split("=", 1)
                     env_vars[key.strip()] = val.strip()
     return env_vars
+
 
 _env = load_env_vars()
 CUSTOM_DIR_STR = _env.get("ETHERFIELDS_LOCAL_DIR", REPO_ROOT)
@@ -108,7 +112,9 @@ def record_question(silence_threshold=0.03, silence_duration=1.5, max_duration=1
 
     print("[Record] Processing audio...", flush=True)
     audio_data = np.concatenate(recording)
-    temp_wav_dir = DEFAULT_AUDIO_CACHE_DIR if os.path.exists(DEFAULT_AUDIO_CACHE_DIR) else os.getcwd()
+    temp_wav_dir = (
+        DEFAULT_AUDIO_CACHE_DIR if os.path.exists(DEFAULT_AUDIO_CACHE_DIR) else os.getcwd()
+    )
     temp_wav = os.path.join(temp_wav_dir, "question_temp.wav")
     sf.write(temp_wav, audio_data, SAMPLE_RATE)
     return temp_wav
@@ -117,6 +123,7 @@ def record_question(silence_threshold=0.03, silence_duration=1.5, max_duration=1
 # Global variable for lazy model loading
 _stt_model = None
 
+
 def transcribe_audio(wav_path):
     """
     Transcribes audio using the configured local STT engine (mlx-whisper or faster-whisper).
@@ -124,7 +131,7 @@ def transcribe_audio(wav_path):
     """
     global _stt_model
     stt_program = _env.get("STT_PROGRAM", "faster-whisper").lower()
-    
+
     print(f"[{stt_program.upper()}] Transcribing audio file...", flush=True)
     start_t = time.time()
     transcription = None
@@ -132,29 +139,28 @@ def transcribe_audio(wav_path):
     try:
         if stt_program == "mlx-whisper":
             import mlx_whisper
-            
+
             # mlx_whisper takes a path_or_hf_repo and returns a dict with 'text'
             result = mlx_whisper.transcribe(
-                wav_path,
-                path_or_hf_repo="mlx-community/whisper-large-v3-turbo"
+                wav_path, path_or_hf_repo="mlx-community/whisper-large-v3-turbo"
             )
             transcription = result["text"].strip()
-            
+
         elif stt_program == "faster-whisper":
             from faster_whisper import WhisperModel
-            
+
             if _stt_model is None:
                 print(f"[FASTER-WHISPER] Loading model (first time only)...", flush=True)
                 _stt_model = WhisperModel(
                     "Systran/faster-whisper-medium.en",
                     device="cpu",
                     compute_type="int8",
-                    download_root=DEFAULT_MODELS_DIR
+                    download_root=DEFAULT_MODELS_DIR,
                 )
-            
+
             segments, _ = _stt_model.transcribe(wav_path, beam_size=5)
             transcription = " ".join([segment.text for segment in segments]).strip()
-        
+
         else:
             print(f"[STT] Error: Unknown STT program configured '{stt_program}'", file=sys.stderr)
             return None
@@ -176,9 +182,7 @@ def transcribe_audio(wav_path):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Etherfields Rule Master Wake-Word Listener"
-    )
+    parser = argparse.ArgumentParser(description="Etherfields Rule Master Wake-Word Listener")
     parser.add_argument(
         "--model-path",
         type=str,
@@ -249,9 +253,7 @@ def main():
     custom_onnx_files = []
     if os.path.exists(models_dir) and os.path.isdir(models_dir):
         custom_onnx_files = [
-            os.path.join(models_dir, f)
-            for f in os.listdir(models_dir)
-            if f.endswith(".onnx")
+            os.path.join(models_dir, f) for f in os.listdir(models_dir) if f.endswith(".onnx")
         ]
         custom_onnx_files.sort()
 
@@ -280,9 +282,7 @@ def main():
         explicit_paths = [p.strip() for p in args.model_path.split(",")]
         for p in explicit_paths:
             if not os.path.exists(p):
-                print(
-                    f"Error: Specified model path does not exist: {p}", file=sys.stderr
-                )
+                print(f"Error: Specified model path does not exist: {p}", file=sys.stderr)
                 sys.exit(1)
             model_paths.append(p)
     elif args.model_name:
@@ -333,28 +333,42 @@ def main():
 
         if HAS_NANOWAKEWORD and args.engine in ["auto", "nanowakeword"]:
             try:
-                print(f"[Voice Listener] Attempting to load '{model_name}' using nanowakeword...", flush=True)
+                print(
+                    f"[Voice Listener] Attempting to load '{model_name}' using nanowakeword...",
+                    flush=True,
+                )
                 nano_models[model_name] = NanoInterpreter(path)
                 loaded_nano = True
                 print(f"  ✨ Successfully loaded '{model_name}' with nanowakeword!", flush=True)
             except Exception as e:
                 if args.engine == "nanowakeword":
-                    print(f"  ❌ Error loading '{model_name}' with nanowakeword: {e}", file=sys.stderr)
+                    print(
+                        f"  ❌ Error loading '{model_name}' with nanowakeword: {e}", file=sys.stderr
+                    )
                     sys.exit(1)
                 else:
-                    print(f"  ⚠️ Could not load '{model_name}' with nanowakeword: {e}. Falling back to openWakeWord...", flush=True)
+                    print(
+                        f"  ⚠️ Could not load '{model_name}' with nanowakeword: {e}. Falling back to openWakeWord...",
+                        flush=True,
+                    )
 
         if not loaded_nano:
             if HAS_OPENWAKEWORD and args.engine in ["auto", "openwakeword"]:
                 oww_paths.append(path)
             else:
-                print(f"  ❌ Error: Model '{model_name}' requires openwakeword, but it is disabled or unavailable.", file=sys.stderr)
+                print(
+                    f"  ❌ Error: Model '{model_name}' requires openwakeword, but it is disabled or unavailable.",
+                    file=sys.stderr,
+                )
                 sys.exit(1)
 
     oww_model = None
     if oww_paths:
         try:
-            print(f"[Voice Listener] Loading {len(oww_paths)} custom model(s) using openWakeWord: {oww_paths}", flush=True)
+            print(
+                f"[Voice Listener] Loading {len(oww_paths)} custom model(s) using openWakeWord: {oww_paths}",
+                flush=True,
+            )
             oww_model = OWWModel(
                 wakeword_models=oww_paths,
                 inference_framework=args.inference_framework,
@@ -373,6 +387,7 @@ def main():
             )
             try:
                 import openwakeword.utils
+
                 openwakeword.utils.download_models()
                 print(
                     "[Voice Listener] Base models downloaded successfully. Retrying initialization...",
@@ -386,19 +401,28 @@ def main():
                 except TypeError:
                     oww_model = OWWModel(wakeword_models=oww_paths)
             except Exception as retry_err:
-                print(f"Error after downloading and retrying initialization: {retry_err}", file=sys.stderr)
+                print(
+                    f"Error after downloading and retrying initialization: {retry_err}",
+                    file=sys.stderr,
+                )
                 sys.exit(1)
 
     # Handle built-in model fallback if no models were loaded
     if not nano_models and oww_model is None:
         if HAS_OPENWAKEWORD and args.engine in ["auto", "openwakeword"]:
-            print("[Voice Listener] Loading built-in openWakeWord models (e.g. 'alexa', 'hey_mycroft')...", flush=True)
+            print(
+                "[Voice Listener] Loading built-in openWakeWord models (e.g. 'alexa', 'hey_mycroft')...",
+                flush=True,
+            )
             try:
                 oww_model = OWWModel(inference_framework=args.inference_framework)
             except TypeError:
                 oww_model = OWWModel()
         else:
-            print("❌ Error: No models specified and no wake-word engine was available to load built-ins.", file=sys.stderr)
+            print(
+                "❌ Error: No models specified and no wake-word engine was available to load built-ins.",
+                file=sys.stderr,
+            )
             sys.exit(1)
 
     active_models = list(nano_models.keys())
@@ -444,8 +468,14 @@ def main():
                 # If debugging is active, print volume and model scores
                 if args.debug:
                     volume = np.linalg.norm(chunk) / np.sqrt(len(chunk)) if len(chunk) > 0 else 0.0
-                    scores_str = ", ".join([f"{name}: {score:.3f}" for name, score in prediction.items()])
-                    print(f"\r[Debug] Vol: {volume:.4f} | Predictions: {scores_str}     ", end="", flush=True)
+                    scores_str = ", ".join(
+                        [f"{name}: {score:.3f}" for name, score in prediction.items()]
+                    )
+                    print(
+                        f"\r[Debug] Vol: {volume:.4f} | Predictions: {scores_str}     ",
+                        end="",
+                        flush=True,
+                    )
 
                 # Process predictions
                 for model_name, score in prediction.items():
@@ -456,9 +486,7 @@ def main():
                         )
 
                         # Stop audio buffer temporarily, record question, and process
-                        wav_file = record_question(
-                            silence_threshold=args.silence_threshold
-                        )
+                        wav_file = record_question(silence_threshold=args.silence_threshold)
                         text = transcribe_audio(wav_file)
 
                         if text:
@@ -468,15 +496,11 @@ def main():
                             )
 
                             # Combine with preamble if configured
-                            clipboard_text = (
-                                f"{args.preamble}{text}" if args.preamble else text
-                            )
+                            clipboard_text = f"{args.preamble}{text}" if args.preamble else text
 
                             # Copy to clipboard for easy copy-pasting to terminal CLI
                             try:
-                                subprocess.run(
-                                    ["pbcopy"], input=clipboard_text, text=True
-                                )
+                                subprocess.run(["pbcopy"], input=clipboard_text, text=True)
                                 if args.preamble:
                                     print(
                                         "[Clipboard] Copied to clipboard with voice preamble! Ready to paste into your session.",

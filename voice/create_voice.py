@@ -16,6 +16,7 @@ from pathlib import Path
 # Repo root is parent of the directory of this file
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
+
 def load_env_vars():
     env_vars = {}
     env_path = REPO_ROOT / ".env"
@@ -27,6 +28,7 @@ def load_env_vars():
                     key, val = line.split("=", 1)
                     env_vars[key.strip()] = val.strip()
     return env_vars
+
 
 def save_env_vars(env_vars):
     env_path = REPO_ROOT / ".env"
@@ -61,20 +63,25 @@ def save_env_vars(env_vars):
     with open(env_path, "w") as f:
         f.writelines(new_lines)
 
+
 def print_info(text):
     print(f"\033[94mℹ️  [Info] {text}\033[0m")
+
 
 def print_success(text):
     print(f"\033[92m✅  [Success] {text}\033[0m")
 
+
 def print_error(text):
     print(f"\033[91m❌  [Error] {text}\033[0m", file=sys.stderr)
+
 
 def ask_input(prompt, default=None):
     if default is not None:
         val = input(f"{prompt} [{default}]: ").strip()
         return val if val else default
     return input(f"{prompt}: ").strip()
+
 
 def ask_choice(prompt, options):
     print(prompt)
@@ -85,6 +92,7 @@ def ask_choice(prompt, options):
         if choice in options:
             return choice
         print("Invalid choice. Please try again.")
+
 
 def main():
     print("=" * 60)
@@ -102,8 +110,8 @@ def main():
         "Select the voice role you would like to create/clonify:",
         {
             "1": "Narrative (For emotional narrative, dreamworld descriptions, secret scripts)",
-            "2": "Instruction (For neutral rulebooks, game steps, card setup guidelines)"
-        }
+            "2": "Instruction (For neutral rulebooks, game steps, card setup guidelines)",
+        },
     )
     role_name = "NARRATIVE" if role_choice == "1" else "INSTRUCTION"
     role_filename = f"voice_ref_{role_name.lower()}.wav"
@@ -114,8 +122,8 @@ def main():
         "\nHow would you like to provide the voice reference?",
         {
             "1": "Record a fresh 6-second sample right now using your microphone",
-            "2": "Provide an existing local .wav audio file"
-        }
+            "2": "Provide an existing local .wav audio file",
+        },
     )
 
     if source_choice == "1":
@@ -125,7 +133,9 @@ def main():
             import sounddevice as sd
             import soundfile as sf
         except ImportError:
-            print_error("Failed to load audio recording dependencies (sounddevice, soundfile, numpy).")
+            print_error(
+                "Failed to load audio recording dependencies (sounddevice, soundfile, numpy)."
+            )
             sys.exit(1)
 
         print("\n" + "-" * 50)
@@ -133,9 +143,13 @@ def main():
         print("Chatterbox works best with clean, clear vocals.")
         print("Prepare to speak a sample phrase. Recommended phrases:")
         if role_name == "NARRATIVE":
-            print("  >>> 'In the middle of the deep slumber, a strange shadow rises. Discard one turn card and suffer one damage.'")
+            print(
+                "  >>> 'In the middle of the deep slumber, a strange shadow rises. Discard one turn card and suffer one damage.'"
+            )
         else:
-            print("  >>> 'Flip the rulebook to page fifteen. Place the active token onto the map space and prepare for setup.'")
+            print(
+                "  >>> 'Flip the rulebook to page fifteen. Place the active token onto the map space and prepare for setup.'"
+            )
         print("-" * 50 + "\n")
 
         ready = input("Press [Enter] when ready to record for 6 seconds...")
@@ -156,13 +170,18 @@ def main():
             if sys.platform == "darwin":
                 os.system('printf "\a"')
 
-            audio_data = sd.rec(int(duration * sample_rate), samplerate=sample_rate, channels=channels, dtype='float32')
+            audio_data = sd.rec(
+                int(duration * sample_rate),
+                samplerate=sample_rate,
+                channels=channels,
+                dtype="float32",
+            )
 
             # Show a simple progress bar
             for s in range(int(duration)):
                 time.sleep(1.0)
                 progress = "#" * (s + 1) + " " * (int(duration) - s - 1)
-                print(f"\r   [{progress}] {s+1}/6s", end="", flush=True)
+                print(f"\r   [{progress}] {s + 1}/6s", end="", flush=True)
             sd.wait()
 
             print("\n⏹️ Recording completed!\n")
@@ -178,9 +197,11 @@ def main():
     else:
         # Existing file path
         while True:
-            file_path_str = ask_input("\nEnter the absolute or relative path to your local .wav file")
+            file_path_str = ask_input(
+                "\nEnter the absolute or relative path to your local .wav file"
+            )
             file_path = Path(file_path_str).expanduser().resolve()
-            if file_path.exists() and file_path.suffix.lower() == '.wav':
+            if file_path.exists() and file_path.suffix.lower() == ".wav":
                 break
             print_error("Specified file does not exist or is not a .wav file. Please try again.")
 
@@ -194,9 +215,7 @@ def main():
 
     # 3. Save to .env
     print_info("Updating your local environment configuration...")
-    env_vars = {
-        f"VOICE_REF_{role_name}": str(target_path)
-    }
+    env_vars = {f"VOICE_REF_{role_name}": str(target_path)}
     save_env_vars(env_vars)
     print_success(f"Added VOICE_REF_{role_name} override path in '.env'!")
 
@@ -207,6 +226,7 @@ def main():
     print(f" Profile WAV: {target_path}")
     print(" This voice will now be automatically cloned offline during active gameplay!")
     print("=" * 60 + "\n")
+
 
 if __name__ == "__main__":
     main()

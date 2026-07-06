@@ -21,6 +21,7 @@ import urllib.request
 
 BASE_DIR = "/Users/ryan/Documents/etherfields-ai"
 
+
 def load_env_vars():
     env_vars = {}
     env_path = os.path.join(BASE_DIR, ".env")
@@ -32,6 +33,7 @@ def load_env_vars():
                     key, val = line.split("=", 1)
                     env_vars[key.strip()] = val.strip()
     return env_vars
+
 
 _env = load_env_vars()
 CUSTOM_DIR_STR = _env.get("ETHERFIELDS_LOCAL_DIR", BASE_DIR)
@@ -56,17 +58,23 @@ elif platform.system() == "Windows":
 
 AUDIO_PLAYER = _env.get("AUDIO_PLAYER", _default_player)
 
+
 def play_audio_file(file_path):
     import shlex
+
     cmd = shlex.split(AUDIO_PLAYER) + [file_path]
     try:
         subprocess.run(cmd, check=True)
     except Exception as e:
-        print(f"[Playback Error] Failed to play audio file using player command '{AUDIO_PLAYER}': {e}", file=sys.stderr)
+        print(
+            f"[Playback Error] Failed to play audio file using player command '{AUDIO_PLAYER}': {e}",
+            file=sys.stderr,
+        )
 
 
 # Global variable for local Kokoro TTS instance
 _kokoro_instance = None
+
 
 def get_kokoro():
     global _local_chatterbox_instance, _stt_model, _kokoro_instance
@@ -105,6 +113,7 @@ def get_kokoro():
         print("[Local TTS] Initializing local kokoro-onnx engine...", flush=True)
         try:
             from kokoro_onnx import Kokoro
+
             _kokoro_instance = Kokoro(model_path, voices_path)
         except Exception as e:
             print(f"[Local TTS Error] Failed to load Kokoro engine: {e}", file=sys.stderr)
@@ -125,15 +134,18 @@ def speak_text_kokoro(text, voice="bm_george", speed=1.0, output_path=None, play
 
     try:
         import soundfile as sf
-        print(f"[Local TTS] Generating local speech (Voice: {voice}, Speed: {speed})...", flush=True)
+
+        print(
+            f"[Local TTS] Generating local speech (Voice: {voice}, Speed: {speed})...", flush=True
+        )
         samples, sample_rate = kokoro.create(text, voice=voice, speed=speed, lang="en-us")
-        
+
         save_path = output_path
         if not save_path:
             temp_f = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
             save_path = temp_f.name
             temp_f.close()
-            
+
         sf.write(save_path, samples, sample_rate)
 
         if play_audio:
@@ -161,23 +173,12 @@ def speak_text_openai(text, voice="onyx", speed=1.0, output_path=None, play_audi
         return False
 
     url = "https://api.openai.com/v1/audio/speech"
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
-    payload = {
-        "model": "tts-1",
-        "input": text,
-        "voice": voice,
-        "speed": speed
-    }
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    payload = {"model": "tts-1", "input": text, "voice": voice, "speed": speed}
 
     try:
         req = urllib.request.Request(
-            url,
-            data=json.dumps(payload).encode("utf-8"),
-            headers=headers,
-            method="POST"
+            url, data=json.dumps(payload).encode("utf-8"), headers=headers, method="POST"
         )
         print("[OpenAI TTS] Connecting to cloud speech synthesizer...", flush=True)
         with urllib.request.urlopen(req) as response:
@@ -204,7 +205,9 @@ def speak_text_openai(text, voice="onyx", speed=1.0, output_path=None, play_audi
         return False
 
 
-def speak_text_elevenlabs(text, voice_id="pNInz6obpg7ANgFlW75D", speed=1.0, output_path=None, play_audio=True):
+def speak_text_elevenlabs(
+    text, voice_id="pNInz6obpg7ANgFlW75D", speed=1.0, output_path=None, play_audio=True
+):
     if output_path and os.path.exists(output_path):
         if play_audio:
             print("[ElevenLabs TTS] Playing cached audio...", flush=True)
@@ -213,30 +216,22 @@ def speak_text_elevenlabs(text, voice_id="pNInz6obpg7ANgFlW75D", speed=1.0, outp
 
     api_key = _env.get("ELEVENLABS_API_KEY", "")
     if not api_key:
-        print("[ElevenLabs TTS Error] ELEVENLABS_API_KEY is missing from .env file.", file=sys.stderr)
+        print(
+            "[ElevenLabs TTS Error] ELEVENLABS_API_KEY is missing from .env file.", file=sys.stderr
+        )
         return False
 
     url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
-    headers = {
-        "xi-api-key": api_key,
-        "Content-Type": "application/json"
-    }
+    headers = {"xi-api-key": api_key, "Content-Type": "application/json"}
     payload = {
         "text": text,
         "model_id": "eleven_flash_v2_5",
-        "voice_settings": {
-            "stability": 0.5,
-            "similarity_boost": 0.75,
-            "speed": speed
-        }
+        "voice_settings": {"stability": 0.5, "similarity_boost": 0.75, "speed": speed},
     }
 
     try:
         req = urllib.request.Request(
-            url,
-            data=json.dumps(payload).encode("utf-8"),
-            headers=headers,
-            method="POST"
+            url, data=json.dumps(payload).encode("utf-8"), headers=headers, method="POST"
         )
         print("[ElevenLabs TTS] Connecting to cloud speech synthesizer...", flush=True)
         with urllib.request.urlopen(req) as response:
@@ -265,7 +260,7 @@ def speak_text_elevenlabs(text, voice_id="pNInz6obpg7ANgFlW75D", speed=1.0, outp
 
 def speak_text(text, voice=None, speed=1.0, output_path=None, play_audio=True, engine=None):
     engine = (engine or _env.get("TTS_ENGINE", "kokoro")).lower()
-    
+
     if engine == "kokoro":
         resolved_voice = voice or _env.get("VOICE_REF_NARRATIVE", "bm_george")
         return speak_text_kokoro(text, resolved_voice, speed, output_path, play_audio)
@@ -293,24 +288,24 @@ def lookup_secret_script(script_num):
         print(f"Error reading cache: {e}", file=sys.stderr)
         return None
 
-    script_num_str = str(script_num).strip().lstrip('0')
+    script_num_str = str(script_num).strip().lstrip("0")
     if not script_num_str:
-        script_num_str = '0'
+        script_num_str = "0"
     return scripts.get(script_num_str)
 
 
 def clean_script_text(text):
     clean = text.replace("*", "").replace("`", "").replace("\n", " ").strip()
-    clean = re.sub(r'\{\s*\d*(?:\.\d+)?s\s*\}', ' ', clean)
-    clean = re.sub(r'\s+', ' ', clean)
+    clean = re.sub(r"\{\s*\d*(?:\.\d+)?s\s*\}", " ", clean)
+    clean = re.sub(r"\s+", " ", clean)
     return clean.strip()
 
 
 def pre_cache_scripts(script_nums, args):
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print(f"ETHERFIELDS RULE MASTER - PRE-CACHING SCRIPTS (Engine: {args.engine})")
     print(f"Processing {len(script_nums)} scripts...")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
 
     success_count = 0
     fail_count = 0
@@ -324,7 +319,9 @@ def pre_cache_scripts(script_nums, args):
             continue
 
         narrative = script_obj.get("narrative", "").strip() if isinstance(script_obj, dict) else ""
-        instructions = script_obj.get("instructions", "").strip() if isinstance(script_obj, dict) else ""
+        instructions = (
+            script_obj.get("instructions", "").strip() if isinstance(script_obj, dict) else ""
+        )
 
         print(f"\n--- Script {num} ---")
 
@@ -337,7 +334,14 @@ def pre_cache_scripts(script_nums, args):
             else:
                 clean_narr = clean_script_text(narrative)
                 voice = args.voice or _env.get("VOICE_REF_NARRATIVE")
-                ok = speak_text(clean_narr, voice, args.speed, output_path=narrative_path, play_audio=False, engine=args.engine)
+                ok = speak_text(
+                    clean_narr,
+                    voice,
+                    args.speed,
+                    output_path=narrative_path,
+                    play_audio=False,
+                    engine=args.engine,
+                )
                 if ok:
                     success_count += 1
                 else:
@@ -352,30 +356,52 @@ def pre_cache_scripts(script_nums, args):
             else:
                 clean_inst = clean_script_text(instructions)
                 voice = _env.get("VOICE_REF_INSTRUCTION")
-                ok = speak_text(clean_inst, voice, args.speed, output_path=instructions_path, play_audio=False, engine=args.engine)
+                ok = speak_text(
+                    clean_inst,
+                    voice,
+                    args.speed,
+                    output_path=instructions_path,
+                    play_audio=False,
+                    engine=args.engine,
+                )
                 if ok:
                     success_count += 1
                 else:
                     fail_count += 1
 
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("PRE-CACHING COMPLETED")
     print(f"Successfully cached: {success_count} files")
     print(f"Already cached: {skipped_count} files")
     print(f"Failed/Missing: {fail_count}")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
 
 
 def main():
     parser = argparse.ArgumentParser(description="Etherfields Rule Master Voice Assistant")
     parser.add_argument("--text", type=str, help="Convert custom text to speech and play it")
     parser.add_argument("--script", type=str, help="Look up a secret script and play it")
-    parser.add_argument("--voice", type=str, help="Voice ID / name override (for Kokoro, OpenAI, or ElevenLabs)")
-    parser.add_argument("--engine", type=str, choices=["kokoro", "openai", "elevenlabs"], help="TTS Engine to use (default loaded from .env)")
+    parser.add_argument(
+        "--voice", type=str, help="Voice ID / name override (for Kokoro, OpenAI, or ElevenLabs)"
+    )
+    parser.add_argument(
+        "--engine",
+        type=str,
+        choices=["kokoro", "openai", "elevenlabs"],
+        help="TTS Engine to use (default loaded from .env)",
+    )
     parser.add_argument("--speed", type=float, default=1.0, help="Speech speed (default: 1.0)")
-    parser.add_argument("--interactive", action="store_true", help="Run in persistent interactive mode")
-    parser.add_argument("--pre-cache", type=str, help="Pre-cache a comma-separated list of script numbers silently")
-    parser.add_argument("--filename", type=str, help="Specify a custom filename to save/read the cached audio (e.g. 'topic_stun')")
+    parser.add_argument(
+        "--interactive", action="store_true", help="Run in persistent interactive mode"
+    )
+    parser.add_argument(
+        "--pre-cache", type=str, help="Pre-cache a comma-separated list of script numbers silently"
+    )
+    parser.add_argument(
+        "--filename",
+        type=str,
+        help="Specify a custom filename to save/read the cached audio (e.g. 'topic_stun')",
+    )
 
     args = parser.parse_args()
 
@@ -390,18 +416,18 @@ def main():
     # 1. Pre-caching Option
     if args.pre_cache:
         raw_nums = [s.strip() for s in args.pre_cache.split(",") if s.strip()]
-        script_nums = [n.lstrip('0') if n.lstrip('0') else '0' for n in raw_nums]
+        script_nums = [n.lstrip("0") if n.lstrip("0") else "0" for n in raw_nums]
         pre_cache_scripts(script_nums, args)
         sys.exit(0)
 
     # 2. Interactive Loop Option
     if args.interactive:
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("ETHERFIELDS RULE MASTER - INTERACTIVE VOICE ASSISTANT")
         print(f"Engine: {args.engine.upper()}")
         print("Type a script number (e.g. 777), type custom text directly,")
         print("or type 'exit' or 'quit' to close.")
-        print("="*60 + "\n")
+        print("=" * 60 + "\n")
 
         # Warm up Kokoro
         if args.engine == "kokoro":
@@ -423,38 +449,58 @@ def main():
                         continue
 
                     print(f"\nSECRET SCRIPT: {user_input}")
-                    print("-"*60)
+                    print("-" * 60)
                     if isinstance(script_obj, dict) and "narrative" in script_obj:
                         print(script_obj["narrative"])
                         print("\n--- INSTRUCTIONS ---")
                         print(script_obj["instructions"])
                     else:
                         print(script_obj)
-                    print("-"*60)
+                    print("-" * 60)
 
                     if isinstance(script_obj, dict) and "narrative" in script_obj:
                         narrative = script_obj.get("narrative", "").strip()
                         instructions = script_obj.get("instructions", "").strip()
 
-                        narr_path = os.path.join(AUDIO_CACHE_DIR, f"script_{user_input}_narrative.wav")
-                        inst_path = os.path.join(AUDIO_CACHE_DIR, f"script_{user_input}_instructions.wav")
+                        narr_path = os.path.join(
+                            AUDIO_CACHE_DIR, f"script_{user_input}_narrative.wav"
+                        )
+                        inst_path = os.path.join(
+                            AUDIO_CACHE_DIR, f"script_{user_input}_instructions.wav"
+                        )
 
                         if narrative:
                             clean_narrative = clean_script_text(narrative)
                             if os.path.exists(narrative_path := narr_path):
-                                print(f"[TTS] Playing cached NARRATIVE audio: {os.path.basename(narrative_path)}...")
+                                print(
+                                    f"[TTS] Playing cached NARRATIVE audio: {os.path.basename(narrative_path)}..."
+                                )
                             else:
                                 print(f"[TTS] Synthesizing narrative...")
-                            speak_text(clean_narrative, args.voice, args.speed, output_path=narr_path, engine=args.engine)
+                            speak_text(
+                                clean_narrative,
+                                args.voice,
+                                args.speed,
+                                output_path=narr_path,
+                                engine=args.engine,
+                            )
 
                         if instructions:
                             clean_instructions = clean_script_text(instructions)
                             inst_voice = _env.get("VOICE_REF_INSTRUCTION")
                             if os.path.exists(instructions_path := inst_path):
-                                print(f"[TTS] Playing cached INSTRUCTIONS audio: {os.path.basename(instructions_path)}...")
+                                print(
+                                    f"[TTS] Playing cached INSTRUCTIONS audio: {os.path.basename(instructions_path)}..."
+                                )
                             else:
                                 print(f"[TTS] Synthesizing instructions...")
-                            speak_text(clean_instructions, inst_voice, args.speed, output_path=inst_path, engine=args.engine)
+                            speak_text(
+                                clean_instructions,
+                                inst_voice,
+                                args.speed,
+                                output_path=inst_path,
+                                engine=args.engine,
+                            )
                     else:
                         clean_text = clean_script_text(str(script_obj))
                         speak_text(clean_text, args.voice, args.speed, engine=args.engine)
@@ -499,18 +545,35 @@ def main():
                 clean_narrative = clean_script_text(narrative)
                 if os.path.exists(narr_path):
                     print(f"[TTS] Playing cached NARRATIVE audio: {os.path.basename(narr_path)}...")
-                speak_text(clean_narrative, args.voice, args.speed, output_path=narr_path, engine=args.engine)
+                speak_text(
+                    clean_narrative,
+                    args.voice,
+                    args.speed,
+                    output_path=narr_path,
+                    engine=args.engine,
+                )
 
             if instructions:
                 clean_instructions = clean_script_text(instructions)
                 inst_voice = _env.get("VOICE_REF_INSTRUCTION")
                 if os.path.exists(inst_path):
-                    print(f"[TTS] Playing cached INSTRUCTIONS audio: {os.path.basename(inst_path)}...")
-                speak_text(clean_instructions, inst_voice, args.speed, output_path=inst_path, engine=args.engine)
+                    print(
+                        f"[TTS] Playing cached INSTRUCTIONS audio: {os.path.basename(inst_path)}..."
+                    )
+                speak_text(
+                    clean_instructions,
+                    inst_voice,
+                    args.speed,
+                    output_path=inst_path,
+                    engine=args.engine,
+                )
         else:
             clean_text = clean_script_text(str(script_obj))
             output_path = os.path.join(AUDIO_CACHE_DIR, f"script_{args.script}.wav")
-            speak_text(clean_text, args.voice, args.speed, output_path=output_path, engine=args.engine)
+            speak_text(
+                clean_text, args.voice, args.speed, output_path=output_path, engine=args.engine
+            )
+
 
 if __name__ == "__main__":
     main()

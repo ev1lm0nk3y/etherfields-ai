@@ -52,13 +52,13 @@ def download_file_with_progress(url, dest_path):
     print_info(f"Downloading {url} to {dest_path}...")
     dest_path = Path(dest_path)
     dest_path.parent.mkdir(parents=True, exist_ok=True)
-    
+
     try:
-        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urllib.request.urlopen(req) as response:
-            total_size = int(response.info().get('Content-Length', 0))
+            total_size = int(response.info().get("Content-Length", 0))
             bytes_downloaded = 0
-            with open(dest_path, 'wb') as f:
+            with open(dest_path, "wb") as f:
                 while True:
                     chunk = response.read(8192)
                     if not chunk:
@@ -67,7 +67,11 @@ def download_file_with_progress(url, dest_path):
                     bytes_downloaded += len(chunk)
                     if total_size > 0:
                         percent = bytes_downloaded * 100 / total_size
-                        print(f"\rDownloading: {percent:.1f}% ({bytes_downloaded / (1024*1024):.1f}MB / {total_size / (1024*1024):.1f}MB)", end="", flush=True)
+                        print(
+                            f"\rDownloading: {percent:.1f}% ({bytes_downloaded / (1024 * 1024):.1f}MB / {total_size / (1024 * 1024):.1f}MB)",
+                            end="",
+                            flush=True,
+                        )
             print()
         print_success(f"Downloaded successfully.")
     except Exception as e:
@@ -165,7 +169,7 @@ def main():
 
     is_apple_silicon = sys.platform == "darwin" and platform.machine() == "arm64"
     stt_recommended = "1" if is_apple_silicon else "2"
-    
+
     stt_choice = ask_input(f"Select Speech-to-Text program (1-2)", stt_recommended)
 
     if stt_choice == "1":
@@ -182,7 +186,7 @@ def main():
     if listener_path.exists():
         with open(listener_path, "r", encoding="utf-8") as f:
             lines = f.readlines()
-        
+
         with open(listener_path, "w", encoding="utf-8") as f:
             in_deps = False
             for line in lines:
@@ -205,7 +209,9 @@ def main():
     # 3. Text to Speech (TTS) System Selection
     print("\n--- [Step 3: Text to Speech (TTS) System] ---")
     print("Choose the engine used to narrate scripts and rule master instructions:")
-    print("  1) kokoro-onnx (Recommended: 100% offline, blazing-fast StyleTTS2, premium human quality)")
+    print(
+        "  1) kokoro-onnx (Recommended: 100% offline, blazing-fast StyleTTS2, premium human quality)"
+    )
     print("  2) openai (Online: cloud-based high fidelity voices, highly cost-effective)")
     print("  3) elevenlabs (Online: premium cloud-based hyper-realistic voices and custom cloning)")
 
@@ -215,7 +221,9 @@ def main():
     tts_default = "1" if curr_tts == "kokoro" else ("2" if curr_tts == "openai" else "3")
     tts_choice = ask_input("Select Text-to-Speech system (1-3)", tts_default)
 
-    custom_dir_str = env.get("ETHERFIELDS_LOCAL_DIR", env.get("ETHERFIELDS_CUSTOM_DIR", str(REPO_ROOT)))
+    custom_dir_str = env.get(
+        "ETHERFIELDS_LOCAL_DIR", env.get("ETHERFIELDS_CUSTOM_DIR", str(REPO_ROOT))
+    )
     custom_dir = Path(custom_dir_str).expanduser().resolve()
     models_dir = custom_dir / "voice" / "models"
 
@@ -270,12 +278,18 @@ def main():
 
         if narrator_gender == "1":
             print("\nSelect a default Male voice for Narration:")
-            print("  1) bm_george (Default: rich, dramatic British male voice - highly recommended!)")
+            print(
+                "  1) bm_george (Default: rich, dramatic British male voice - highly recommended!)"
+            )
             print("  2) am_adam (Alternative: standard American male storytelling voice)")
             print("  3) Custom (Specify any other Kokoro voice ID, e.g. bm_lewis, am_michael)")
 
             curr_narrator = env.get("VOICE_REF_NARRATIVE", "bm_george")
-            narrator_default = "1" if curr_narrator == "bm_george" else ("2" if curr_narrator == "am_adam" else "3")
+            narrator_default = (
+                "1"
+                if curr_narrator == "bm_george"
+                else ("2" if curr_narrator == "am_adam" else "3")
+            )
             narrator_choice = ask_input("Select narration voice (1-3)", narrator_default)
 
             if narrator_choice == "1":
@@ -291,11 +305,15 @@ def main():
         else:
             print("\nSelect a default Female voice for Narration:")
             print("  1) bf_emma (Default: crisp, dramatic British female voice)")
-            print("  2) af_heart (Alternative: popular warm, highly expressive American female voice)")
+            print(
+                "  2) af_heart (Alternative: popular warm, highly expressive American female voice)"
+            )
             print("  3) Custom (Specify any other Kokoro voice ID, e.g. af_sarah, bf_isabella)")
 
             curr_narrator = env.get("VOICE_REF_NARRATIVE", "bf_emma")
-            narrator_default = "1" if curr_narrator == "bf_emma" else ("2" if curr_narrator == "af_heart" else "3")
+            narrator_default = (
+                "1" if curr_narrator == "bf_emma" else ("2" if curr_narrator == "af_heart" else "3")
+            )
             narrator_choice = ask_input("Select narration voice (1-3)", narrator_default)
 
             if narrator_choice == "1":
@@ -322,7 +340,11 @@ def main():
             print("  3) Custom (Specify any other Kokoro voice ID, e.g. af_bella, bf_isabella)")
 
             curr_instructor = env.get("VOICE_REF_INSTRUCTION", "bf_emma")
-            instructor_default = "1" if curr_instructor == "bf_emma" else ("2" if curr_instructor == "af_sarah" else "3")
+            instructor_default = (
+                "1"
+                if curr_instructor == "bf_emma"
+                else ("2" if curr_instructor == "af_sarah" else "3")
+            )
             instructor_choice = ask_input("Select instruction voice (1-3)", instructor_default)
 
             if instructor_choice == "1":
@@ -342,7 +364,11 @@ def main():
             print("  3) Custom (Specify any other Kokoro voice ID, e.g. bm_george, am_adam)")
 
             curr_instructor = env.get("VOICE_REF_INSTRUCTION", "bm_lewis")
-            instructor_default = "1" if curr_instructor == "bm_lewis" else ("2" if curr_instructor == "am_michael" else "3")
+            instructor_default = (
+                "1"
+                if curr_instructor == "bm_lewis"
+                else ("2" if curr_instructor == "am_michael" else "3")
+            )
             instructor_choice = ask_input("Select instruction voice (1-3)", instructor_default)
 
             if instructor_choice == "1":
@@ -370,7 +396,9 @@ def main():
             print("  3) Custom (Specify any other OpenAI voice name, e.g. alloy, fable)")
 
             curr_narrator = env.get("VOICE_REF_NARRATIVE", "onyx")
-            narrator_default = "1" if curr_narrator == "onyx" else ("2" if curr_narrator == "echo" else "3")
+            narrator_default = (
+                "1" if curr_narrator == "onyx" else ("2" if curr_narrator == "echo" else "3")
+            )
             narrator_choice = ask_input("Select narration voice (1-3)", narrator_default)
 
             if narrator_choice == "1":
@@ -390,7 +418,9 @@ def main():
             print("  3) Custom (Specify any other OpenAI voice name, e.g. nova, fable)")
 
             curr_narrator = env.get("VOICE_REF_NARRATIVE", "alloy")
-            narrator_default = "1" if curr_narrator == "alloy" else ("2" if curr_narrator == "shimmer" else "3")
+            narrator_default = (
+                "1" if curr_narrator == "alloy" else ("2" if curr_narrator == "shimmer" else "3")
+            )
             narrator_choice = ask_input("Select narration voice (1-3)", narrator_default)
 
             if narrator_choice == "1":
@@ -417,7 +447,9 @@ def main():
             print("  3) Custom (Specify any other OpenAI voice name, e.g. alloy, fable)")
 
             curr_instructor = env.get("VOICE_REF_INSTRUCTION", "nova")
-            instructor_default = "1" if curr_instructor == "nova" else ("2" if curr_instructor == "shimmer" else "3")
+            instructor_default = (
+                "1" if curr_instructor == "nova" else ("2" if curr_instructor == "shimmer" else "3")
+            )
             instructor_choice = ask_input("Select instruction voice (1-3)", instructor_default)
 
             if instructor_choice == "1":
@@ -437,7 +469,9 @@ def main():
             print("  3) Custom (Specify any other OpenAI voice name, e.g. alloy, fable)")
 
             curr_instructor = env.get("VOICE_REF_INSTRUCTION", "onyx")
-            instructor_default = "1" if curr_instructor == "onyx" else ("2" if curr_instructor == "echo" else "3")
+            instructor_default = (
+                "1" if curr_instructor == "onyx" else ("2" if curr_instructor == "echo" else "3")
+            )
             instructor_choice = ask_input("Select instruction voice (1-3)", instructor_default)
 
             if instructor_choice == "1":
