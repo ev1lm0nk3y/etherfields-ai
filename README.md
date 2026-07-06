@@ -12,7 +12,7 @@ This project turns an AI agent into an expert **Rule Master**, allowing players 
    Instead of bloating an AI's context window with the entire 20-page rulebook, the engine cross-references a dynamically compiled `index.json` mapping hundreds of game terms and Table of Contents tags. It retrieves and displays *only* the exact page text files (e.g., Page 15 for *Shopping*) required to answer a question.
 
 2. **Self-Healing Cache Integrity**
-   The Python 3.13 (`uv`) CLI tool tracks the cryptographic SHA-256 hash and modification timestamp of the original `Rulebook_20.pdf`. If the PDF is updated, the tool automatically invalidates the cache, extracts individual page texts to `rulebook_pages/`, and rebuilds the structured lookup index.
+   The Python 3.11 (`uv`) CLI tool tracks the cryptographic SHA-256 hash and modification timestamp of the original `Rulebook_20.pdf`. If the PDF is updated, the tool automatically invalidates the cache, extracts individual page texts to `rulebook_pages/`, and rebuilds the structured lookup index.
 
 3. **Persistent Campaign Memory**
    Keeps track of discussed rules, campaign-specific errata, and active player configurations. When rules are verified and accepted, they are saved to a local `.md` file inside the `topics/` folder and registered inside `TOPICS.md` as long-term context cache.
@@ -29,7 +29,7 @@ This project turns an AI agent into an expert **Rule Master**, allowing players 
 ├── index.json            # Generated TOC and alphabetical index mapping keywords to pages
 ├── install.py            # Primary installation and setup script
 ├── src/                  # Main Python source directory
-│   ├── rulebook_tool.py  # Unified Python 3.13 tool to validate, regenerate, and query the cache
+│   ├── rulebook_tool.py  # Unified Python 3.11 tool to validate, regenerate, and query the cache
 │   ├── secret_scripts_tool.py # Polite offline caching and lookups of Core Secret Scripts
 │   ├── preprocess_scripts.py # Offline compilation tool for secret scripts
 │   ├── extract_chat.py   # Chat history exporter tool
@@ -48,7 +48,7 @@ This project turns an AI agent into an expert **Rule Master**, allowing players 
 ## 🛠️ Setup & Usage
 
 ### Prerequisites
-* **Python 3.12** or higher
+* **Python 3.11** (specifically 3.11.10)
 * **`uv`** (fast Python package installer and runner)
 
 ### 🚀 Interactive Setup Wizard
@@ -61,7 +61,7 @@ python install.py
 ```
 
 The setup wizard will walk you through:
-1. **Prerequisite Verification:** Ensuring Python 3.12+ and `uv` are available.
+1. **Prerequisite Verification:** Ensuring Python 3.11 (specifically 3.11.10) and `uv` are available.
 2. **Custom Files Directory:** Defining a local directory for logs, caches, and models (defaults to `~/.local/etherfields-ai`), keeping the repository directory clean.
 3. **Environment Generation:** Creating a local `.env` file (copied from `.env.example` template) to specify your custom paths and configurations. This file is automatically ignored by git.
 4. **Voice Assistance (Optional):** Setting up wake-word models (e.g. downloading `jarvis.onnx`) and verifying `ffmpeg` installation.
