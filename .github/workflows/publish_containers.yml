@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - mcp-transition
     tags:
       - 'v*'
   workflow_dispatch:
