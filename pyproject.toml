@@ -15,6 +15,7 @@ voice = [
     "kokoro-onnx>=0.3.0",
     "mlx-whisper>=0.4.0; sys_platform == 'darwin' and platform_machine == 'arm64'",
     "nanowakeword>=0.1.0",
+    "piper-tts>=1.2.0",
     "numpy>=1.26.0",
     "onnxruntime>=1.16.0",
     "openwakeword>=0.6.0",
@@ -38,17 +39,17 @@ dev = [
 
 [tool.black]
 line-length = 100
-target-version = ["py312"]
+target-version = ["py311"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py312"
+target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "B"]
 ignore = []
 
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.11"
 strict = false
 ignore_missing_imports = true

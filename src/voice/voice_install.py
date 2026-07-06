@@ -7,7 +7,6 @@ and customized narrator/instruction voices.
 
 import os
 import platform
-import shutil
 import subprocess
 import sys
 import urllib.request
@@ -73,7 +72,7 @@ def download_file_with_progress(url, dest_path):
                             flush=True,
                         )
             print()
-        print_success(f"Downloaded successfully.")
+        print_success("Downloaded successfully.")
     except Exception as e:
         print_error(f"Download failed: {e}")
         raise e
@@ -157,6 +156,122 @@ def main():
     if ww_choice == "1":
         new_configs["WAKE_WORD_ENGINE"] = "nanowakeword"
         print_success("Selected wake word library: nanowakeword")
+
+        print("\n--- [Nanowakeword Custom Wake Word Setup] ---")
+        wake_word = ask_input("Enter your desired custom wake word", "etherfields").strip().lower()
+        if not wake_word:
+            wake_word = "etherfields"
+        wake_word_slug = wake_word.replace(" ", "_")
+
+        # Resolve training directory under ETHERFIELDS_LOCAL_PATH / ETHERFIELDS_LOCAL_DIR / ETHERFIELDS_CUSTOM_DIR
+        custom_dir_str_local = env.get(
+            "ETHERFIELDS_LOCAL_PATH",
+            env.get("ETHERFIELDS_LOCAL_DIR", env.get("ETHERFIELDS_CUSTOM_DIR", str(REPO_ROOT)))
+        )
+        expanded_dir_local = os.path.expandvars(custom_dir_str_local)
+        custom_dir_local = os.path.abspath(os.path.expanduser(expanded_dir_local))
+
+        training_dir = os.path.join(custom_dir_local, "voice", "training_data")
+        etherfields_train_dir = os.path.join(training_dir, wake_word_slug)
+        targets_dir = os.path.join(etherfields_train_dir, "data", "targets")
+        negatives_dir = os.path.join(etherfields_train_dir, "data", "negative")
+        false_positives_dir = os.path.join(etherfields_train_dir, "data", "false_positives")
+        models_dir_local = os.path.join(custom_dir_local, "voice", "models")
+
+        # Create all folders
+        os.makedirs(targets_dir, exist_ok=True)
+        os.makedirs(negatives_dir, exist_ok=True)
+        os.makedirs(false_positives_dir, exist_ok=True)
+        os.makedirs(models_dir_local, exist_ok=True)
+
+        print_success(f"Initialized training workspace folders at {etherfields_train_dir}")
+
+        print("\n--- [Positive Samples Source Selection] ---")
+        print("Choose how you want to provide positive voice clips for training:")
+        print("  1) Record or provide your own voice clips (highly recommended for personalized accuracy)")
+        print("  2) Auto-generate synthetic voice clones (fully automated, no microphone required)")
+        pos_choice = ask_input("Select positive sample source (1-2)", "1")
+
+        generate_pos = (pos_choice == "2")
+        if not generate_pos:
+            print_info("Custom recordings selected. Please ensure your raw .wav recordings are placed in:")
+            print_info(f"   -> {targets_dir}")
+
+        # Write or update the configuration file at the training path
+        train_config_path = os.path.join(etherfields_train_dir, "config.yaml")
+
+        # Helper to generate phonetic/close negatives based on the wake word
+        def generate_custom_negatives(word):
+            words = word.strip().split()
+            negatives = []
+            if len(words) > 1:
+                for w in words:
+                    if len(w) > 2:
+                        negatives.append(w)
+
+            if "etherfields" in word or "etherfield" in word:
+                negatives.extend([
+                    "ether", "fields", "either fields", "ether field", "feather fields",
+                    "heater fields", "outer fields", "enter fields", "other fields",
+                    "ether shield", "ether folds", "nether fields", "leather fields"
+                ])
+            elif "jarvis" in word:
+                negatives.extend([
+                    "jar", "vis", "tarvis", "carvis", "harvis", "marvis", "parvis",
+                    "jarv", "arvis", "jar fish", "jar vis"
+                ])
+            else:
+                base = words[-1] if words else word
+                if len(base) > 3:
+                    negatives.extend([
+                        base[:-1], base[1:], "hey " + base, base + "es",
+                        "not " + base, base[:-2], "no " + base
+                    ])
+
+            # De-duplicate
+            seen = set()
+            unique_negatives = []
+            for neg in negatives:
+                neg_clean = neg.strip()
+                if neg_clean and neg_clean != word and neg_clean not in seen:
+                    seen.add(neg_clean)
+                    unique_negatives.append(neg_clean)
+            return unique_negatives if unique_negatives else ["not " + word, "other " + word]
+
+        custom_negatives = generate_custom_negatives(wake_word)
+
+        # Load and render template using Jinja2
+        try:
+            import jinja2
+            # Template path is relative to the voice_install.py location
+            template_path = os.path.join(os.path.dirname(__file__), "templates", "nanowakeword_config.yaml.j2")
+            with open(template_path, "r", encoding="utf-8") as tf:
+                template_str = tf.read()
+
+            template = jinja2.Template(template_str)
+            config_content = template.render(
+                wake_word=wake_word,
+                wake_word_slug=wake_word_slug,
+                models_dir=models_dir_local,
+                targets_dir=targets_dir,
+                negatives_dir=negatives_dir,
+                false_positives_dir=false_positives_dir,
+                train_dir=etherfields_train_dir,
+                custom_negatives=custom_negatives,
+                generate_synthetic_positives=generate_pos
+            )
+        except Exception as err:
+            print_error(f"Failed to load or render template: {err}.")
+            raise err
+
+        with open(train_config_path, "w", encoding="utf-8") as f:
+            f.write(config_content)
+        print_success(f"Generated NanoWakeWord custom config at: {train_config_path}")
+
+        # Alert about piper-tts dependency for generation
+        print_info("💡 Note: Nanowakeword requires 'piper-tts' to auto-synthesize negatives and positives.")
+        print_info("   Since 'piper-tts' has been added to our optional voice dependencies,")
+        print_info("   it will be synchronized and installed automatically at the end of this script!")
     else:
         new_configs["WAKE_WORD_ENGINE"] = "openwakeword"
         print_success("Selected wake word library: openwakeword")
@@ -170,7 +285,7 @@ def main():
     is_apple_silicon = sys.platform == "darwin" and platform.machine() == "arm64"
     stt_recommended = "1" if is_apple_silicon else "2"
 
-    stt_choice = ask_input(f"Select Speech-to-Text program (1-2)", stt_recommended)
+    stt_choice = ask_input("Select Speech-to-Text program (1-2)", stt_recommended)
 
     if stt_choice == "1":
         new_configs["STT_PROGRAM"] = "mlx-whisper"
@@ -222,18 +337,20 @@ def main():
     tts_choice = ask_input("Select Text-to-Speech system (1-3)", tts_default)
 
     custom_dir_str = env.get(
-        "ETHERFIELDS_LOCAL_DIR", env.get("ETHERFIELDS_CUSTOM_DIR", str(REPO_ROOT))
+        "ETHERFIELDS_LOCAL_PATH",
+        env.get("ETHERFIELDS_LOCAL_DIR", env.get("ETHERFIELDS_CUSTOM_DIR", str(REPO_ROOT)))
     )
-    custom_dir = Path(custom_dir_str).expanduser().resolve()
-    models_dir = custom_dir / "voice" / "models"
+    expanded_dir_str = os.path.expandvars(custom_dir_str)
+    custom_dir = os.path.abspath(os.path.expanduser(expanded_dir_str))
+    models_dir = os.path.join(custom_dir, "voice", "models")
 
     if tts_choice == "1":
         new_configs["TTS_ENGINE"] = "kokoro"
         print_success("Selected TTS System: kokoro-onnx (Local Offline)")
 
         # Ensure Kokoro models are downloaded
-        model_path = models_dir / "kokoro-v1.0.onnx"
-        voices_path = models_dir / "voices-v1.0.bin"
+        model_path = os.path.join(models_dir, "kokoro-v1.0.onnx")
+        voices_path = os.path.join(models_dir, "voices-v1.0.bin")
 
         if not model_path.exists():
             print_warning("Kokoro ONNX model file missing. Downloading (~310MB)...")
