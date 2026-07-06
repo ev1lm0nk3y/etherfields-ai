@@ -65,6 +65,7 @@ To maintain long-term memory of discussed rules and campaign states without exha
 * **Load `.env` Cache Path:** On startup, read the `.env` file to determine the local cache path containing the context indexes for rules, topics, logs, voice related content and more.
 
 #### 1. Rule Master Mode Session Initialization Actions
+* **Set Session Path Environment Variable:** Upon starting up in Rule Master Mode, identify the active temporary directory or session path for the Gemini session and set or expose it in the environment as `GEMINI_SESSION_PATH` (e.g. for files like `extract_chat.py` to reference).
 * **Validate the Rulebook Cache:** Always run `uv run rulebook_tool.py --validate` on startup to ensure the index and page split files are consistent with the rulebook pdf file. If the PDF is updated, the tool automatically self-heals and rebuilds the cache.
 * **Read `TOPICS.md` first:** At the beginning of every session, read `TOPICS.md` to understand what topics have already been discussed and documented. This file should be located in the `.env` cache path if defined.
 * **Brief Last Session:** At startup, read the `LOGS.md` file to determine the latest session log then read the last session recorded in the referenced log file to formulate a concise greeting and summary of the last session's state and rules.

@@ -1,6 +1,24 @@
+import os
 import re
+import sys
 
-filepath = "/Users/ryan/.gemini/tmp/etherfields-ai/tool-outputs/session-a4446215-1566-4806-bcb6-c62aa1596929/run_shell_command__xkj9bhng.txt"
+filepath = os.environ.get("GEMINI_SESSION_PATH")
+if not filepath:
+    print(
+        "Error: GEMINI_SESSION_PATH environment variable is not set.", file=sys.stderr
+    )
+    print(
+        "Please set this variable to the active session output file path before running.",
+        file=sys.stderr,
+    )
+    sys.exit(1)
+
+if not os.path.exists(filepath):
+    print(
+        f"Error: File path defined in GEMINI_SESSION_PATH does not exist: {filepath}",
+        file=sys.stderr,
+    )
+    sys.exit(1)
 
 with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
     html = f.read()
