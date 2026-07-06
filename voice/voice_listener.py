@@ -51,7 +51,7 @@ def load_env_vars():
     return env_vars
 
 _env = load_env_vars()
-CUSTOM_DIR_STR = _env.get("ETHERFIELDS_CUSTOM_DIR", REPO_ROOT)
+CUSTOM_DIR_STR = _env.get("ETHERFIELDS_LOCAL_DIR", REPO_ROOT)
 CUSTOM_DIR = os.path.abspath(os.path.expanduser(os.path.expandvars(CUSTOM_DIR_STR)))
 DEFAULT_MODELS_DIR = os.path.join(CUSTOM_DIR, "models")
 DEFAULT_AUDIO_CACHE_DIR = os.path.join(CUSTOM_DIR, "audio_cache")

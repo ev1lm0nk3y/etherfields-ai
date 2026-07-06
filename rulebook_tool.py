@@ -31,7 +31,7 @@ def load_env_vars():
 
 # Resolve custom directory from env if available (falls back to workspace root)
 _env = load_env_vars()
-CUSTOM_DIR_STR = _env.get("ETHERFIELDS_CUSTOM_DIR", BASE_DIR)
+CUSTOM_DIR_STR = _env.get("ETHERFIELDS_LOCAL_DIR", BASE_DIR)
 CUSTOM_DIR = os.path.abspath(os.path.expanduser(os.path.expandvars(CUSTOM_DIR_STR)))
 
 PDF_PATH = os.path.join(CUSTOM_DIR, "Rulebook_20.pdf")

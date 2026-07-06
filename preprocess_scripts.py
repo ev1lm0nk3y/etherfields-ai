@@ -8,8 +8,34 @@ import os
 import re
 
 BASE_DIR = "/Users/ryan/Documents/etherfields-ai"
-INPUT_CACHE = os.path.join(BASE_DIR, "secret_scripts_cache.json")
-OUTPUT_CACHE = os.path.join(BASE_DIR, "structured_scripts_cache.json")
+
+def load_env_vars():
+    env_vars = {}
+    env_path = os.path.join(BASE_DIR, ".env")
+    if os.path.exists(env_path):
+        with open(env_path, "r") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    key, val = line.split("=", 1)
+                    env_vars[key.strip()] = val.strip()
+    return env_vars
+
+_env = load_env_vars()
+CUSTOM_DIR_STR = _env.get("ETHERFIELDS_LOCAL_DIR", BASE_DIR)
+CUSTOM_DIR = os.path.abspath(os.path.expanduser(os.path.expandvars(CUSTOM_DIR_STR)))
+
+INPUT_CACHE = os.path.join(CUSTOM_DIR, "scripts", "secret_scripts_cache.json")
+if not os.path.exists(INPUT_CACHE):
+    INPUT_CACHE = os.path.join(CUSTOM_DIR, "secret_scripts_cache.json")
+if not os.path.exists(INPUT_CACHE):
+    INPUT_CACHE = os.path.join(BASE_DIR, "secret_scripts_cache.json")
+
+OUTPUT_CACHE = os.path.join(CUSTOM_DIR, "scripts", "structured_scripts_cache.json")
+if not os.path.exists(OUTPUT_CACHE):
+    OUTPUT_CACHE = os.path.join(CUSTOM_DIR, "structured_scripts_cache.json")
+if not os.path.exists(OUTPUT_CACHE):
+    OUTPUT_CACHE = os.path.join(BASE_DIR, "structured_scripts_cache.json")
 
 def detect_script_emotion(text):
     text_lower = text.lower()
@@ -43,8 +69,8 @@ def detect_script_emotion(text):
         return max_emotion, False
     return "neutral", True
 
-def preprocess():
-    with open(INPUT_CACHE, "r", encoding="utf-8") as f:
+def preprocess(input_path=INPUT_CACHE, output_path=OUTPUT_CACHE):
+    with open(input_path, "r", encoding="utf-8") as f:
         raw_scripts = json.load(f)
 
     structured_scripts = {}
@@ -83,7 +109,7 @@ def preprocess():
             "needs_llm_review": needs_review
         }
 
-    with open(OUTPUT_CACHE, "w", encoding="utf-8") as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump(structured_scripts, f, indent=2, ensure_ascii=False)
 
 if __name__ == "__main__":

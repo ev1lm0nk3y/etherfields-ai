@@ -25,11 +25,20 @@ def load_env_vars():
     return env_vars
 
 _env = load_env_vars()
-CUSTOM_DIR_STR = _env.get("ETHERFIELDS_CUSTOM_DIR", BASE_DIR)
+CUSTOM_DIR_STR = _env.get("ETHERFIELDS_LOCAL_DIR", BASE_DIR)
 CUSTOM_DIR = os.path.abspath(os.path.expanduser(os.path.expandvars(CUSTOM_DIR_STR)))
 
-RAW_CACHE_PATH = os.path.join(BASE_DIR, "secret_scripts_cache.json")
-STRUCTURED_CACHE_PATH = os.path.join(BASE_DIR, "structured_scripts_cache.json")
+RAW_CACHE_PATH = os.path.join(CUSTOM_DIR, "scripts", "secret_scripts_cache.json")
+if not os.path.exists(RAW_CACHE_PATH):
+    RAW_CACHE_PATH = os.path.join(CUSTOM_DIR, "secret_scripts_cache.json")
+if not os.path.exists(RAW_CACHE_PATH):
+    RAW_CACHE_PATH = os.path.join(BASE_DIR, "secret_scripts_cache.json")
+
+STRUCTURED_CACHE_PATH = os.path.join(CUSTOM_DIR, "scripts", "structured_scripts_cache.json")
+if not os.path.exists(STRUCTURED_CACHE_PATH):
+    STRUCTURED_CACHE_PATH = os.path.join(CUSTOM_DIR, "structured_scripts_cache.json")
+if not os.path.exists(STRUCTURED_CACHE_PATH):
+    STRUCTURED_CACHE_PATH = os.path.join(BASE_DIR, "structured_scripts_cache.json")
 URL_PREFIX = "https://dev.etherfieldsapp.awakenrealms.com/assets/secrets/en/"
 
 def build_cache(force=False):
@@ -85,7 +94,7 @@ def build_cache(force=False):
         # Automatically run preprocessor to sync the structured database
         print("[Secret Scripts] Triggering preprocessor to build structured cache...", file=sys.stderr)
         import preprocess_scripts
-        preprocess_scripts.preprocess()
+        preprocess_scripts.preprocess(RAW_CACHE_PATH, STRUCTURED_CACHE_PATH)
         return True
     except Exception as e:
         print(f"Error saving cache to file: {e}", file=sys.stderr)

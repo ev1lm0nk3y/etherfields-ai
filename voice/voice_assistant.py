@@ -38,7 +38,7 @@ def load_env_vars():
     return env_vars
 
 _env = load_env_vars()
-CUSTOM_DIR_STR = _env.get("ETHERFIELDS_CUSTOM_DIR", BASE_DIR)
+CUSTOM_DIR_STR = _env.get("ETHERFIELDS_LOCAL_DIR", BASE_DIR)
 CUSTOM_DIR = os.path.abspath(os.path.expanduser(os.path.expandvars(CUSTOM_DIR_STR)))
 
 SCRIPTS_CACHE_PATH = os.path.join(BASE_DIR, "structured_scripts_cache.json")
