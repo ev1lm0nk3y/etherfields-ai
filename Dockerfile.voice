@@ -1,0 +1,39 @@
+# Use the official Astral uv image with Python 3.11 pre-installed on Debian Slim
+FROM ghcr.io/astral-sh/uv:python3.11-bookworm-slim
+
+# Install audio and system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    libasound2 \
+    libasound2-dev \
+    libportaudio2 \
+    portaudio19-dev \
+    gcc \
+    python3-dev \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set the working directory
+WORKDIR /app
+
+# Copy project configuration for caching layers
+COPY pyproject.toml uv.lock ./
+
+# Synchronize dependencies with the voice group, utilizing buildx uv cache mount for speedy rebuilds
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --extra voice --no-install-project
+
+# Copy project source and voice modules
+COPY src/ src/
+COPY install.py ./
+
+# Configure local directory for the persistent mount
+ENV ETHERFIELDS_LOCAL_PATH=/app/data
+RUN mkdir -p /app/data
+
+# Mount directory for shared assets, models, and caches
+VOLUME ["/app/data"]
+
+# Default entrypoint runs the voice listener
+ENTRYPOINT ["uv", "run", "python", "src/voice/voice_listener.py"]

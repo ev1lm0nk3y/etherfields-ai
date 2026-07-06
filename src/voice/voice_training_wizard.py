@@ -1,13 +1,11 @@
 # /// script
-# requires-python = ">=3.12"
+# requires-python = ">=3.11"
 # dependencies = [
 #     "numpy==1.26.4",
 #     "sounddevice",
 #     "soundfile",
 #     "pyyaml",
 # ]
-# ---
-# Note: To run this script, use: uv run voice/reformat_notebook.py or similar.
 # ///
 
 import os
@@ -21,7 +19,20 @@ import yaml
 
 # Repo root is parent of the directory containing this file
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-WIZARD_DATA_DIR = os.path.join(BASE_DIR, "src", "voice", "training_data")
+
+# Respect ETHERFIELDS_LOCAL_PATH or other custom dir variables
+custom_dir_str = os.environ.get(
+    "ETHERFIELDS_LOCAL_PATH",
+    os.environ.get("ETHERFIELDS_CUSTOM_DIR", BASE_DIR)
+)
+expanded_dir = os.path.expandvars(custom_dir_str)
+resolved_custom_dir = os.path.abspath(os.path.expanduser(expanded_dir))
+
+# Check if we should fall back to inside src/voice if the custom path is default BASE_DIR
+if resolved_custom_dir == os.path.abspath(BASE_DIR):
+    WIZARD_DATA_DIR = os.path.join(BASE_DIR, "src", "voice", "training_data")
+else:
+    WIZARD_DATA_DIR = os.path.join(resolved_custom_dir, "voice", "training_data")
 
 SAMPLE_RATE = 16000  # standard for nanowakeword
 CHANNELS = 1
