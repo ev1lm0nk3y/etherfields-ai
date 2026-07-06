@@ -34,10 +34,17 @@ This project turns an AI agent into an expert **Rule Master**, allowing players 
 │   ├── preprocess_scripts.py # Offline compilation tool for secret scripts
 │   ├── extract_chat.py   # Chat history exporter tool
 │   └── voice/            # Voice assistant & wake-word listening sub-system
+│       ├── create_voice.py  # Synthesizes offline neural voices
+│       ├── test_assistant.py # Tests TTS playback and config settings
+│       ├── test_stt.py       # Tests Whisper Speech-to-Text transcribing
 │       ├── voice_assistant.py # Local TTS narration (Kokoro-ONNX / OpenAI / ElevenLabs)
-│       ├── voice_listener.py  # Continuous wake-word listener (openWakeWord / mlx-whisper / faster-whisper)
-│       └── wakeword_model_training.ipynb # Google Colab notebook for training custom models
-├── GEMINI.md             # Automatic LLM instructions and workflow protocols
+│       ├── voice_install.py   # Interactive nanowakeword/openWakeWord installation wizard
+│       ├── voice_listener.py  # Continuous wake-word listener (nanowakeword / openWakeWord / mlx-whisper / faster-whisper)
+│       ├── voice_training_wizard.py # Interactive voice clip recorder and training config generator
+│       ├── wakeword_model_training.ipynb # Google Colab notebook for training custom models
+│       ├── VOICE_TOOLS.md     # Detailed documentation on voice options and settings
+│       └── templates/         # Configuration templates
+│           └── nanowakeword_config.yaml.j2 # Jinja2 configuration template for nanowakeword
 ├── RULEMASTER.md         # Baseline rules role prompt and active player roster
 ├── TOPICS.md             # The central registry of cached topic files
 └── README.md             # This file
@@ -93,15 +100,82 @@ uv run src/rulebook_tool.py --force
 
 ## 🎙️ Custom Wake Word Model Training
 
-The project includes a Jupyter Notebook at `src/voice/wakeword_model_training.ipynb` that allows you to train your own custom **openWakeWord** models (such as `"ee_thir_fields"`, `"hey_rule_book"`, etc.). You can run this pipeline either in the cloud using Google Colab or completely offline on your local machine.
+This repository supports two state-of-the-art offline wake-word engines: **nanowakeword** (highly recommended for personalized single-voice models) and **openWakeWord** (ideal for general-use models). You can configure your engine and set up your system interactively, or build custom models tailored specifically to your voice and room acoustics.
 
-### Option A: Cloud Training (Google Colab) [Recommended]
+### 🛠️ Interactive Voice Setup Wizard (`src/voice/voice_install.py`)
+
+The repository includes a dedicated interactive configuration script for the voice subsystem. It handles library installation, environment generation, configuration templating using modular Jinja2 configurations (`src/voice/templates/nanowakeword_config.yaml.j2`), and voice-source selection (microphone vs. synthetic text-to-speech clones).
+
+To launch the setup wizard, run:
+```bash
+uv run python src/voice/voice_install.py
+```
+
+---
+
+### 🎨 Method 1: Nanowakeword Training Wizard (`src/voice/voice_training_wizard.py`) [Personalized & Offline]
+
+**nanowakeword** is a modern, lightweight, transformer-based wake-word detector optimized for running on laptops and micro-controllers. The project provides an interactive command-line utility, `src/voice/voice_training_wizard.py`, to guide you through recording your own real-voice clips and preparing the training configuration.
+
+#### 1. Record Your Voice and Generate Config
+Run the training wizard from your terminal:
+```bash
+uv run python src/voice/voice_training_wizard.py
+```
+The wizard will:
+* Prompt you to name your custom wake word (e.g. `ee_thir_fields`, `jarvis`).
+* Create a dedicated training workspace under your configured dynamic directory (e.g., `~/.local/etherfields-ai/voice/training_data/[your_wake_word]`).
+* Guide you through recording 30 to 50 real-voice samples (each 1.6 seconds long) from your physical microphone using the `sounddevice` library.
+* Automatically write a tailored `config.yaml` file with transformer architectures, targeting the output to your local models directory.
+
+#### 2. Choose Your Training Pipeline:
+
+##### Option A: Local Training (Directly on your MacBook / Laptop)
+This option keeps your voice and data completely offline and secure.
+1. Install nanowakeword with its optional training dependencies:
+   ```bash
+   pip install "nanowakeword[train] @ git+https://github.com/arcosoph/nanowakeword.git"
+   ```
+2. Execute the training command using nanowakeword's Auto-Config feature:
+   ```bash
+   nanowakeword-train -c ~/.local/etherfields-ai/voice/training_data/[your_wake_word]/config.yaml --auto-config -G -t -T
+   ```
+   *This command will automatically synthesize look-alike negative datasets (adversarial training), configure hyperparameters, train a robust transformer model, and export a lightweight `.onnx` model file in about 45 minutes.*
+3. Place your output `.onnx` file into your local models directory:
+   ```bash
+   cp ~/.local/etherfields-ai/voice/training_data/[your_wake_word]/models/[your_wake_word].onnx ~/.local/etherfields-ai/models/
+   ```
+
+##### Option B: Cloud Training (Google Colab) [Free GPU Acceleration]
+Google Colab provides high-speed, free GPU acceleration, cutting training times down to under 15 minutes!
+1. Zip up your recorded training directory:
+   ```bash
+   cd ~/.local/etherfields-ai/voice/training_data/[your_wake_word] && zip -r targets.zip data/
+   ```
+2. Open the official Nanowakeword notebook or upload `src/voice/wakeword_model_training.ipynb` directly to [Google Colab](https://colab.research.google.com/).
+3. Upload `targets.zip` to Colab's file explorer and unzip it:
+   ```bash
+   !unzip targets.zip -d ./
+   ```
+4. Combine your real voice recordings with Colab's synthetic voice clones (Piper TTS) for the absolute highest model accuracy, and run the training cells.
+5. Download your finished `.onnx` model and place it in your local models folder:
+   ```bash
+   mv ~/Downloads/[your_wake_word].onnx ~/.local/etherfields-ai/models/
+   ```
+
+---
+
+### 📡 Method 2: OpenWakeWord Custom Model Training (`src/voice/wakeword_model_training.ipynb`)
+
+**openWakeWord** is a deep-learning-based wake-word detector with pre-trained models that can also be trained on your custom words. It performs best on general-purpose terms and features robust noise filtering.
+
+You can train openWakeWord models either in the cloud or locally:
+
+#### Option A: Cloud Training (Google Colab) [Recommended]
 1. **Upload the Notebook:** Upload `src/voice/wakeword_model_training.ipynb` to your [Google Drive](https://drive.google.com/) or open it directly in [Google Colab](https://colab.research.google.com/).
 2. **Choose a Runtime:** 
-   * For the fastest training, go to **Runtime** > **Change runtime type** and select a **GPU** (e.g., T4).
-   * The notebook features **automatic multi-accelerator hardware detection**. It dynamically configures and installs the correct PyTorch build:
-     * **GPU:** Installs PyTorch with CUDA 12.1 support for fast GPU-accelerated training.
-     * **TPU / CPU:** Gracefully falls back to installing a stable CPU PyTorch build.
+   * Go to **Runtime** > **Change runtime type** and select a **GPU** (e.g., T4).
+   * The notebook features **automatic multi-accelerator hardware detection**. It dynamically configures and installs the correct PyTorch build (CUDA 12.1 for GPU, stable CPU build otherwise).
 3. **Configure Your Wake Word:** 
    * In Step 2, set the `target_word` variable to your custom phrase (e.g., `'ee_thir_fields'`).
    * Spell it phonetically with underscores if the TTS pronunciation needs adjustments (e.g., `'hey_seer_e'`).
@@ -110,9 +184,9 @@ The project includes a Jupyter Notebook at `src/voice/wakeword_model_training.ip
 5. **Download and Deploy:** Once complete, the notebook automatically exports and downloads your custom model files:
    * `[your_wake_word].onnx`
    * `[your_wake_word].tflite`
-   * Simply place your custom `.onnx` model files in your local `models/` directory. The continuous listener `src/voice/voice_listener.py` will automatically auto-discover and load them in parallel!
+   * Simply place your custom `.onnx` model files in your local `models/` directory. The continuous listener `src/voice/voice_listener.py` will automatically discover and load them in parallel!
 
-### Option B: Local Training (Your Machine)
+#### Option B: Local Training (Your Machine)
 If you prefer to train your models offline, you can run the notebook locally using `uv` to automatically manage your Jupyter environment:
 
 1. **Start the Jupyter Server:**
