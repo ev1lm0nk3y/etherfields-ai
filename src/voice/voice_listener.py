@@ -44,14 +44,21 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fi
 
 def load_env_vars():
     env_vars = {}
-    env_path = os.path.join(REPO_ROOT, ".env")
-    if os.path.exists(env_path):
-        with open(env_path, "r") as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith("#") and "=" in line:
-                    key, val = line.split("=", 1)
-                    env_vars[key.strip()] = val.strip()
+    local_dir = os.environ.get("ETHERFIELDS_LOCAL_DIR")
+    paths_to_try = []
+    if local_dir:
+        paths_to_try.append(os.path.join(os.path.abspath(os.path.expanduser(os.path.expandvars(local_dir))), ".env"))
+    paths_to_try.append(os.path.join(REPO_ROOT, ".env"))
+
+    for env_path in paths_to_try:
+        if os.path.exists(env_path):
+            with open(env_path, "r") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        key, val = line.split("=", 1)
+                        env_vars[key.strip()] = val.strip()
+            break
     return env_vars
 
 
@@ -150,7 +157,7 @@ def transcribe_audio(wav_path):
             from faster_whisper import WhisperModel
 
             if _stt_model is None:
-                print(f"[FASTER-WHISPER] Loading model (first time only)...", flush=True)
+                print("[FASTER-WHISPER] Loading model (first time only)...", flush=True)
                 _stt_model = WhisperModel(
                     "Systran/faster-whisper-medium.en",
                     device="cpu",
@@ -179,6 +186,53 @@ def transcribe_audio(wav_path):
         if os.path.exists(wav_path):
             os.remove(wav_path)
     return None
+
+
+def load_narration_worker():
+    """Starts the background thread to poll and narrate queue items."""
+    import json
+    import threading
+
+    def worker():
+        topics_dir = os.path.join(CUSTOM_DIR, "narration_queue")
+        os.makedirs(topics_dir, exist_ok=True)
+
+        # Lazy import of speak_text to avoid circular dependencies
+        from voice_assistant import speak_text
+
+        print("[Voice Listener] Background narration queue worker started.", flush=True)
+        while True:
+            try:
+                if os.path.exists(topics_dir):
+                    files = [
+                        f
+                        for f in os.listdir(topics_dir)
+                        if f.startswith("req_") and f.endswith(".json")
+                    ]
+                    if files:
+                        files.sort(key=lambda x: os.path.getmtime(os.path.join(topics_dir, x)))
+                        next_file = files[0]
+                        file_path = os.path.join(topics_dir, next_file)
+
+                        try:
+                            with open(file_path, "r", encoding="utf-8") as f:
+                                data = json.load(f)
+                            text_to_narrate = data.get("text")
+                            if text_to_narrate:
+                                print(f"\n📢 [Queue] Narrating: '{text_to_narrate}'\n", flush=True)
+                                speak_text(text_to_narrate)
+                        except Exception as fe:
+                            print(f"Error processing queue file {next_file}: {fe}", file=sys.stderr)
+
+                        if os.path.exists(file_path):
+                            os.remove(file_path)
+            except Exception as e:
+                print(f"Error in queue worker loop: {e}", file=sys.stderr)
+
+            time.sleep(0.5)
+
+    worker_thread = threading.Thread(target=worker, daemon=True)
+    worker_thread.start()
 
 
 def main():
@@ -435,6 +489,9 @@ def main():
         f"{' (Debug Mode enabled)' if args.debug else ' (Run with --debug to show live audio levels and scores)'}",
         flush=True,
     )
+
+    # Start background narration queue worker thread to process MCP narrate_text requests
+    load_narration_worker()
 
     audio_buffer = []
 

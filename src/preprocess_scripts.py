@@ -7,18 +7,25 @@ import json
 import os
 import re
 
-BASE_DIR = "/Users/ryan/Documents/etherfields-ai"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def load_env_vars():
     env_vars = {}
-    env_path = os.path.join(BASE_DIR, ".env")
-    if os.path.exists(env_path):
-        with open(env_path, "r") as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith("#") and "=" in line:
-                    key, val = line.split("=", 1)
-                    env_vars[key.strip()] = val.strip()
+    local_dir = os.environ.get("ETHERFIELDS_LOCAL_DIR")
+    paths_to_try = []
+    if local_dir:
+        paths_to_try.append(os.path.join(os.path.abspath(os.path.expanduser(os.path.expandvars(local_dir))), ".env"))
+    paths_to_try.append(os.path.join(BASE_DIR, ".env"))
+
+    for env_path in paths_to_try:
+        if os.path.exists(env_path):
+            with open(env_path, "r") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        key, val = line.split("=", 1)
+                        env_vars[key.strip()] = val.strip()
+            break
     return env_vars
 
 _env = load_env_vars()

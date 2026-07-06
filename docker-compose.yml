@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: etherfields-mcp-server
+    restart: unless-stopped
+    volumes:
+      # Mount the local user directory containing topics, session logs, .env config, and dynamic caches
+      - ${HOME}/.local/etherfields-ai:/app/data
+    environment:
+      - ETHERFIELDS_LOCAL_DIR=/app/data
+      - NARRATE_VIA_QUEUE=true
+    # Stdio transport is run directly. If remote SSE is preferred, you can run:
+    # command: ["uv", "run", "python", "src/mcp_server.py", "--transport", "sse"]
+    # ports:
+    #   - "8000:8000"
+
+  voice-subsystem:
+    build:
+      context: .
+      dockerfile: Dockerfile.voice
+    container_name: etherfields-voice-subsystem
+    restart: unless-stopped
+    volumes:
+      # Share the same local user directory for access to .env config, wake-word models, and audio outputs
+      - ${HOME}/.local/etherfields-ai:/app/data
+    environment:
+      - ETHERFIELDS_LOCAL_DIR=/app/data
+    # Native hardware audio device mapping (highly robust for Linux ALSA/PulseAudio setups)
+    devices:
+      - /dev/snd:/dev/snd
+    # Host network mode allows the container to seamlessly interface with local audio servers (like PulseAudio)
+    network_mode: host
+    ipc: host
+    group_add:
+      - audio # Grant container audio group permissions to access physical sound devices
+
+    # Note on macOS / Apple Silicon:
+    # Since Docker Desktop on macOS runs within a virtual machine, direct audio device passthrough (/dev/snd) is not supported natively.
+    # On macOS, it is highly recommended to run the voice subsystem natively on your host machine with:
+    #   `uv run src/voice/voice_listener.py`
+    # Otherwise, you can stream audio from the container to a host-level PulseAudio server using network sockets.
