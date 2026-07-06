@@ -15,3 +15,20 @@ ENV/
 
 # Large copyrighted source material (Keep this local)
 Rulebook_20.pdf
+
+# Local configurations & settings
+.gemini/
+
+# Compiled voice and temporary media
+audio_cache/
+*.wav
+
+# Deep neural network wake-word models
+models/
+
+# Core copyrighted caches
+secret_scripts_cache.json
+structured_scripts_cache.json
+
+# Session/user custom data
+logs/

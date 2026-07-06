@@ -22,7 +22,15 @@ elements and mechanics we have discussed will be important so using
 
 ## Campaign
 
-_Note: Modify this secton with important campaign details_
+_Note: Modify this section with important campaign details_
 
 Details:
-- 2 Players: The Specialist and The Free Spirit.
+- **Player Count:** 2 Players
+- **Active Characters:** The Specialist and The Free Spirit
+- **Current Status:** On the Dreamworld Map with 0 Keys, no available shopping cards left in Suburbia, and holding the Train Ticket item card.
+- **Session Logs:** Managed in the [Campaign Session Registry](logs/LOGS.md). Active log file: [Sessions 1-4](logs/sessions_01_04.md).
+
+### Latest Session Brief (Session 2: July 4, 2026)
+* **Status:** Finished shopping in Suburbia and drew the Delta Phase card.
+* **Key Topics:** Stunned State, Metropolis Movement (Relocation), Important Business Loop, Equidistant Entity Movement.
+* *See full summary and rules clarified in [Sessions 1-4](logs/sessions_01_04.md).*
