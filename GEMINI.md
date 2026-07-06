@@ -43,7 +43,7 @@ This is a **Non-Code Project** serving as a knowledge base, context manager, and
 ├── index.json            # Generated TOC & Alphabetical Index mapping keywords to page numbers
 ├── rulebook_tool.py      # Python script to validate, regenerate, and query the page cache
 ├── voice/                # Voice activation module directory
-│   ├── voice_assistant.py # Local TTS script interfacing with Bantr for scene/rule narration
+│   ├── voice_assistant.py # Local TTS script interfacing with local & remote servers for narration
 │   └── voice_listener.py  # Continuous openWakeWord listener & Whisper transcriber
 ├── secret_scripts_tool.py # Polite offline caching and lookups of Core Secret Scripts
 ├── secret_scripts_cache.json # Compiled offline database of 1093 Core Campaign Secret Scripts
@@ -97,10 +97,11 @@ Keep track of the campaign details to customize rule applications (e.g., charact
 * **Surgically Searching & Reading Rules (Primary):**
   Use `uv run rulebook_tool.py --search "<term>"` to look up any mechanic, rule, or card query. The tool automatically maps your query to the correct rulebook pages using the index, and retrieves only the necessary page text.
   * *Example:* `uv run rulebook_tool.py --search "Slumber"` or `uv run rulebook_tool.py --search "Awakening"`
-* **Local Dual-Mode TTS Voice Assistant (Chatterbox & Bantr Integration):**
+* **Local Dual-Voice TTS Voice Assistant:**
   Use `uv run voice/voice_assistant.py` to voice rule answers or secret scripts locally.
-  * *Default Engine (Chatterbox):* Chatterbox TTS (`--engine chatterbox`). Runs 100% offline via local PyTorch & Apple Silicon GPU acceleration (`mps`). Automatically performs zero-shot voice cloning using local Bantr `.wav` samples as reference prompts! Rule instructions default to neutral Cyrus voice; secret scripts automatically detect and clone Cyrus's emotional profiles (e.g. `happy`, `sad`, `fearful`, `angry`).
-  * *High-Fidelity Engine (Bantr):* Bantr TTS (`--engine bantr`). Rule instructions default to speaker `0306_cyrus_m_neutral` (Cyrus). Secret scripts utilize automated emotion-detection keyword scanning to dynamically load matching emotional Cyrus voices (e.g. `0311_cyrus_m_happy`, `0305_cyrus_m_fearful`).
+  * *Default Local Engine:* Runs 100% offline via local PyTorch & Apple Silicon GPU acceleration (`mps`). Automatically performs zero-shot voice cloning of reference prompts! Rule instructions use clear narrative and instruction voices. If no custom `.wav` reference clips are set in `.env`, it falls back gracefully to high-quality default pretrained models.
+  * *WebSocket Remote Engine:* Interfaces with an external, high-fidelity WebSocket-based TTS server. Supports automated emotion-detection keyword scanning to dynamically adjust voices and tones matching the narrative.
+  * *To create custom voice reference models:* Run `uv run voice/create_voice.py` to record a fresh clip or load a local `.wav` file!
   * *To speak custom text:* `uv run voice/voice_assistant.py --text "My text response here"`
   * *To speak a secret script:* `uv run voice/voice_assistant.py --script 234`
 * **Continuous Voice Listener (Hands-Free Integration):**

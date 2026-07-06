@@ -42,7 +42,27 @@ CUSTOM_DIR = os.path.abspath(os.path.expanduser(os.path.expandvars(CUSTOM_DIR_ST
 
 SCRIPTS_CACHE_PATH = os.path.join(BASE_DIR, "structured_scripts_cache.json")
 AUDIO_CACHE_DIR = os.path.join(CUSTOM_DIR, "audio_cache")
-BANTR_WS_URL = "ws://127.0.0.1:46290/generate"
+
+# Custom WS Endpoint Configuration (Generalized TTS)
+TTS_WS_URL = _env.get("TTS_WS_URL", _env.get("BANTR_WS_URL", "ws://127.0.0.1:46290/generate"))
+
+# Custom Audio Player Setup (Defaulting per-platform)
+import platform
+_default_player = "afplay"
+if platform.system() == "Linux":
+    _default_player = "aplay"
+elif platform.system() == "Windows":
+    _default_player = "start"
+
+AUDIO_PLAYER = _env.get("AUDIO_PLAYER", _default_player)
+
+def play_audio_file(file_path):
+    import shlex
+    cmd = shlex.split(AUDIO_PLAYER) + [file_path]
+    try:
+        subprocess.run(cmd, check=True)
+    except Exception as e:
+        print(f"[Playback Error] Failed to play audio file using player command '{AUDIO_PLAYER}': {e}", file=sys.stderr)
 
 # Check for local pip-installed Chatterbox TTS packages
 HAS_LOCAL_CHATTERBOX = False
@@ -61,10 +81,10 @@ def get_chatterbox():
     if _local_chatterbox_instance is None:
         if not HAS_LOCAL_CHATTERBOX:
             return None
-        print("[Chatterbox TTS] Initializing local GPU-accelerated Chatterbox Turbo model...", flush=True)
+        print("[Local TTS] Initializing local GPU-accelerated Chatterbox Turbo model...", flush=True)
         try:
             device = "mps" if torch.backends.mps.is_available() else "cpu"
-            print(f"[Chatterbox TTS] Loading model on device: {device}...", flush=True)
+            print(f"[Local TTS] Loading model on device: {device}...", flush=True)
             _local_chatterbox_instance = ChatterboxTurboTTS.from_pretrained(device=device)
         except Exception as e:
             import traceback
@@ -138,15 +158,11 @@ def get_script_cache_paths(script_num, script_obj, args):
 async def speak_text_bantr(text, voice, speed=1.0, stability=2.0, creativity=0.0, output_path=None, play_audio=True):
     if output_path and os.path.exists(output_path):
         if play_audio:
-            print(f"[Bantr TTS] Playing cached audio via afplay...", flush=True)
-            try:
-                subprocess.run(["afplay", output_path], check=True)
-            except Exception as e:
-                print(f"[Bantr TTS Error] Failed to play cached audio: {e}", file=sys.stderr)
-                return False
+            print(f"[Web TTS] Playing cached audio...", flush=True)
+            play_audio_file(output_path)
         return True
 
-    url = f"{BANTR_WS_URL}?speed={speed}&stability={stability}&creativity={creativity}"
+    url = f"{TTS_WS_URL}?speed={speed}&stability={stability}&creativity={creativity}"
     
     try:
         # We specify max_size=None to handle large files (e.g. secret scripts)
@@ -164,7 +180,7 @@ async def speak_text_bantr(text, voice, speed=1.0, stability=2.0, creativity=0.0
                 if t == "progress":
                     step = data.get("step")
                     total = data.get("total_steps")
-                    print(f"[Bantr TTS] Generating speech... ({step}/{total})", flush=True)
+                    print(f"[Web TTS] Generating speech... ({step}/{total})", flush=True)
                 elif t == "done":
                     audio_b64 = data["audio"]
                     sample_rate = data.get("sample_rate", 22050)
@@ -184,9 +200,9 @@ async def speak_text_bantr(text, voice, speed=1.0, stability=2.0, creativity=0.0
                             f.write(wav_data)
                     
                     if play_audio:
-                        print(f"[Bantr TTS] Playing generated audio via afplay...", flush=True)
+                        print(f"[Web TTS] Playing generated audio...", flush=True)
                         try:
-                            subprocess.run(["afplay", save_path], check=True)
+                            play_audio_file(save_path)
                         finally:
                             if not output_path and os.path.exists(save_path):
                                 os.remove(save_path)
@@ -195,18 +211,46 @@ async def speak_text_bantr(text, voice, speed=1.0, stability=2.0, creativity=0.0
                     print(f"Error from Bantr: {data.get('message')}", file=sys.stderr)
                     return False
     except ConnectionRefusedError:
-        print("\n[Bantr TTS Error] Could not connect to Bantr. Is the Bantr app running?", file=sys.stderr)
+        print("\n[Web TTS Error] Could not connect to TTS server. Is the server running?", file=sys.stderr)
         return False
     except Exception as e:
-        print(f"\n[Bantr TTS Error] An error occurred during voice generation: {e}", file=sys.stderr)
+        print(f"\n[Web TTS Error] An error occurred during voice generation: {e}", file=sys.stderr)
         return False
 
 def resolve_reference_wav(voice_name="cyrus", emotion="neutral"):
     """
-    Returns the absolute path to the local Bantr .wav sample file to use
+    Returns the absolute path to the local reference .wav sample file to use
     as the reference voice cloning prompt for Chatterbox TTS.
     """
-    base_dir = "/Applications/Bantr.app/Contents/Resources/renderer/voices_transformed"
+    # Map abstract role names
+    role_name = voice_name
+    if voice_name.lower() == "cyrus":
+        role_name = "narrative"
+    elif voice_name.lower() == "cora":
+        role_name = "instruction"
+
+    # 1. Allow the user to specify custom direct mappings in .env
+    # e.g., VOICE_REF_NARRATIVE_FEARFUL=/path/to/narrator_fearful.wav
+    env_key = f"VOICE_REF_{role_name.upper()}_{emotion.upper()}"
+    if env_key in _env:
+        custom_path = _env[env_key]
+        if os.path.exists(custom_path):
+            return custom_path
+
+    # Fallback to general voice role override
+    general_env_key = f"VOICE_REF_{role_name.upper()}"
+    if general_env_key in _env:
+        custom_path = _env[general_env_key]
+        if os.path.exists(custom_path):
+            return custom_path
+
+    # 2. Look in the configured reference voices directory (generalized TTS)
+    base_dir = _env.get("TTS_RESOURCES_DIR", _env.get("BANTR_RESOURCES_DIR", "/Applications/Bantr.app/Contents/Resources/renderer/voices_transformed"))
+    if not os.path.exists(base_dir) and "voices_transformed" not in base_dir:
+        # Check if voices_transformed subfolder exists inside standard TTS_RESOURCES_DIR
+        alt_path = os.path.join(base_dir, "voices_transformed")
+        if os.path.exists(alt_path):
+            base_dir = alt_path
     
     # Standard voice mappings
     mappings = {
@@ -277,7 +321,7 @@ def get_safe_audio_prompt(path):
             temp_f.close()
             
             sf.write(temp_path, padded_data, samplerate)
-            print(f"[Chatterbox TTS] Audio prompt '{os.path.basename(path)}' was only {duration:.2f}s. Automatically padded/tiled to {len(padded_data)/samplerate:.2f}s.", flush=True)
+            print(f"[Local TTS] Audio prompt '{os.path.basename(path)}' was only {duration:.2f}s. Automatically padded/tiled to {len(padded_data)/samplerate:.2f}s.", flush=True)
             return temp_path
     except Exception as e:
         print(f"[Warning] Failed to pad audio prompt: {e}", flush=True)
@@ -289,12 +333,8 @@ _voice_conditionals_cache = {}
 def speak_text_chatterbox(text, audio_prompt_path=None, output_path=None, play_audio=True):
     if output_path and os.path.exists(output_path):
         if play_audio:
-            print(f"[Chatterbox TTS] Playing cached audio via afplay...", flush=True)
-            try:
-                subprocess.run(["afplay", output_path], check=True)
-            except Exception as e:
-                print(f"[Chatterbox TTS Error] Failed to play cached audio: {e}", file=sys.stderr)
-                return False
+            print(f"[Local TTS] Playing cached audio...", flush=True)
+            play_audio_file(output_path)
         return True
 
     model = get_chatterbox()
@@ -314,12 +354,12 @@ def speak_text_chatterbox(text, audio_prompt_path=None, output_path=None, play_a
         if audio_prompt_path and os.path.exists(audio_prompt_path):
             cache_key = audio_prompt_path
             if cache_key in _voice_conditionals_cache:
-                print(f"[Chatterbox TTS] Reusing cached voice conditionals (prompt: {os.path.basename(audio_prompt_path)})...", flush=True)
+                print(f"[Local TTS] Reusing cached voice conditionals (prompt: {os.path.basename(audio_prompt_path)})...", flush=True)
                 model.conds = _voice_conditionals_cache[cache_key]
                 wav = model.generate(text, audio_prompt_path=None)
             else:
                 safe_prompt_path = get_safe_audio_prompt(audio_prompt_path)
-                print(f"[Chatterbox TTS] Compiling and caching voice conditionals (prompt: {os.path.basename(audio_prompt_path)})...", flush=True)
+                print(f"[Local TTS] Compiling and caching voice conditionals (prompt: {os.path.basename(audio_prompt_path)})...", flush=True)
                 wav = model.generate(text, audio_prompt_path=safe_prompt_path)
                 _voice_conditionals_cache[cache_key] = model.conds
                 if safe_prompt_path != audio_prompt_path and os.path.exists(safe_prompt_path):
@@ -328,7 +368,7 @@ def speak_text_chatterbox(text, audio_prompt_path=None, output_path=None, play_a
                     except:
                         pass
         else:
-            print("[Chatterbox TTS] Synthesizing speech with default pretrained voice...", flush=True)
+            print("[Local TTS] Synthesizing speech with default pretrained voice...", flush=True)
             wav = model.generate(text)
             
         # Ensure 2D tensor for torchaudio saving: (1, frames)
@@ -347,9 +387,9 @@ def speak_text_chatterbox(text, audio_prompt_path=None, output_path=None, play_a
         ta.save(save_path, wav, model.sr)
         
         if play_audio:
-            print("[Chatterbox TTS] Playing generated audio via afplay...", flush=True)
+            print("[Local TTS] Playing generated audio...", flush=True)
             try:
-                subprocess.run(["afplay", save_path], check=True)
+                play_audio_file(save_path)
             finally:
                 if not output_path and os.path.exists(save_path):
                     os.remove(save_path)
@@ -417,7 +457,14 @@ def resolve_cyrus_voice(emotion="neutral"):
     to find the correct Cyrus voice ID matching the requested emotion.
     """
     # 1. Try reading directly from Bantr app's voices.json on disk (fast & reliable)
-    local_voices_path = "/Applications/Bantr.app/Contents/Resources/renderer/voices.json"
+    base_dir = _env.get("TTS_RESOURCES_DIR", _env.get("BANTR_RESOURCES_DIR", "/Applications/Bantr.app/Contents/Resources/renderer"))
+    if "voices_transformed" in base_dir:
+        base_dir = os.path.dirname(base_dir)
+        
+    local_voices_path = os.path.join(base_dir, "voices.json")
+    if not os.path.exists(local_voices_path):
+        local_voices_path = "/Applications/Bantr.app/Contents/Resources/renderer/voices.json"
+        
     if os.path.exists(local_voices_path):
         try:
             with open(local_voices_path, "r", encoding="utf-8") as f:
@@ -438,7 +485,7 @@ def resolve_cyrus_voice(emotion="neutral"):
                         vid = str(cv.get("id", "")).lower()
                         if emotion in style or emotion in vid:
                             voice_id = cv.get("id")
-                            print(f"[Bantr TTS] Found Cyrus voice '{voice_id}' for style '{emotion}' in voices.json")
+                            print(f"[Web TTS] Found Cyrus voice '{voice_id}' for style '{emotion}' in voices.json")
                             return voice_id
                             
                     # Fallback to neutral if style/emotion not explicitly found
@@ -446,14 +493,14 @@ def resolve_cyrus_voice(emotion="neutral"):
                         style = str(cv.get("style", "")).lower()
                         if "neutral" in style:
                             voice_id = cv.get("id")
-                            print(f"[Bantr TTS] Style '{emotion}' not found. Defaulting to neutral Cyrus voice: '{voice_id}'")
+                            print(f"[Web TTS] Style '{emotion}' not found. Defaulting to neutral Cyrus voice: '{voice_id}'")
                             return voice_id
                             
                     first_id = cyrus_voices[0].get("id")
-                    print(f"[Bantr TTS] Style '{emotion}' not found. Defaulting to first Cyrus voice: '{first_id}'")
+                    print(f"[Web TTS] Style '{emotion}' not found. Defaulting to first Cyrus voice: '{first_id}'")
                     return first_id
         except Exception as e:
-            print(f"[Bantr TTS Info] Tried reading local voices.json but failed: {e}")
+            print(f"[Web TTS Info] Tried reading local voices.json but failed: {e}")
 
     # 2. Hardcoded verified failsafe mapping
     failsafe = {
@@ -469,7 +516,7 @@ def resolve_cyrus_voice(emotion="neutral"):
     
     if emotion in failsafe:
         val = failsafe[emotion]
-        print(f"[Bantr TTS] Resolved Cyrus voice '{val}' for emotion '{emotion}' via failsafe mapping")
+        print(f"[Web TTS] Resolved Cyrus voice '{val}' for emotion '{emotion}' via failsafe mapping")
         return val
 
     # 3. Try querying local Bantr HTTP endpoints
@@ -512,11 +559,11 @@ def resolve_cyrus_voice(emotion="neutral"):
             continue
             
     if found_voice:
-        print(f"[Bantr TTS] Dynamically resolved Cyrus voice: '{found_voice}' (emotion: '{emotion}')")
+        print(f"[Web TTS] Dynamically resolved Cyrus voice: '{found_voice}' (emotion: '{emotion}')")
         return found_voice
         
     fallback = f"cyrus_m_{emotion}"
-    print(f"[Bantr TTS] Could not dynamically resolve Cyrus voice. Falling back to: '{fallback}'")
+    print(f"[Web TTS] Could not dynamically resolve Cyrus voice. Falling back to: '{fallback}'")
     return fallback
 
 def clean_script_text(text, engine="chatterbox"):
@@ -625,7 +672,7 @@ async def main_async(args):
     if args.text:
         voice = args.voice or "0099_cora_f_neutral"
         text_to_speak = clean_script_text(args.text, "bantr")
-        print(f"[Bantr TTS] Playing via voice: '{voice}'...")
+        print(f"[Web TTS] Playing via voice: '{voice}'...")
         await speak_text_bantr(text_to_speak, voice, args.speed, args.stability, args.creativity)
     elif script_obj and isinstance(script_obj, dict):
         # Sequential Dual-Voice Playback
@@ -641,18 +688,18 @@ async def main_async(args):
             
             clean_narrative = clean_script_text(narrative, "bantr")
             if narrative_path and os.path.exists(narrative_path):
-                print(f"[Bantr TTS] Found cached NARRATIVE audio: {os.path.basename(narrative_path)}. Playing instantly...")
+                print(f"[Web TTS] Found cached NARRATIVE audio: {os.path.basename(narrative_path)}. Playing instantly...")
             else:
-                print(f"[Bantr TTS] Playing NARRATIVE via voice: '{voice}'...")
+                print(f"[Web TTS] Playing NARRATIVE via voice: '{voice}'...")
             await speak_text_bantr(clean_narrative, voice, args.speed, args.stability, args.creativity, output_path=narrative_path)
             
         if instructions:
             instruction_voice = "0099_cora_f_neutral" # Default clear instruction voice
             clean_instructions = clean_script_text(instructions, "bantr")
             if instructions_path and os.path.exists(instructions_path):
-                print(f"[Bantr TTS] Found cached INSTRUCTIONS audio: {os.path.basename(instructions_path)}. Playing instantly...")
+                print(f"[Web TTS] Found cached INSTRUCTIONS audio: {os.path.basename(instructions_path)}. Playing instantly...")
             else:
-                print(f"[Bantr TTS] Playing INSTRUCTIONS via voice: '{instruction_voice}'...")
+                print(f"[Web TTS] Playing INSTRUCTIONS via voice: '{instruction_voice}'...")
             await speak_text_bantr(clean_instructions, instruction_voice, args.speed, args.stability, args.creativity, output_path=instructions_path)
     elif script_obj:
         # Fallback for old cache format
@@ -805,18 +852,18 @@ def main():
                                 audio_prompt_path = resolve_reference_wav("cyrus", emotion)
                                 clean_narrative = clean_script_text(narrative, "chatterbox")
                                 if narrative_path and os.path.exists(narrative_path):
-                                    print(f"[Chatterbox TTS] Found cached NARRATIVE audio: {os.path.basename(narrative_path)}. Playing instantly...")
+                                    print(f"[Local TTS] Found cached NARRATIVE audio: {os.path.basename(narrative_path)}. Playing instantly...")
                                 else:
-                                    print(f"[Chatterbox TTS] Playing NARRATIVE with zero-shot cloning for emotion '{emotion}'...")
+                                    print(f"[Local TTS] Playing NARRATIVE with zero-shot cloning for emotion '{emotion}'...")
                                 speak_text_chatterbox(clean_narrative, audio_prompt_path, output_path=narrative_path)
                                 
                             if instructions:
                                 instruction_prompt_path = resolve_reference_wav("cora", "neutral")
                                 clean_instructions = clean_script_text(instructions, "chatterbox")
                                 if instructions_path and os.path.exists(instructions_path):
-                                    print(f"[Chatterbox TTS] Found cached INSTRUCTIONS audio: {os.path.basename(instructions_path)}. Playing instantly...")
+                                    print(f"[Local TTS] Found cached INSTRUCTIONS audio: {os.path.basename(instructions_path)}. Playing instantly...")
                                 else:
-                                    print(f"[Chatterbox TTS] Playing INSTRUCTIONS with clear rule voice...")
+                                    print(f"[Local TTS] Playing INSTRUCTIONS with clear rule voice...")
                                 speak_text_chatterbox(clean_instructions, instruction_prompt_path, output_path=instructions_path)
                         else:
                             clean_text = clean_script_text(str(script_obj), "chatterbox")
@@ -825,7 +872,7 @@ def main():
                     else:
                         clean_text = clean_script_text(user_input, "chatterbox")
                         audio_prompt_path = resolve_reference_wav("cyrus", "neutral")
-                        print(f"[Chatterbox TTS] Playing custom text...")
+                        print(f"[Local TTS] Playing custom text...")
                         speak_text_chatterbox(clean_text, audio_prompt_path)
                 except KeyboardInterrupt:
                     print("\nExiting interactive mode. Goodbye!")
@@ -884,9 +931,9 @@ def main():
                     
                 clean_narrative = clean_script_text(narrative, "chatterbox")
                 if narrative_path and os.path.exists(narrative_path):
-                    print(f"[Chatterbox TTS] Found cached NARRATIVE audio: {os.path.basename(narrative_path)}. Playing instantly...")
+                    print(f"[Local TTS] Found cached NARRATIVE audio: {os.path.basename(narrative_path)}. Playing instantly...")
                 else:
-                    print(f"[Chatterbox TTS] Playing NARRATIVE with zero-shot cloning for emotion '{emotion}'...")
+                    print(f"[Local TTS] Playing NARRATIVE with zero-shot cloning for emotion '{emotion}'...")
                 speak_text_chatterbox(clean_narrative, audio_prompt_path, output_path=narrative_path)
                 
             if instructions:
@@ -894,9 +941,9 @@ def main():
                 instruction_prompt_path = resolve_reference_wav("cora", "neutral")
                 clean_instructions = clean_script_text(instructions, "chatterbox")
                 if instructions_path and os.path.exists(instructions_path):
-                    print(f"[Chatterbox TTS] Found cached INSTRUCTIONS audio: {os.path.basename(instructions_path)}. Playing instantly...")
+                    print(f"[Local TTS] Found cached INSTRUCTIONS audio: {os.path.basename(instructions_path)}. Playing instantly...")
                 else:
-                    print(f"[Chatterbox TTS] Playing INSTRUCTIONS with clear rule voice...")
+                    print(f"[Local TTS] Playing INSTRUCTIONS with clear rule voice...")
                 speak_text_chatterbox(clean_instructions, instruction_prompt_path, output_path=instructions_path)
         elif script_obj:
             # Fallback for old cache format
