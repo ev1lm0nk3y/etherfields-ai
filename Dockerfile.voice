@@ -29,7 +29,7 @@ COPY src/ src/
 COPY install.py ./
 
 # Configure local directory for the persistent mount
-ENV ETHERFIELDS_LOCAL_DIR=/app/data
+ENV ETHERFIELDS_LOCAL_PATH=/app/data
 RUN mkdir -p /app/data
 
 # Mount directory for shared assets, models, and caches

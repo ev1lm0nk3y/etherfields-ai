@@ -163,10 +163,10 @@ def main():
             wake_word = "etherfields"
         wake_word_slug = wake_word.replace(" ", "_")
 
-        # Resolve training directory under ETHERFIELDS_LOCAL_PATH / ETHERFIELDS_LOCAL_DIR / ETHERFIELDS_CUSTOM_DIR
+        # Resolve training directory under ETHERFIELDS_LOCAL_PATH / ETHERFIELDS_CUSTOM_DIR
         custom_dir_str_local = env.get(
             "ETHERFIELDS_LOCAL_PATH",
-            env.get("ETHERFIELDS_LOCAL_DIR", env.get("ETHERFIELDS_CUSTOM_DIR", str(REPO_ROOT)))
+            env.get("ETHERFIELDS_CUSTOM_DIR", str(REPO_ROOT))
         )
         expanded_dir_local = os.path.expandvars(custom_dir_str_local)
         custom_dir_local = os.path.abspath(os.path.expanduser(expanded_dir_local))
@@ -338,7 +338,7 @@ def main():
 
     custom_dir_str = env.get(
         "ETHERFIELDS_LOCAL_PATH",
-        env.get("ETHERFIELDS_LOCAL_DIR", env.get("ETHERFIELDS_CUSTOM_DIR", str(REPO_ROOT)))
+        env.get("ETHERFIELDS_CUSTOM_DIR", str(REPO_ROOT))
     )
     expanded_dir_str = os.path.expandvars(custom_dir_str)
     custom_dir = os.path.abspath(os.path.expanduser(expanded_dir_str))

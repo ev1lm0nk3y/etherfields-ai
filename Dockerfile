@@ -41,17 +41,17 @@ RUN --mount=type=cache,target=/app/build_cache \
     \
     # 3. Regenerate pages & index \
     echo "[Process] Slicing pages and compiling index..." && \
-    ETHERFIELDS_LOCAL_DIR=/app uv run python src/rulebook_tool.py --force && \
+    ETHERFIELDS_LOCAL_PATH=/app uv run python src/rulebook_tool.py --force && \
     \
     # 4. Rebuild secret scripts cache (reads local file if present, otherwise politely downloads shards) \
     echo "[Process] Compiling secret scripts..." && \
-    ETHERFIELDS_LOCAL_DIR=/app uv run python src/secret_scripts_tool.py --update-cache && \
+    ETHERFIELDS_LOCAL_PATH=/app uv run python src/secret_scripts_tool.py --update-cache && \
     \
     # 5. Persist the generated raw cache back to the mount cache \
     cp secret_scripts_cache.json /app/build_cache/secret_scripts_cache.json
 
-# Configure ETHERFIELDS_LOCAL_DIR to the mount path
-ENV ETHERFIELDS_LOCAL_DIR=/app/data
+# Configure ETHERFIELDS_LOCAL_PATH to the mount path
+ENV ETHERFIELDS_LOCAL_PATH=/app/data
 RUN mkdir -p /app/data
 
 # Declare mount volume for logs, topics, and configs

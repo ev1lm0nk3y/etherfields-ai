@@ -100,7 +100,7 @@ def main():
     print("=" * 60)
 
     _env = load_env_vars()
-    custom_dir_str = _env.get("ETHERFIELDS_LOCAL_DIR", str(REPO_ROOT))
+    custom_dir_str = _env.get("ETHERFIELDS_LOCAL_PATH", str(REPO_ROOT))
     custom_dir = Path(custom_dir_str).expanduser().resolve()
     models_dir = custom_dir / "models"
     models_dir.mkdir(parents=True, exist_ok=True)

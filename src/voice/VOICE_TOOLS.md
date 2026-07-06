@@ -27,8 +27,8 @@ Use `uv run src/voice/voice_assistant.py` to play voice narration for secret scr
 ## 2. Directory Architecture & Caching
 To maintain zero-overhead gameplay, all synthesized speech is intelligently cached to prevent redundant generations.
 
-* **Models Folder:** Neural network models (e.g. `kokoro-v1.0.onnx` and `voices-v1.0.bin`) are stored in `${ETHERFIELDS_LOCAL_DIR}/voice/models/`.
-* **Cache Folder:** Synthesized audio clips are saved as `.wav` files inside `${ETHERFIELDS_LOCAL_DIR}/voice/cache/`.
+* **Models Folder:** Neural network models (e.g. `kokoro-v1.0.onnx` and `voices-v1.0.bin`) are stored in `${ETHERFIELDS_LOCAL_PATH}/voice/models/`.
+* **Cache Folder:** Synthesized audio clips are saved as `.wav` files inside `${ETHERFIELDS_LOCAL_PATH}/voice/cache/`.
 * **Standardized Filename Mapping:**
   * **Secret Scripts:** Saved cleanly as `script_<num>_narrative.wav` and `script_<num>_instructions.wav`.
   * **Rule Discussions:** Unique text inputs are cached using a stable 12-character MD5 hash (e.g., `text_ae98d25d19c3.wav`), or with custom customizable slugs (e.g., `topic_stun.wav`) by passing the `--filename topic_stun` flag.

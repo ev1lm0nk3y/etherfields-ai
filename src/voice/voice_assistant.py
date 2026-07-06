@@ -24,10 +24,10 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 def load_env_vars():
     env_vars = {}
-    local_dir = os.environ.get("ETHERFIELDS_LOCAL_DIR")
+    local_path = os.environ.get("ETHERFIELDS_LOCAL_PATH")
     paths_to_try = []
-    if local_dir:
-        paths_to_try.append(os.path.join(os.path.abspath(os.path.expanduser(os.path.expandvars(local_dir))), ".env"))
+    if local_path:
+        paths_to_try.append(os.path.join(os.path.abspath(os.path.expanduser(os.path.expandvars(local_path))), ".env"))
     paths_to_try.append(os.path.join(BASE_DIR, ".env"))
 
     for env_path in paths_to_try:
@@ -43,7 +43,7 @@ def load_env_vars():
 
 
 _env = load_env_vars()
-CUSTOM_DIR_STR = _env.get("ETHERFIELDS_LOCAL_DIR", BASE_DIR)
+CUSTOM_DIR_STR = _env.get("ETHERFIELDS_LOCAL_PATH", BASE_DIR)
 CUSTOM_DIR = os.path.abspath(os.path.expanduser(os.path.expandvars(CUSTOM_DIR_STR)))
 
 SCRIPTS_CACHE_PATH = os.path.join(BASE_DIR, "secret_scripts_cache.json")

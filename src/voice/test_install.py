@@ -7,8 +7,8 @@ from pathlib import Path
 # Ensure project root is in path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Set ETHERFIELDS_LOCAL_DIR to avoid relying on actual host setting during test imports/setups
-os.environ["ETHERFIELDS_LOCAL_DIR"] = os.getcwd()
+# Set ETHERFIELDS_LOCAL_PATH to avoid relying on actual host setting during test imports/setups
+os.environ["ETHERFIELDS_LOCAL_PATH"] = os.getcwd()
 
 from voice import voice_install
 

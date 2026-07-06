@@ -77,10 +77,10 @@ def to_float(val):
 
 def load_env_vars():
     env_vars = {}
-    local_dir = os.environ.get("ETHERFIELDS_LOCAL_DIR")
+    local_path = os.environ.get("ETHERFIELDS_LOCAL_PATH")
     paths_to_try = []
-    if local_dir:
-        paths_to_try.append(os.path.join(os.path.abspath(os.path.expanduser(os.path.expandvars(local_dir))), ".env"))
+    if local_path:
+        paths_to_try.append(os.path.join(os.path.abspath(os.path.expanduser(os.path.expandvars(local_path))), ".env"))
     paths_to_try.append(os.path.join(REPO_ROOT, ".env"))
 
     for env_path in paths_to_try:
@@ -96,7 +96,7 @@ def load_env_vars():
 
 
 _env = load_env_vars()
-CUSTOM_DIR_STR = _env.get("ETHERFIELDS_LOCAL_DIR", REPO_ROOT)
+CUSTOM_DIR_STR = _env.get("ETHERFIELDS_LOCAL_PATH", REPO_ROOT)
 CUSTOM_DIR = os.path.abspath(os.path.expanduser(os.path.expandvars(CUSTOM_DIR_STR)))
 DEFAULT_MODELS_DIR = os.path.join(CUSTOM_DIR, "models")
 DEFAULT_AUDIO_CACHE_DIR = os.path.join(CUSTOM_DIR, "audio_cache")

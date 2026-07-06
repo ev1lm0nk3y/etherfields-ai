@@ -7,8 +7,8 @@ import numpy as np
 # Ensure project root is in path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Set ETHERFIELDS_LOCAL_DIR to avoid relying on actual host setting during test imports/setups
-os.environ["ETHERFIELDS_LOCAL_DIR"] = os.getcwd()
+# Set ETHERFIELDS_LOCAL_PATH to avoid relying on actual host setting during test imports/setups
+os.environ["ETHERFIELDS_LOCAL_PATH"] = os.getcwd()
 
 # Mock nanowakeword before importing voice_listener to ensure no issues with native libraries
 mock_nanowakeword = MagicMock()
@@ -39,10 +39,10 @@ class TestVoiceListener(unittest.TestCase):
         self.assertEqual(voice_listener.to_float("invalid"), 0.0)
 
     @patch("os.path.exists", return_value=True)
-    @patch("builtins.open", new_callable=mock_open, read_data="ETHERFIELDS_LOCAL_DIR=/dummy/dir\n")
+    @patch("builtins.open", new_callable=mock_open, read_data="ETHERFIELDS_LOCAL_PATH=/dummy/dir\n")
     def test_load_env_vars(self, mock_file, mock_exists):
         vars_dict = voice_listener.load_env_vars()
-        self.assertEqual(vars_dict.get("ETHERFIELDS_LOCAL_DIR"), "/dummy/dir")
+        self.assertEqual(vars_dict.get("ETHERFIELDS_LOCAL_PATH"), "/dummy/dir")
 
     def test_nano_interpreter_wrapper(self):
         mock_model_instance = MagicMock()

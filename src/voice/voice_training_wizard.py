@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 # Respect ETHERFIELDS_LOCAL_PATH or other custom dir variables
 custom_dir_str = os.environ.get(
     "ETHERFIELDS_LOCAL_PATH",
-    os.environ.get("ETHERFIELDS_LOCAL_DIR", os.environ.get("ETHERFIELDS_CUSTOM_DIR", BASE_DIR))
+    os.environ.get("ETHERFIELDS_CUSTOM_DIR", BASE_DIR)
 )
 expanded_dir = os.path.expandvars(custom_dir_str)
 resolved_custom_dir = os.path.abspath(os.path.expanduser(expanded_dir))

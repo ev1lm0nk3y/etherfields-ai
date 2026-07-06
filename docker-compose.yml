@@ -11,7 +11,7 @@ services:
       # Mount the local user directory containing topics, session logs, .env config, and dynamic caches
       - ${HOME}/.local/etherfields-ai:/app/data
     environment:
-      - ETHERFIELDS_LOCAL_DIR=/app/data
+      - ETHERFIELDS_LOCAL_PATH=/app/data
       - NARRATE_VIA_QUEUE=true
     # Stdio transport is run directly. If remote SSE is preferred, you can run:
     # command: ["uv", "run", "python", "src/mcp_server.py", "--transport", "sse"]
@@ -28,7 +28,7 @@ services:
       # Share the same local user directory for access to .env config, wake-word models, and audio outputs
       - ${HOME}/.local/etherfields-ai:/app/data
     environment:
-      - ETHERFIELDS_LOCAL_DIR=/app/data
+      - ETHERFIELDS_LOCAL_PATH=/app/data
     # Native hardware audio device mapping (highly robust for Linux ALSA/PulseAudio setups)
     devices:
       - /dev/snd:/dev/snd

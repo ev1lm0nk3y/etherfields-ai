@@ -373,7 +373,7 @@ To use the hands-free voice assistant container, ensure you configure the persis
 1. **Configure the Environment:**
    Ensure your `.env` configuration file (located at `${HOME}/.local/etherfields-ai/.env`) includes your active voice settings:
    ```env
-   ETHERFIELDS_LOCAL_DIR=/app/data
+   ETHERFIELDS_LOCAL_PATH=/app/data
    ENABLE_VOICE=True
    STT_PROGRAM=faster-whisper
    TTS_ENGINE=kokoro
