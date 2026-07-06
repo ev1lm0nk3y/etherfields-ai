@@ -14,7 +14,7 @@ import time
 from pathlib import Path
 
 # Repo root is parent of the directory of this file
-REPO_ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 def load_env_vars():

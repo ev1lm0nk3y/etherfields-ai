@@ -8,7 +8,7 @@ This project turns an AI agent into an expert **Rule Master**, allowing players 
 
 ## 🚀 Key Features
 
-1. **Surgical Page-Mapping Lookup (`rulebook_tool.py`)**
+1. **Surgical Page-Mapping Lookup (`src/rulebook_tool.py`)**
    Instead of bloating an AI's context window with the entire 20-page rulebook, the engine cross-references a dynamically compiled `index.json` mapping hundreds of game terms and Table of Contents tags. It retrieves and displays *only* the exact page text files (e.g., Page 15 for *Shopping*) required to answer a question.
 
 2. **Self-Healing Cache Integrity**
@@ -27,11 +27,16 @@ This project turns an AI agent into an expert **Rule Master**, allowing players 
 ├── rulebook_pages/       # Extracted page-level text files (page_01.txt to page_20.txt)
 ├── topics/               # Cached campaign-specific rule discussions and explanations
 ├── index.json            # Generated TOC and alphabetical index mapping keywords to pages
-├── rulebook_tool.py      # Unified Python 3.13 tool to validate, regenerate, and query the cache
-├── voice/                # Voice assistant & wake-word listening sub-system
-│   ├── voice_assistant.py # Local TTS narration (Kokoro-ONNX / OpenAI / ElevenLabs)
-│   ├── voice_listener.py  # Continuous wake-word listener (openWakeWord / mlx-whisper / faster-whisper)
-│   └── wakeword_model_training.ipynb # Google Colab notebook for training custom models
+├── install.py            # Primary installation and setup script
+├── src/                  # Main Python source directory
+│   ├── rulebook_tool.py  # Unified Python 3.13 tool to validate, regenerate, and query the cache
+│   ├── secret_scripts_tool.py # Polite offline caching and lookups of Core Secret Scripts
+│   ├── preprocess_scripts.py # Offline compilation tool for secret scripts
+│   ├── extract_chat.py   # Chat history exporter tool
+│   └── voice/            # Voice assistant & wake-word listening sub-system
+│       ├── voice_assistant.py # Local TTS narration (Kokoro-ONNX / OpenAI / ElevenLabs)
+│       ├── voice_listener.py  # Continuous wake-word listener (openWakeWord / mlx-whisper / faster-whisper)
+│       └── wakeword_model_training.ipynb # Google Colab notebook for training custom models
 ├── GEMINI.md             # Automatic LLM instructions and workflow protocols
 ├── RULEMASTER.md         # Baseline rules role prompt and active player roster
 ├── TOPICS.md             # The central registry of cached topic files
@@ -69,29 +74,29 @@ The setup wizard will walk you through:
 
 #### 1. Validate the Cache (Checks hash/time metadata)
 ```bash
-uv run rulebook_tool.py --validate
+uv run src/rulebook_tool.py --validate
 ```
 *Note: If the PDF is updated, the tool will automatically self-heal and regenerate the page cache and `index.json`.*
 
 #### 2. Search for a Topic or Term
 ```bash
-uv run rulebook_tool.py --search "Slumber"
+uv run src/rulebook_tool.py --search "Slumber"
 ```
 This searches the index, lists matching chapters/index terms, maps them to their respective pages, and prints the raw extracted page contents for immediate, zero-guesswork rule verification.
 
 #### 3. Force Cache Rebuild
 ```bash
-uv run rulebook_tool.py --force
+uv run src/rulebook_tool.py --force
 ```
 
 ---
 
 ## 🎙️ Custom Wake Word Model Training
 
-The project includes a Jupyter Notebook at `voice/wakeword_model_training.ipynb` that allows you to train your own custom **openWakeWord** models (such as `"ee_thir_fields"`, `"hey_rule_book"`, etc.). You can run this pipeline either in the cloud using Google Colab or completely offline on your local machine.
+The project includes a Jupyter Notebook at `src/voice/wakeword_model_training.ipynb` that allows you to train your own custom **openWakeWord** models (such as `"ee_thir_fields"`, `"hey_rule_book"`, etc.). You can run this pipeline either in the cloud using Google Colab or completely offline on your local machine.
 
 ### Option A: Cloud Training (Google Colab) [Recommended]
-1. **Upload the Notebook:** Upload `voice/wakeword_model_training.ipynb` to your [Google Drive](https://drive.google.com/) or open it directly in [Google Colab](https://colab.research.google.com/).
+1. **Upload the Notebook:** Upload `src/voice/wakeword_model_training.ipynb` to your [Google Drive](https://drive.google.com/) or open it directly in [Google Colab](https://colab.research.google.com/).
 2. **Choose a Runtime:** 
    * For the fastest training, go to **Runtime** > **Change runtime type** and select a **GPU** (e.g., T4).
    * The notebook features **automatic multi-accelerator hardware detection**. It dynamically configures and installs the correct PyTorch build:
@@ -105,7 +110,7 @@ The project includes a Jupyter Notebook at `voice/wakeword_model_training.ipynb`
 5. **Download and Deploy:** Once complete, the notebook automatically exports and downloads your custom model files:
    * `[your_wake_word].onnx`
    * `[your_wake_word].tflite`
-   * Simply place your custom `.onnx` model files in your local `models/` directory. The continuous listener `voice_listener.py` will automatically auto-discover and load them in parallel!
+   * Simply place your custom `.onnx` model files in your local `models/` directory. The continuous listener `src/voice/voice_listener.py` will automatically auto-discover and load them in parallel!
 
 ### Option B: Local Training (Your Machine)
 If you prefer to train your models offline, you can run the notebook locally using `uv` to automatically manage your Jupyter environment:
@@ -113,7 +118,7 @@ If you prefer to train your models offline, you can run the notebook locally usi
 1. **Start the Jupyter Server:**
    Spin up a local Jupyter Notebook server using `uv`:
    ```bash
-   uv run --with jupyter jupyter notebook voice/wakeword_model_training.ipynb
+   uv run --with jupyter jupyter notebook src/voice/wakeword_model_training.ipynb
    ```
 2. **Open the Notebook:** 
    Open the printed URL in your browser, or open the folder in **VS Code** and use the Jupyter extension.

@@ -204,15 +204,15 @@ def handle_rulebook_pdf(custom_dir):
     if custom_pdf_path.exists():
         print_info("Triggering Rulebook validation and cache building...")
         try:
-            # We run rulebook_tool.py --validate via uv run
+            # We run src/rulebook_tool.py --validate via uv run
             # Note: we need to ensure the script itself loads the custom dir .env, which we will implement next.
-            subprocess.run(["uv", "run", "rulebook_tool.py", "--validate"], check=True)
+            subprocess.run(["uv", "run", "src/rulebook_tool.py", "--validate"], check=True)
             print_success("Rulebook cache validated and initialized successfully.")
         except subprocess.CalledProcessError as e:
             print_error(f"Failed to validate rulebook cache: {e}")
     else:
         print_warning(
-            "Skipping rulebook validation because PDF is missing. Please add the PDF and run `uv run rulebook_tool.py --validate` later."
+            "Skipping rulebook validation because PDF is missing. Please add the PDF and run `uv run src/rulebook_tool.py --validate` later."
         )
 
 
@@ -220,7 +220,7 @@ def warmup_dependencies():
     print_info("Warming up Python voice dependency caches...")
     try:
         # We perform a dry-run / help output to warm up uv script-level virtual environment
-        subprocess.run(["uv", "run", "voice/voice_listener.py", "--list-models"], check=True)
+        subprocess.run(["uv", "run", "src/voice/voice_listener.py", "--list-models"], check=True)
         print_success("Voice assistant dependency cache warmed up.")
     except subprocess.CalledProcessError as e:
         print_warning(
@@ -232,7 +232,7 @@ def handle_voice_tools():
     # Launch our custom voice setup wizard!
     print_info("Launching the interactive Voice & TTS Setup Wizard...")
     try:
-        subprocess.run(["uv", "run", "voice/voice_install.py"], check=True)
+        subprocess.run(["uv", "run", "src/voice/voice_install.py"], check=True)
     except subprocess.CalledProcessError as e:
         print_error(f"Voice Installation Wizard exited with an error: {e}")
 
@@ -327,6 +327,16 @@ def main():
     print("🌌  Etherfields AI Rule Master & Retriever Setup Wizard  🌌")
     print("=" * 60)
 
+    env_path = Path(".env")
+    if env_path.exists():
+        print_warning("An existing '.env' configuration file was detected.")
+        print_warning("Continuing with this script will OVERWRITE your current '.env'")
+        print_warning("and reset customized settings (like API keys or voice configuration).")
+        if not ask_yes_no("Are you sure you want to continue?", default=False):
+            print_info("Installation cancelled to protect your existing '.env' file.")
+            sys.exit(0)
+        print("-" * 60)
+
     check_prerequisites()
     print("-" * 60)
 
@@ -354,10 +364,10 @@ def main():
     print("Next Steps:")
     print(f" 1. Custom Directory: {custom_dir}")
     print(" 2. To run the rule master lookup directly:")
-    print('    `uv run rulebook_tool.py --search "<term>"`')
+    print('    `uv run src/rulebook_tool.py --search "<term>"`')
     if enable_voice:
         print(" 3. To run the continuous hands-free voice listener:")
-        print("    `uv run voice/voice_listener.py`")
+        print("    `uv run src/voice/voice_listener.py`")
         print(" 4. Remember that you can drop additional custom .onnx wake-word models")
         print(f"    directly into {custom_dir}/models/ for parallel wake-word support!")
     print("=" * 60)

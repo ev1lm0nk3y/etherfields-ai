@@ -14,7 +14,7 @@ import urllib.request
 from pathlib import Path
 
 # Repo root is parent of voice directory (where this script resides)
-REPO_ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 # Color helpers
@@ -182,7 +182,7 @@ def main():
         selected_dep = '"faster-whisper>=1.0.0",'
 
     # Dynamically update voice_listener.py dependencies
-    listener_path = REPO_ROOT / "voice" / "voice_listener.py"
+    listener_path = REPO_ROOT / "src" / "voice" / "voice_listener.py"
     if listener_path.exists():
         with open(listener_path, "r", encoding="utf-8") as f:
             lines = f.readlines()

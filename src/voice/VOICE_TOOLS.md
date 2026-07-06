@@ -4,8 +4,8 @@ This document provides detailed setup, execution, and architectural information 
 
 ---
 
-## 1. Local Voice Assistant (`voice/voice_assistant.py`)
-Use `uv run voice/voice_assistant.py` to play voice narration for secret scripts or rule master answers. The sub-system supports three selectable Text-to-Speech (TTS) engines configured via `.env` or overridden at runtime:
+## 1. Local Voice Assistant (`src/voice/voice_assistant.py`)
+Use `uv run src/voice/voice_assistant.py` to play voice narration for secret scripts or rule master answers. The sub-system supports three selectable Text-to-Speech (TTS) engines configured via `.env` or overridden at runtime:
 
 ### A. Kokoro ONNX Engine (Local Offline - Recommended)
 * **How it works:** A state-of-the-art, lightweight neural TTS (82M parameters) running via the **ONNX Runtime**. It runs completely offline with near-ElevenLabs quality.
@@ -40,37 +40,37 @@ To maintain zero-overhead gameplay, all synthesized speech is intelligently cach
 ### Speak Custom Text
 ```bash
 # Speak custom text using your default .env engine
-uv run voice/voice_assistant.py --text "Draw a Turn card and resolve Slumber."
+uv run src/voice/voice_assistant.py --text "Draw a Turn card and resolve Slumber."
 
 # Override engine on-the-fly and specify a custom cache filename
-uv run voice/voice_assistant.py --text "You enter a dark corridor." --engine elevenlabs --filename corridors_sound
+uv run src/voice/voice_assistant.py --text "You enter a dark corridor." --engine elevenlabs --filename corridors_sound
 
 # Override voice on-the-fly (e.g. British Male on Kokoro)
-uv run voice/voice_assistant.py --text "Let me explain the rule." --voice bm_george
+uv run src/voice/voice_assistant.py --text "Let me explain the rule." --voice bm_george
 ```
 
 ### Speak a Secret Script
 Secret scripts often contain two parts: **story narrative** and **rules instructions**. The assistant reads these sequentially using two distinct voices (e.g. a rich male narrator voice and a clear female instruction voice).
 ```bash
-uv run voice/voice_assistant.py --script 100
+uv run src/voice/voice_assistant.py --script 100
 ```
 
 ### Pre-Cache Multiple Scripts
 You can pre-cache a comma-separated list of scripts silently before your game session starts to guarantee zero-latency play:
 ```bash
-uv run voice/voice_assistant.py --pre-cache 100,101,102,105
+uv run src/voice/voice_assistant.py --pre-cache 100,101,102,105
 ```
 
 ### Persistent Interactive Mode
 To run a persistent shell that keeps the local Kokoro ONNX model warmed up in memory for instant responses:
 ```bash
-uv run voice/voice_assistant.py --interactive
+uv run src/voice/voice_assistant.py --interactive
 ```
 
 ---
 
-## 4. Continuous Voice Listener (`voice/voice_listener.py`)
-Use `uv run voice/voice_listener.py` to run the continuous wake-word detector locally. 
+## 4. Continuous Voice Listener (`src/voice/voice_listener.py`)
+Use `uv run src/voice/voice_listener.py` to run the continuous wake-word detector locally. 
 
 * **Dual Wake-Word Backends:** Dynamically supports both **nanowakeword** (for highest accuracy and exceptionally low CPU footprint) and **openWakeWord** engines in parallel!
 * **Speech-to-Text (STT) Processing:** Upon hearing the wake word (e.g., *Jarvis* or a custom trained phrase), the listener records your voice question until you stop speaking, and transcribes it completely locally using:
@@ -80,6 +80,6 @@ Use `uv run voice/voice_listener.py` to run the continuous wake-word detector lo
 
 To run the listener:
 ```bash
-uv run voice/voice_listener.py
+uv run src/voice/voice_listener.py
 ```
 ---

@@ -39,7 +39,7 @@ except ImportError:
     HAS_OPENWAKEWORD = False
 
 # Repo root is parent of the directory of this file
-REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def load_env_vars():

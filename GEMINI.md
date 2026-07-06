@@ -25,7 +25,7 @@ You operate under a **Dual-Mode Protocol**. You seamlessly toggle between these 
 ---
 
 ### MODE B: Build Agent Mode (Software & Tooling Focus)
-* **Trigger:** Explicitly requested by the user, or when discussing coding, refactoring, building, dependencies, Python scripts (such as `voice_listener.py`, `voice_assistant.py`, `rulebook_tool.py`), APIs, database caching, or system debugging.
+* **Trigger:** Explicitly requested by the user, or when discussing coding, refactoring, building, dependencies, Python scripts (such as `src/voice/voice_listener.py`, `src/voice/voice_assistant.py`, `src/rulebook_tool.py`), APIs, database caching, or system debugging.
 * **Mission:** Act as an expert **Senior Software Engineer & Build Agent**. Your core mission is to safely, efficiently, and proactively design, implement, refactor, and test the software tools in this workspace.
 * **Core Directives:**
   * **Software Engineering Standards:** Adhere strictly to the workspace's python/command standards, perform targeted, surgical edits, write highly maintainable/re-usable code, and implement robust error-handling.
@@ -43,11 +43,15 @@ This is a **Non-Code Project** serving as a knowledge base, context manager, and
 ├── Rulebook_20.pdf       # The official Etherfields 2.0 PDF rulebook
 ├── rulebook_pages/       # Extracted page-level text cache (page_01.txt to page_20.txt)
 ├── index.json            # Generated TOC & Alphabetical Index mapping keywords to page numbers
-├── rulebook_tool.py      # Python script to validate, regenerate, and query the page cache
-├── voice/                # Voice activation module directory
-│   ├── voice_assistant.py # Local TTS script interfacing with local & remote servers for narration
-│   └── voice_listener.py  # Continuous openWakeWord listener & Whisper transcriber
-├── secret_scripts_tool.py # Polite offline caching and lookups of Core Secret Scripts
+├── install.py            # Primary installation & setup script
+├── src/                  # Main Python source directory
+│   ├── rulebook_tool.py  # Python script to validate, regenerate, and query the page cache
+│   ├── secret_scripts_tool.py # Polite offline caching and lookups of Core Secret Scripts
+│   ├── preprocess_scripts.py # Offline compilation tool for secret scripts
+│   ├── extract_chat.py   # Chat history exporter tool
+│   └── voice/            # Voice activation module directory
+│       ├── voice_assistant.py # Local TTS script interfacing with local & remote servers for narration
+│       └── voice_listener.py  # Continuous openWakeWord listener & Whisper transcriber
 ├── secret_scripts_cache.json # Compiled offline database of 1093 Core Campaign Secret Scripts
 ├── RULEMASTER.md         # Primary prompt, campaign details, and player roster
 ├── TOPICS.md             # The central registry of discussed rules/mechanics
@@ -66,7 +70,7 @@ To maintain long-term memory of discussed rules and campaign states without exha
 
 #### 1. Rule Master Mode Session Initialization Actions
 * **Set Session Path Environment Variable:** Upon starting up in Rule Master Mode, identify the active temporary directory or session path for the Gemini session and set or expose it in the environment as `GEMINI_SESSION_PATH` (e.g. for files like `extract_chat.py` to reference).
-* **Validate the Rulebook Cache:** Always run `uv run rulebook_tool.py --validate` on startup to ensure the index and page split files are consistent with the rulebook pdf file. If the PDF is updated, the tool automatically self-heals and rebuilds the cache.
+* **Validate the Rulebook Cache:** Always run `uv run src/rulebook_tool.py --validate` on startup to ensure the index and page split files are consistent with the rulebook pdf file. If the PDF is updated, the tool automatically self-heals and rebuilds the cache.
 * **Read `TOPICS.md` first:** At the beginning of every session, read `TOPICS.md` to understand what topics have already been discussed and documented. This file should be located in the `.env` cache path if defined.
 * **Brief Last Session:** At startup, read the `LOGS.md` file to determine the latest session log then read the last session recorded in the referenced log file to formulate a concise greeting and summary of the last session's state and rules.
 
@@ -112,16 +116,16 @@ Keep track of the campaign details to customize rule applications (e.g., charact
 ## 5. Helpful Commands & Tool Usage
 
 * **Surgically Searching & Reading Rules (Primary):**
-  Use `uv run rulebook_tool.py --search "<term>"` to look up any mechanic, rule, or card query. The tool automatically maps your query to the correct rulebook pages using the index, and retrieves only the necessary page text.
-  * *Example:* `uv run rulebook_tool.py --search "Slumber"` or `uv run rulebook_tool.py --search "Awakening"`
+  Use `uv run src/rulebook_tool.py --search "<term>"` to look up any mechanic, rule, or card query. The tool automatically maps your query to the correct rulebook pages using the index, and retrieves only the necessary page text.
+  * *Example:* `uv run src/rulebook_tool.py --search "Slumber"` or `uv run src/rulebook_tool.py --search "Awakening"`
 * **Voice & Text-To-Speech Capabilities:**
-  Voice assistant and hands-free listener capabilities are documented in `voice/VOICE_TOOLS.md`.
+  Voice assistant and hands-free listener capabilities are documented in `src/voice/VOICE_TOOLS.md`.
   * *Conditional Reference:* Reference, recommend, or load voice tools **ONLY** if the `.env` configuration file has `ENABLE_VOICE=true` or `ENABLE_VOICE=True` set. If it is undefined, missing, or set to `false`, voice features are disabled and must not be described, recommended, or utilized during sessions.
 * **Forcing Cache Regeneration:**
-  If you ever suspect the cache or index is corrupted, run: `uv run rulebook_tool.py --force`
+  If you ever suspect the cache or index is corrupted, run: `uv run src/rulebook_tool.py --force`
 * **Secret Scripts Retrieval (Primary):**
-  Use `uv run secret_scripts_tool.py --script "<number>"` to retrieve any core campaign secret script from the local offline cache.
-  * *Example:* `uv run secret_scripts_tool.py --script "100"`
+  Use `uv run src/secret_scripts_tool.py --script "<number>"` to retrieve any core campaign secret script from the local offline cache.
+  * *Example:* `uv run src/secret_scripts_tool.py --script "100"`
 * **Updating Campaign/Topics:**
   Use the `replace` tool to surgically update `RULEMASTER.md` or `TOPICS.md` when the campaign progresses or new topics are registered.
 
@@ -134,7 +138,7 @@ During gameplay, players will often need to resolve "Secret Scripts" (e.g., "s. 
 1. **Local Retrieval First:**
    * **Never** search the internet or external sources for secret scripts.
    * Always look up the script using the local offline cache:
-     `uv run secret_scripts_tool.py --script "<number>"`
+     `uv run src/secret_scripts_tool.py --script "<number>"`
 2. **One Script at a Time (Anti-Spoiler Rule):**
    * Only display the text of the *immediate* script requested.
    * If a script redirects to another script (e.g., contains a markdown link or instruction like `[Resolve](/core/309)` or `go to script 76`), **DO NOT** look up or display that next script.

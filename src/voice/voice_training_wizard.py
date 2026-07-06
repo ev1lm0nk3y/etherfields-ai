@@ -20,8 +20,8 @@ import soundfile as sf
 import yaml
 
 # Repo root is parent of the directory containing this file
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-WIZARD_DATA_DIR = os.path.join(BASE_DIR, "voice", "training_data")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+WIZARD_DATA_DIR = os.path.join(BASE_DIR, "src", "voice", "training_data")
 
 SAMPLE_RATE = 16000  # standard for nanowakeword
 CHANNELS = 1
@@ -175,7 +175,7 @@ def main():
     print("\n1. Zip up your recorded raw target samples:")
     print(f"   cd {project_dir} && zip -r targets.zip data/")
     print("\n2. Open your web browser and load the training notebook:")
-    print("   * Upload 'voice/wakeword_model_training.ipynb' directly to Google Colab")
+    print("   * Upload 'src/voice/wakeword_model_training.ipynb' directly to Google Colab")
     print("   * Or open the official Nanowakeword Colab Notebook")
     print("\n3. Upload your 'targets.zip' file to Colab's file browser and run:")
     print("   !unzip targets.zip -d ./")
